@@ -1,5 +1,0 @@
-!function() {
-    this.addListener = function(elem, iden, callback) {
-        return elem.addEventListener(iden, function() { callback(); });
-    }
-}();

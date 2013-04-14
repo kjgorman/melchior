@@ -1,3 +1,0 @@
-module Melchior.Dom.Events where
-
-data Event = MouseEvt | ElementEvt 
