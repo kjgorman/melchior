@@ -6,9 +6,12 @@
         });
     }
     
-    this.select = function(pattern) {
-        console.log(window.dbg = pattern);
-        return document.querySelectorAll(pattern);
+    this.id = function(a) {
+        return a;
+    }
+
+    this.select = function(elem, pattern) {         
+        return _e_(elem._1).getElementById(pattern);
     }
 
     this.set = function(elem, key, value) {
@@ -23,6 +26,7 @@
         addListener: this.addListener,
         set: this.set,
         get: this.get, 
-        select: this.select
+        select: this.select,
+        id: this.id
     }
 }();

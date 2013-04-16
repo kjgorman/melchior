@@ -1,36 +1,21 @@
 module Melchior.Dom.Selectors where
 
-import Language.UHC.JScript.ECMA.String
+import Control.Monad
 import Melchior.Dom
+import Language.UHC.JScript.ECMA.String
+import Language.UHC.JScript.Primitives
 
-data Selector a b = ById a b | ByTag a b | ByClass a b
+newtype Selector a b = Selector (a -> Dom b)
 
-get :: Selector a b -> String -> [a] -> [b]
-get (ById a b) pat els = primGetElemById (ById a b) els $ stringToJSString pat
-get (ByTag a b) pat els = primGetElemByTag (ByTag a b) els $ stringToJSString pat
-get (ByClass a b) pat els = primGetElemByClass (ByClass a b) els $ stringToJSString pat
+instance Functor (Selector a) where
+  fmap f (Selector a) = Selector $ a >=> return . f
 
-primGetElemById :: Selector a b -> [a] -> JSString -> [b]
-primGetElemById (ById a b) els pat = concatMap getOneFrom els
-  where
-    getOneFrom = (\el -> primGetByIdInChildrenOf (ById a b) pat el)
+get :: (DomNode b) => Selector a b -> a -> Dom b
+get (Selector s) el = return . force $! s el
 
-foreign import js "%3.getElementById(%2)"
-  primGetByIdInChildrenOf :: Selector a b -> JSString -> a -> [b]
-    
-primGetElemByTag :: Selector a b -> [a] -> JSString -> [b]
-primGetElemByTag (ByTag a b) els pat = concatMap getOneFrom els
-  where
-    getOneFrom = (\el -> primGetByTagInChildrenOf (ByTag a b) pat el)
+byId :: String -> Element -> Dom Element
+byId s e = primGetById (stringToJSString s) e
 
-foreign import js "%3.getElementsByTagName(%2)"
-  primGetByTagInChildrenOf :: Selector a b -> JSString -> a -> [b]
-
-primGetElemByClass :: Selector a b -> [a] -> JSString -> [b]
-primGetElemByClass (ByClass a b) els pat = concatMap getOneFrom els
-  where
-    getOneFrom = (\el -> primGetByClassInChildrenOf (ByClass a b) pat el)
-
-foreign import js "%3.getElementsByClassName(%2)"
-  primGetByClassInChildrenOf :: Selector a b -> JSString -> a -> [b]
+foreign import js "select(%2, %1)"
+  primGetById :: JSString -> Element -> Dom Element
 

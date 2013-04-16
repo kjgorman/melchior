@@ -6,16 +6,18 @@ import Melchior.Dom.Selectors
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 import Language.UHC.JScript.Primitives
 
-main = return $ runDom document
+main = return $! runDom document
 
-runDom :: Document -> Dom ()
+runDom :: Dom Document -> Dom ()
 runDom = \html ->
-  do
-    input <- return . head $ get (ById Document Input) "input" [html]
-    output <- return . head $ get (ById Document Div) "output" [html]
-    bindBody output (value input)    
-  
-bindBody :: (Element a) => a -> Signal String -> Dom ()
+     do
+       input <- get (Selector $ byId "input") $ toElement html
+       output <- get (Selector $ byId "output") $ toElement html       
+       value . toInput $ input
+
+
+--    primLog' $ get (Selector $ byId "input") $ element html
+bindBody :: Element -> Signal String -> Dom ()
 bindBody e s = undefined
   {-
     bind e s (\v -> setBody e b)
@@ -34,9 +36,11 @@ bindBody e s = undefined
    }
   -}
 
---should be Input input...
-value :: (Element a) => a -> Signal String
-value e = undefined
+value :: Input -> Dom () --Signal String
+value e = primLog' . toElement $ e
+
+foreign import js "console.log(%1)"
+  primLog' :: Element -> Dom ()
   {-
     create e InputEvt (\_ -> push primValue e)
     var s = new Signal();
