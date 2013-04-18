@@ -4,6 +4,10 @@
         return elem.getElementById(pattern);
     }
 
+    this.selectByClass = function(elem, pattern) {
+        return elem.getElementsByClassName(pattern);
+    }
+
     this.set = function(elem, key, value) {
         return elem[key] = value;
     }

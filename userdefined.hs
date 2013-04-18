@@ -10,11 +10,14 @@ main :: IO Element
 main = runDom $ \html -> do
    input <- head . get (Selector $ byId "input") $ [toElement html]
    output <- head . get (Selector $ byId "output") $ [toElement html]
+   head . doSomeShit $ toElement html
    return . force $! bindBody input output
 
 runDom :: (Document -> Dom Element) -> IO Element
 runDom f = let Dom io = f primDoc in io
 
+doSomeShit :: Element -> [Dom ()]
+doSomeShit e = fmap primLog' $ get (Selector $ byClass "elem") $ [e]
 
 --    primLog' $ get (Selector $ byId "input") $ element html
 foreign import js "echo(%1, %2)"
@@ -37,10 +40,10 @@ foreign import js "echo(%1, %2)"
   -}
 
 value :: Input -> Dom () --Signal String
-value e = primLog' . toElement $ e
+value e = undefined --primLog' . toElement $ e
 
 foreign import js "console.log(%1)"
-  primLog' :: Element -> Dom ()              
+  primLog' :: Dom Element -> Dom ()              
   {-
     create e InputEvt (\_ -> push primValue e)
     var s = new Signal();
