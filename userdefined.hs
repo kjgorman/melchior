@@ -10,7 +10,7 @@ main :: IO Element
 main = runDom $ \html -> do
    input <- head . get (Selector $ byId "input") $ [toElement html]
    output <- head . get (Selector $ byId "output") $ [toElement html]
-   (return . force) $ bindBody input output
+   return . force $! bindBody input output
 
 runDom :: (Document -> Dom Element) -> IO Element
 runDom f = let Dom io = f primDoc in io

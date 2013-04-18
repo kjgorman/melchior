@@ -1,13 +1,6 @@
 !function() {
 
-    this.addListener = function(elem, iden, callback) {
-        return elem.addEventListener(iden, function() { 
-            _e_(_e_(callback.__evN__())._1);
-        });
-    }
-    
     this.selectById = function(elem, pattern) {
-        console.log(window.dbg = elem);;
         return elem.getElementById(pattern);
     }
 
