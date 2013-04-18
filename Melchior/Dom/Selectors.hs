@@ -16,6 +16,6 @@ get (Selector s) el = return . force $! s el
 byId :: String -> Element -> Dom Element
 byId s e = primGetById (stringToJSString s) e
 
-foreign import js "select(%2, %1)"
+foreign import js "selectById(%2, %1)"
   primGetById :: JSString -> Element -> Dom Element
 

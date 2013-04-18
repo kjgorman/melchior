@@ -6,14 +6,13 @@ import Melchior.Dom.Selectors
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 import Language.UHC.JScript.Primitives
 
-main :: IO ()
+main :: IO Element
 main = runDom $ \html -> do
    input <- get (Selector $ byId "input") $ toElement html
-   output <- get (Selector $ byId "output") $ toElement html       
-   value . toInput $ input
+   output <- get (Selector $ byId "output") $ toElement html
+   return input
 
-
-runDom :: (Document -> Dom a) -> IO a
+runDom :: (Document -> Dom Element) -> IO Element
 runDom f = let Dom io = f primDoc in io
 
 
@@ -41,7 +40,7 @@ value :: Input -> Dom () --Signal String
 value e = primLog' . toElement $ e
 
 foreign import js "console.log(%1)"
-  primLog' :: Element -> Dom ()
+  primLog' :: Element -> Dom ()              
   {-
     create e InputEvt (\_ -> push primValue e)
     var s = new Signal();

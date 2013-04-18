@@ -6,12 +6,9 @@
         });
     }
     
-    this.id = function(a) {
-        return a;
-    }
-
-    this.select = function(elem, pattern) {         
-        return _e_(elem._1).getElementById(pattern);
+    this.selectById = function(elem, pattern) {
+        console.log(window.dbg = elem);
+        return elem.querySelectorAll(pattern);
     }
 
     this.set = function(elem, key, value) {
@@ -22,11 +19,21 @@
         return elem[key];
     }
 
+    this.echo = function(input, output) {
+        input.addEventListener('input', function() {
+            
+        });
+    }
+
+    this.id = function(arg) {
+        return arg;
+    }
+
     return {
         addListener: this.addListener,
         set: this.set,
         get: this.get, 
-        select: this.select,
+        selectById: this.select,
         id: this.id
     }
 }();
