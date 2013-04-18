@@ -6,14 +6,15 @@ import Melchior.Dom.Selectors
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 import Language.UHC.JScript.Primitives
 
-main = return $! runDom document
+main :: IO ()
+main = runDom $ \html -> do
+   input <- get (Selector $ byId "input") $ toElement html
+   output <- get (Selector $ byId "output") $ toElement html       
+   value . toInput $ input
 
-runDom :: Dom Document -> Dom ()
-runDom = \html ->
-     do
-       input <- get (Selector $ byId "input") $ toElement html
-       output <- get (Selector $ byId "output") $ toElement html       
-       value . toInput $ input
+
+runDom :: (Document -> Dom a) -> IO a
+runDom f = let Dom io = f primDoc in io
 
 
 --    primLog' $ get (Selector $ byId "input") $ element html

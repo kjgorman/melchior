@@ -1,21 +1,36 @@
 {-# LANGUAGE EmptyDataDecls #-}
-module Melchior.Dom where
+module Melchior.Dom
+    ( -- * Types
+      Dom
+    , Element
+    , Document
+    , Input
+    , Div
+
+      -- * Functions
+    , toElement
+    , toInput
+    ) where
 
 import Melchior.Control
+import Control.Monad (liftM)
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Primitives
 
-data Dom a = Dom a
+data Dom a = Dom (IO a)
 data Node
-newtype Element = Element (JSPtr Node)
+newtype Element = Element { unEl :: JSPtr Node }
 newtype Document = Document (JSPtr Node)
 newtype Input = Input (JSPtr Node)
 newtype Div = Div (JSPtr Node)
 
 instance Monad Dom where
-  (Dom a) >>= k = k a
-  return a = (Dom a)
+  return = Dom . return
+  (Dom io) >>= k = Dom $ io >>= \x -> let Dom io' = k x in io'
 
+runDom :: (Document -> Dom a) -> IO a
+runDom f = let Dom io = f document in io
+    
 class DomNode a where
   force :: Dom a -> a
 
@@ -31,20 +46,23 @@ instance DomNode Document where
 foreign import js "id(%1)"
   toElement :: a -> Element
 
+foreign import js "filterInputs(%1)"
+    filterInputs :: [Element] -> [Element]
+
+toInput :: [Element] -> [Input]
+toInput els = let ins = filterInputs els in map $ Input . unEl
+
 foreign import js "id(%1)"
   toInput :: a -> Input
 
 foreign import js "id(%1)"
   toDocument :: a -> Document
 
-document :: Dom Document
-document = Dom primDoc
-
 foreign import js "document"
-  primDoc :: Document
+  document :: Document
 
-getAttr :: Dom Element -> String -> String
-getAttr d s = jsStringToString $ primGetAttr d $ stringToJSString s
+getAttr :: String -> Element -> Dom String
+getAttr s e = Dom . liftM jsStringToString $ primGetAttr e (stringToJSString s)
 
 foreign import js "%1.getAttribute(%2)"
-  primGetAttr :: Dom Element -> JSString -> JSString
+  primGetAttr :: Element -> JSString -> IO JSString
