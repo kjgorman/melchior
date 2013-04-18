@@ -8,17 +8,17 @@ import Language.UHC.JScript.Primitives
 
 main :: IO Element
 main = runDom $ \html -> do
-   input <- get (Selector $ byId "input") $ toElement html
-   output <- get (Selector $ byId "output") $ toElement html
-   return input
+   input <- head . get (Selector $ byId "input") $ [toElement html]
+   output <- head . get (Selector $ byId "output") $ [toElement html]
+   (return . force) $ bindBody input output
 
 runDom :: (Document -> Dom Element) -> IO Element
 runDom f = let Dom io = f primDoc in io
 
 
 --    primLog' $ get (Selector $ byId "input") $ element html
-bindBody :: Element -> Signal String -> Dom ()
-bindBody e s = undefined
+foreign import js "echo(%1, %2)"
+  bindBody :: Element -> Element -> Dom Element
   {-
     bind e s (\v -> setBody e b)
     becomes

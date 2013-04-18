@@ -7,8 +7,8 @@
     }
     
     this.selectById = function(elem, pattern) {
-        console.log(window.dbg = elem);
-        return elem.querySelectorAll(pattern);
+        console.log(window.dbg = elem);;
+        return elem.getElementById(pattern);
     }
 
     this.set = function(elem, key, value) {
@@ -21,8 +21,9 @@
 
     this.echo = function(input, output) {
         input.addEventListener('input', function() {
-            
+            output.innerHTML = input.value;
         });
+        return input;
     }
 
     this.id = function(arg) {
@@ -30,7 +31,7 @@
     }
 
     return {
-        addListener: this.addListener,
+        echo: this.echo,
         set: this.set,
         get: this.get, 
         selectById: this.select,
