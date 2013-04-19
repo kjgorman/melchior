@@ -5,11 +5,16 @@ import Control.Monad
 import Melchior.Dom
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Primitives
+import Prelude hiding ((.), id)
 
 newtype Selector a b = Selector ([a] -> Dom [b])
 
 instance Functor (Selector a) where
   fmap f (Selector a) = Selector $ a >=> return . liftM f
+
+instance Category Selector where
+  id = id
+  (Selector a) . (Selector b) = Selector $ b >=> a
   
 get :: (DomNode b) => Selector a b -> [a] -> Dom [b]
 get (Selector s) el = s el >>= (return . map force)
