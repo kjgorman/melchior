@@ -1,6 +1,7 @@
 !function() {
 
     this.selectById = function(elem, pattern) {
+        console.log(window.elem = elem, window.pattern = pattern);
         return elem.getElementById(pattern);
     }
 
@@ -27,11 +28,16 @@
         return arg;
     }
 
+    this.log = function(arg) {
+        return arg;
+    }
+
     return {
         echo: this.echo,
         set: this.set,
         get: this.get, 
         selectById: this.select,
-        id: this.id
+        id: this.id,
+        log: this.log
     }
 }();

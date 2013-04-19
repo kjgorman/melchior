@@ -38,7 +38,7 @@ runDom :: (Document -> Dom a) -> IO a
 runDom f = let Dom io = f document in io
     
 class DomNode a where
-  force :: Dom a -> a
+  force :: a -> a
 
 instance DomNode Element where
   force el = toElement $! el
