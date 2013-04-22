@@ -33,21 +33,18 @@ foreign import js "document"
 instance Monad Dom where
   return = Dom . return
   (Dom io) >>= k = Dom $ io >>= \x -> let Dom io' = k x in io'
-
-runDom :: (Document -> Dom a) -> IO a
-runDom f = let Dom io = f document in io
-    
+  
 class DomNode a where
   force :: a -> a
 
 instance DomNode Element where
-  force el = toElement $! el
+  force el = toElement $ el
 
 instance DomNode Input where
-  force i  = toInput $! i
+  force i  = toInput $ i
 
 instance DomNode Document where
-  force d = toDocument $! d
+  force d = toDocument $ d
 
 foreign import js "id(%1)"
   toElement :: a -> Element
@@ -66,9 +63,9 @@ foreign import js "id(%1)"
 
 foreign import js "document"
   document :: Document
-
+{-
 getAttr :: String -> Element -> Dom String
 getAttr s e = Dom . liftM jsStringToString $ primGetAttr e (stringToJSString s)
 
 foreign import js "%1.getAttribute(%2)"
-  primGetAttr :: Element -> JSString -> IO JSString
+  primGetAttr :: Element -> JSString -> IO JSString-}

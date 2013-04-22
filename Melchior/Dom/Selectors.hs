@@ -17,16 +17,16 @@ instance Category Selector where
   (Selector a) . (Selector b) = Selector $ b >=> a
   
 get :: (DomNode b) => Selector a b -> [a] -> Dom [b]
-get (Selector s) el = s el >>= (return . map force)
+get (Selector s) el = s el
 
 byId :: String -> [Element] -> Dom [Element]
-byId s e = sequence $ map (primGetById $ stringToJSString s) e
+byId s e = Dom $ sequence $ map (primGetById $ stringToJSString s) e
+
+foreign import js "selectById(%2, %1)"
+  primGetById :: JSString -> Element -> IO Element
 
 byClass :: String -> [Element] -> Dom [Element]
 byClass s e = sequence $ map (primGetByClass $ stringToJSString s) e
-
-foreign import js "selectById(%2, %1)"
-  primGetById :: JSString -> Element -> Dom Element
 
 foreign import js "selectByClass(%2, %2)"
   primGetByClass :: JSString -> Element -> Dom Element

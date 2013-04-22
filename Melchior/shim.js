@@ -1,7 +1,6 @@
 !function() {
 
     this.selectById = function(elem, pattern) {
-        console.log(window.elem = elem, window.pattern = pattern);
         return elem.getElementById(pattern);
     }
 
@@ -21,14 +20,16 @@
         input.addEventListener('input', function() {
             output.innerHTML = input.value;
         });
-        return input;
+        return {_1:{__aN__ : function() { return input; }}}
     }
 
     this.id = function(arg) {
         return arg;
     }
 
-    this.log = function(arg) {
+    this.count = 0;
+    this.log = function(arg, message) {
+        console.log((message ? message : "id: "), window["arg"+this.count++] = arg, this.count);
         return arg;
     }
 
@@ -38,6 +39,7 @@
         get: this.get, 
         selectById: this.select,
         id: this.id,
-        log: this.log
+        log: this.log,
     }
+
 }();
