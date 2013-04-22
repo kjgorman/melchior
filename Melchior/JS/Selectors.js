@@ -19,6 +19,20 @@ var Selector = function () {
         return returned;
     }    
     
+    this.toInput = function(elem) {
+        return elem && elem.tagName === "INPUT" ? elem : null;
+    }
+
+    this.toDiv = function(elem) {
+        return elem && elem.tagName === "DIV" ? elem : null;
+    }
+
+    this.toDocument = function(elem) {
+        //the assumption here being that only the document has
+        //this defined... #TODO - probably an actual value to check
+        return elem && elem.doctype !== undefined ? elem : null;
+    }
+
 }
 
 var Selectors = new Selector();

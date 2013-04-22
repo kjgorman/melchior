@@ -13,7 +13,7 @@ import Prelude hiding (head, (.), id)
 
 runDom :: (Document -> Dom Element) -> IO Element
 runDom f = io
-           where Dom io = f primDoc
+           where Dom io = f document
 
 main :: IO Element
 main = runDom $ \html -> do
@@ -45,7 +45,7 @@ foreign import js "echo(%1, %2)"
    }
   -}
 
-value :: Input -> Dom () --Signal String
+value :: Input -> Signal String
 value e = undefined --primLog' . toElement $ e
   {-
     create e InputEvt (\_ -> push primValue e)

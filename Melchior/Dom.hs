@@ -11,8 +11,9 @@ module Melchior.Dom
       -- * Functions
     , toElement
     , toInput
+    , toDiv
     , force
-    , primDoc
+    , document
     ) where
 
 import Melchior.Control
@@ -28,7 +29,7 @@ newtype Input = Input { unIn :: JSPtr Node }
 newtype Div = Div { unDiv :: JSPtr Node }
 
 foreign import js "document"
-  primDoc :: Document
+  document :: Document
 
 instance Monad Dom where
   return = Dom . return
@@ -47,22 +48,17 @@ instance DomNode Document where
   force d = toDocument $ d
 
 foreign import js "id(%1)"
-  toElement :: a -> Element
+  toElement :: (DomNode a) =>  a -> Element
+               
+foreign import js "Selectors.toInput(%1)"
+  toInput :: (DomNode a) =>  a -> Input
 
-foreign import js "filterInputs(%1)"
-    filterInputs :: [Element] -> [Element]
+foreign import js "Selectors.toDocument(%1)"
+  toDocument :: (DomNode a) =>  a -> Document
 
---toInput :: [Element] -> [Input]
---toInput els = let ins = filterInputs els in map $ Input . unEl
+foreign import js "Selectors.toDiv(%1)"
+  toDiv :: (DomNode a) =>  a -> Div
 
-foreign import js "id(%1)"
-  toInput :: a -> Input
-
-foreign import js "id(%1)"
-  toDocument :: a -> Document
-
-foreign import js "document"
-  document :: Document
 {-
 getAttr :: String -> Element -> Dom String
 getAttr s e = Dom . liftM jsStringToString $ primGetAttr e (stringToJSString s)
