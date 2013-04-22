@@ -1,0 +1,1 @@
+exposed-modules: System.Posix.Directory System.Posix.Error System.Posix.Files System.Posix

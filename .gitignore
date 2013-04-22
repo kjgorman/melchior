@@ -2,3 +2,4 @@
 *.core
 *.mjs
 *~
+node_modules
