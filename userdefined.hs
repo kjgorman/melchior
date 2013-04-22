@@ -1,3 +1,5 @@
+import Control.Category
+
 import Melchior.Control
 import Melchior.Data.List
 import Melchior.Dom
@@ -7,7 +9,7 @@ import Melchior.Dom.Selectors
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 import Language.UHC.JScript.Primitives
 
-import Prelude hiding (head)
+import Prelude hiding (head, (.), id)
 
 runDom :: (Document -> Dom Element) -> IO Element
 runDom f = io
@@ -18,7 +20,11 @@ main = runDom $ \html -> do
        input <- head $ get (Selector $ byId "input") $ [toElement html]
        output <- head $ get (Selector $ byId "output") $ [toElement html]
        bindBody input output
+       elems <- get ((Selector $ byClass "elem") . (Selector $ byClass "specific-div")) $ [toElement html]
        return input
+
+foreign import js "log(%2, %1)"
+  inspect :: JSString -> a -> Dom ()
 
 foreign import js "echo(%1, %2)"
   bindBody :: Element -> Element -> Dom ()

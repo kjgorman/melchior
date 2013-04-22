@@ -15,7 +15,7 @@ instance Functor (Selector a) where
 instance Category Selector where
   id = id
   (Selector a) . (Selector b) = Selector $ b >=> a
-  
+
 get :: (DomNode b) => Selector a b -> [a] -> Dom [b]
 get (Selector s) el = s el
 
@@ -26,7 +26,7 @@ foreign import js "Selectors.selectById(%2, %1)"
   primGetById :: JSString -> Element -> IO Element
 
 byClass :: String -> [Element] -> Dom [Element]
-byClass s e = sequence $ map (primGetByClass $ stringToJSString s) e
+byClass s e = Dom $ sequence $ map (primGetByClass $ stringToJSString s) e
 
-foreign import js "Selectors.selectByClass(%2, %2)"
-  primGetByClass :: JSString -> Element -> Dom Element
+foreign import js "Selectors.selectByClass(%2, %1)"
+  primGetByClass :: JSString -> Element -> IO Element

@@ -2,6 +2,11 @@ module.exports = function(grunt) {
     
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        shell : {
+            build : {
+                command : "uhc -tjs userdefined.hs"
+            }
+        },
         concat: {
             options: {
                 separator:';'
@@ -55,6 +60,7 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks("grunt-contrib-concat");
+    grunt.loadNpmTasks("grunt-shell");
     
-    grunt.registerTask('default', ['concat']);
+    grunt.registerTask('default', ['shell', 'concat']);
 }
