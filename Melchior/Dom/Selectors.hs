@@ -22,11 +22,11 @@ get (Selector s) el = s el
 byId :: String -> [Element] -> Dom [Element]
 byId s e = Dom $ sequence $ map (primGetById $ stringToJSString s) e
 
-foreign import js "selectById(%2, %1)"
+foreign import js "Selectors.selectById(%2, %1)"
   primGetById :: JSString -> Element -> IO Element
 
 byClass :: String -> [Element] -> Dom [Element]
 byClass s e = sequence $ map (primGetByClass $ stringToJSString s) e
 
-foreign import js "selectByClass(%2, %2)"
+foreign import js "Selectors.selectByClass(%2, %2)"
   primGetByClass :: JSString -> Element -> Dom Element

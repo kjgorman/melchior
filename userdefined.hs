@@ -1,13 +1,17 @@
 import Melchior.Control
+import Melchior.Data.List
 import Melchior.Dom
 import Melchior.Dom.Events
 import Melchior.Dom.Selectors
 
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
-import Language.UHC.JScript.ECMA.Array
 import Language.UHC.JScript.Primitives
 
 import Prelude hiding (head)
+
+runDom :: (Document -> Dom Element) -> IO Element
+runDom f = io
+           where Dom io = f primDoc
 
 main :: IO Element
 main = runDom $ \html -> do
@@ -15,13 +19,6 @@ main = runDom $ \html -> do
        output <- head $ get (Selector $ byId "output") $ [toElement html]
        bindBody input output
        return input
-
-runDom :: (Document -> Dom Element) -> IO Element
-runDom f = io
-           where Dom io = f primDoc
-
-head :: (DomNode a) => Dom [a] -> Dom a
-head i = i >>= \x -> return $ indexJSArray (listToJSArray x) 0
 
 foreign import js "echo(%1, %2)"
   bindBody :: Element -> Element -> Dom ()
