@@ -16,7 +16,7 @@ module Melchior.Dom
     , document
     ) where
 
-import Melchior.Control
+--dependencies
 import Control.Monad (liftM)
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Primitives
@@ -48,16 +48,16 @@ instance DomNode Document where
   force d = toDocument $ d
 
 foreign import js "id(%1)"
-  toElement :: (DomNode a) =>  a -> Element
+  toElement :: a -> Element
                
 foreign import js "Selectors.toInput(%1)"
-  toInput :: (DomNode a) =>  a -> Input
+  toInput :: a -> Input
 
 foreign import js "Selectors.toDocument(%1)"
-  toDocument :: (DomNode a) =>  a -> Document
+  toDocument :: a -> Document
 
 foreign import js "Selectors.toDiv(%1)"
-  toDiv :: (DomNode a) =>  a -> Div
+  toDiv :: a -> Div
 
 {-
 getAttr :: String -> Element -> Dom String
