@@ -14,6 +14,7 @@ module Melchior.Dom
     , toDiv
     , force
     , document
+    , setBody
     ) where
 
 --dependencies
@@ -58,6 +59,9 @@ foreign import js "Selectors.toDocument(%2)"
 
 foreign import js "Selectors.toDiv(%2)"
   toDiv ::(DomNode a) =>  a -> Div
+
+foreign import js "set(%1, 'innerHTML', %2)"
+  setBody :: Element -> String -> Dom ()
 
 {-
 getAttr :: String -> Element -> Dom String

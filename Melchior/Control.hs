@@ -4,6 +4,7 @@ module Melchior.Control
   , SF
     -- * Functions
   , createEventedSignal
+  , bind
   ) where
 
 import Language.UHC.JScript.Primitives
@@ -19,3 +20,9 @@ createEventedSignal el evt = primCreateEventedSignal el $ (stringToJSString . sh
 
 foreign import js "Signals.createEventedSignal(%2, %3)"
   primCreateEventedSignal :: (DomNode a) => a -> JSString -> Signal String
+
+bind :: Element -> Signal a -> (a -> Dom ()) -> Dom Element
+bind e s f = primBindFunctionToSignal e s f
+
+foreign import js "Signals.bindToSignal(%1, %2, %3)"
+  primBindFunctionToSignal :: Element -> Signal a -> (a -> Dom ()) -> Dom Element
