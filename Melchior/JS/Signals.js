@@ -5,8 +5,9 @@ var Signals = function () {
         this.registeredListeners = []
     }
 
-    Signal.prototype.registerListener = function(listener, callback) {
+    Signal.prototype.registerListener = function(callback) {
         this.registeredListeners.push(function (value) {
+            if(!callback || !callback.args) return;
             //curry the extra argument
             var argCopy = callback.args.slice() //shallow copy!
             callback.args = callback.args.concat([value]);
@@ -31,11 +32,11 @@ var Signals = function () {
         return s
     }
 
-    function bindToSignal (elem, signal, callback) {
-        if(!elem || !signal || !callback) return undefined
+    function bindToSignal (signal, callback) {
+        if(!signal || !callback) return undefined
 
-        signal.registerListener(elem, callback);
-        return {_1:{__aN__ : function() { return elem }}}
+        signal.registerListener(callback);
+        return {_1:{__aN__ : function() { return signal }}}
     }
 
     return {

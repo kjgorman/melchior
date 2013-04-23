@@ -30,7 +30,7 @@ foreign import js "echo(%1, %2)"
   bindBody :: Signal String -> Element -> Dom ()
 
 bindBodyR :: Signal String -> Element -> Dom Element
-bindBodyR s e = bind e s (\v -> setBody e v)
+bindBodyR s e = bind s (\v -> setBody e v)
   {-
     bind e s (\v -> setBody e v)
     becomes
