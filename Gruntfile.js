@@ -14,6 +14,13 @@ module.exports = function(grunt) {
                 command : "uhc -tjs userdefined.hs"
             }
         },
+        jshint : {
+            all: ["Melchior/JS/**/*.js"],
+            options : {
+                asi : true,
+                expr: true
+            }
+        }, 
         concat: {
             options: {
                 separator:';'
@@ -71,9 +78,10 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-jasmine");
+    grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-shell");
     
 
-    grunt.registerTask('default', ['jasmine', 'shell', 'concat']);
+    grunt.registerTask('default', ["jshint", 'jasmine', 'shell', 'concat']);
     grunt.registerTask('travis', ['jasmine']);
 }

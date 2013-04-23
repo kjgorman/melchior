@@ -1,5 +1,7 @@
 var Signals = function () {
-    Signal = function () {
+    "use strict";
+
+    var Signal = function () {
         this.registeredListeners = []
     }
 
