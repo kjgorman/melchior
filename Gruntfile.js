@@ -2,6 +2,13 @@ module.exports = function(grunt) {
     
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        jasmine : {          
+            src : 'Melchior/JS/**/*.js',
+            options : {
+                specs: 'spec/**/*-spec.js',
+                helpers: 'spec/**/-helper.js'
+            }
+        },
         shell : {
             build : {
                 command : "uhc -tjs userdefined.hs"
@@ -60,7 +67,10 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks("grunt-contrib-concat");
+    grunt.loadNpmTasks("grunt-contrib-jasmine");
     grunt.loadNpmTasks("grunt-shell");
     
-    grunt.registerTask('default', ['shell', 'concat']);
+
+    grunt.registerTask('default', ['jasmine', 'shell', 'concat']);
+
 }

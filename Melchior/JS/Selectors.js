@@ -20,10 +20,26 @@ var Selector = function () {
     }    
     
     this.toInput = function(elem) {
+        if(elem && elem.length) {
+            return elem.map(oneToOneToInput).filter(function(e) { return e !== null; });
+        } else {
+            return oneToOneToInput(elem);
+        }
+    }
+
+    var oneToOneToInput = function (elem) {
         return elem && elem.tagName === "INPUT" ? elem : null;
     }
 
     this.toDiv = function(elem) {
+        if(elem && elem.length) {
+            return elem.map(oneToOneToDiv).filter(function (e) { return e !== null; });
+        } else {
+            return oneToOneToDiv(elem);
+        }
+    }
+
+    var oneToOneToDiv = function (elem) {
         return elem && elem.tagName === "DIV" ? elem : null;
     }
 
