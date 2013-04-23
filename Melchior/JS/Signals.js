@@ -3,11 +3,11 @@ var Signals = function () {
 
     function createEventedSignal (elem, event) {
         var s = new Signal()
-        console.log(elem, event)
+        console.log("elem:", elem, "event:", event)
         elem.addEventListener(event, function () {
             s.push(elem.value)
         })
-        return s
+        return elem
     }
 
     return {

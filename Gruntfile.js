@@ -22,6 +22,7 @@ module.exports = function(grunt) {
                 src: [
                   "Melchior/JS/utils.js",
                   "Melchior/JS/Selectors.js",
+                  "Melchior/JS/Signals.js",
                   "/usr/local/lib//uhc-1.1.3/lib/js/libEH-RTS.mjs",
                   "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_Base.mjs",
                   "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_BoxArray.mjs",

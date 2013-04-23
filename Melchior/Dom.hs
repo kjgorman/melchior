@@ -47,17 +47,17 @@ instance DomNode Input where
 instance DomNode Document where
   force d = toDocument $ d
 
-foreign import js "id(%1)"
-  toElement :: a -> Element
+foreign import js "id(%2)"
+  toElement :: (DomNode a) => a -> Element
                
-foreign import js "Selectors.toInput(%1)"
-  toInput :: a -> Input
+foreign import js "Selectors.toInput(%2)"
+  toInput ::(DomNode a) =>  a -> Input
 
-foreign import js "Selectors.toDocument(%1)"
-  toDocument :: a -> Document
+foreign import js "Selectors.toDocument(%2)"
+  toDocument ::(DomNode a) =>  a -> Document
 
-foreign import js "Selectors.toDiv(%1)"
-  toDiv :: a -> Div
+foreign import js "Selectors.toDiv(%2)"
+  toDiv ::(DomNode a) =>  a -> Div
 
 {-
 getAttr :: String -> Element -> Dom String

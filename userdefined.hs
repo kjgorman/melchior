@@ -22,12 +22,12 @@ main :: IO Element
 main = runDom $ \html -> do
        input <- head $ get (Selector $ byId "input") $ [toElement document]
        output <- head $ get (Selector $ byId "output") $! [toElement document]
-       bindBody input output
+       bindBody (value $ toInput input) output
        elems <- get ((Selector $ byClass "elem") . (Selector $ byClass "specific-div")) $ [toElement html]
        return input
 
 foreign import js "echo(%1, %2)"
-  bindBody :: Element -> Element -> Dom ()
+  bindBody :: Signal String -> Element -> Dom ()
   {-
     bind e s (\v -> setBody e b)
     becomes
