@@ -24,7 +24,8 @@ var Signals = function () {
     }
 
     function createEventedSignal (elem, event) {
-        if(!elem || !event || typeof event !== "string") return undefined
+        if(!elem || !elem.addEventListener || !event || typeof event !== "string")
+            return undefined
         var s = new Signal()
         elem.addEventListener(event, function () {
             s.push(elem.value)
@@ -33,7 +34,7 @@ var Signals = function () {
     }
 
     function bindToSignal (signal, callback) {
-        if(!signal || !callback) return undefined
+        if(!signal || !callback || !callback.args) return undefined
 
         signal.registerListener(callback);
         return {_1:{__aN__ : function() { return signal }}}

@@ -28,6 +28,7 @@ newtype Element = Element { unEl :: JSPtr Node }
 newtype Document = Document {unDoc ::  JSPtr Node }
 newtype Input = Input { unIn :: JSPtr Node }
 newtype Div = Div { unDiv :: JSPtr Node }
+newtype Span = Span {unSpan :: JSPtr Node}
 
 foreign import js "document"
   document :: Document
@@ -58,7 +59,10 @@ foreign import js "Selectors.toDocument(%2)"
   toDocument ::(DomNode a) =>  a -> Document
 
 foreign import js "Selectors.toDiv(%2)"
-  toDiv ::(DomNode a) =>  a -> Div
+  toDiv :: (DomNode a) => a -> Div
+
+foreign import js "Selectors.toSpan(%2)"
+  toSpan :: (DomNode a) => a -> Span
 
 foreign import js "set(%1, 'innerHTML', %2)"
   setBody :: Element -> String -> Dom ()

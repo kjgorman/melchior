@@ -46,6 +46,19 @@ var Selectors = function () {
         return elem && elem.tagName === "DIV" ? elem : null
     }
 
+    Selector.prototype.toSpan = function(elem) {
+        if(elem && elem.length) {
+            return elem.map(oneToOneToSpan).filter(function (e) { return e !== null })
+        } else {
+            return oneToOneToSpan(elem)
+        }
+    }
+
+    var oneToOneToSpan = function (elem) {
+        return elem && elem.tagName === "SPAN" ? elem : null
+    }
+
+
     Selector.prototype.toDocument = function(elem) {
         //the assumption here being that only the document has
         //Selector.prototype defined... #TODO - probably an actual value to check
