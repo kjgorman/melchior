@@ -72,5 +72,5 @@ module.exports = function(grunt) {
     
 
     grunt.registerTask('default', ['jasmine', 'shell', 'concat']);
-
+    grunt.registerTask('travis', ['jasmine']);
 }

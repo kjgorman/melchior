@@ -9,6 +9,6 @@
     "grunt-contrib-jasmine": "~0.4.2"
   },
   "scripts": { 
-    "test": "grunt --verbose"
+    "test": "grunt travis --verbose"
   }
 }
