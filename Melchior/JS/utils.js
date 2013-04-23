@@ -9,13 +9,6 @@
         return elem[key]
     }
 
-    this.echo = function(input, output) {
-        input.addEventListener('input', function() {
-            output.innerHTML = input.value
-        })
-        return {_1:{__aN__ : function() { return input; }}}
-    }
-
     this.id = function(arg) {
         return arg
     }
@@ -27,10 +20,8 @@
     }
 
     return {
-        echo: this.echo,
         set: this.set,
         get: this.get, 
-        selectById: this.select,
         id: this.id,
         log: this.log
     }
