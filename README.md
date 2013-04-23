@@ -1,4 +1,5 @@
-###489-uhc
+###489-uhc [![Build Status](https://travis-ci.org/[kjgorman]/[489-uhc].png)](https://travis-ci.org/[kjgorman]/[489-uhc])
+
 
 Trying out the utrecht haskell compiler to javascript.
 

@@ -19,7 +19,7 @@ main :: IO Element
 main = runDom $ \html -> do
        input <- head $ get (Selector $ byId "input") $ [toElement html]
        output <- head $ get (Selector $ byId "output") $ [toElement html]
-       bindBody input output
+       bindBody (value $ toInput input) output
        elems <- get ((Selector $ byClass "elem") . (Selector $ byClass "specific-div")) $ [toElement html]
        return input
 
@@ -27,7 +27,7 @@ foreign import js "log(%2, %1)"
   inspect :: JSString -> a -> Dom ()
 
 foreign import js "echo(%1, %2)"
-  bindBody :: Element -> Element -> Dom ()
+  bindBody :: Signal String -> Element -> Dom ()
   {-
     bind e s (\v -> setBody e b)
     becomes
@@ -46,7 +46,7 @@ foreign import js "echo(%1, %2)"
   -}
 
 value :: Input -> Signal String
-value e = undefined --primLog' . toElement $ e
+value i = undefined 
   {-
     create e InputEvt (\_ -> push primValue e)
     var s = new Signal();
