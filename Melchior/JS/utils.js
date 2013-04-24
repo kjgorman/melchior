@@ -6,6 +6,7 @@
     }
 
     this.get = function(elem, key) {
+        if (elem._1) elem = elem._1
         return elem[key]
     }
 
