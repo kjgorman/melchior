@@ -40,8 +40,13 @@ var Signals = function () {
         return {_1:{__aN__ : function() { return signal }}}
     }
 
+    function ampersand(pair) {
+        console.log(pair);
+    }
+
     return {
         createEventedSignal: createEventedSignal,
-        bindToSignal: bindToSignal
+        bindToSignal: bindToSignal,
+        ampersand: ampersand
     }
 }()

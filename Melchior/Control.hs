@@ -2,9 +2,14 @@ module Melchior.Control
   ( -- * Types
     Signal
   , SF
+  , Of
     -- * Functions
+  , runDom
   , createEventedSignal
   , bind
+  , (>>>)
+  , (<<<)
+  , (&&&)
   ) where
 
 import Language.UHC.JScript.Primitives
@@ -13,13 +18,30 @@ import Melchior.Dom
 import Melchior.Dom.Events
 
 data Signal a = Signal (JSPtr a)
+data Of a = Of a
 type SF a b = Signal a -> Signal b
 
-createEventedSignal :: (DomNode a) => a -> Event b -> Signal String
-createEventedSignal el evt = primCreateEventedSignal el $ (stringToJSString . show) evt
+runDom :: (Document -> Dom Element) -> IO Element
+runDom f = io
+           where Dom io = f document
 
-foreign import js "Signals.createEventedSignal(%2, %3)"
-  primCreateEventedSignal :: (DomNode a) => a -> JSString -> Signal String
+(>>>) :: SF a b -> SF b c -> SF a c
+s >>> t = t . s
+
+(<<<) :: SF b c -> SF a b -> SF a c
+s <<< t = s . t
+
+(&&&) :: SF a b -> SF a c -> SF a (b, c)
+s &&& t = \x -> ampersand (s x, t x)
+
+foreign import js "Signals.ampersand(%1)"
+  ampersand :: (Signal b, Signal c) -> Signal (b, c)
+  
+createEventedSignal :: (DomNode a) => Of c -> a -> Event b -> Signal c
+createEventedSignal o el evt = primCreateEventedSignal o el $ (stringToJSString . show) evt
+
+foreign import js "Signals.createEventedSignal(%3, %4)"
+  primCreateEventedSignal :: (DomNode a) => Of c -> a -> JSString -> Signal c
 
 bind :: Signal a -> (a -> Dom ()) -> Dom Element
 bind s f = primBindFunctionToSignal s f

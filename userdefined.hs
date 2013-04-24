@@ -11,10 +11,6 @@ import Language.UHC.JScript.Primitives
 
 import Prelude hiding (head, map, (.), id)
 
-runDom :: (Document -> Dom Element) -> IO Element
-runDom f = io
-           where Dom io = f document
-
 foreign import js "document"
   elem :: Element
 
@@ -37,5 +33,8 @@ bindBody :: Signal String -> Element -> Dom Element
 bindBody s e = bind s (\v -> setBody e v)
 
 value :: Input -> Signal String
-value i = createEventedSignal i (ElementEvt InputEvt)
+value i = createEventedSignal (Of "string") i (ElementEvt InputEvt)
+
+clickEdge :: Element -> Signal ()
+clickEdge e = createEventedSignal (Of ()) e (MouseEvt ClickEvt)
 
