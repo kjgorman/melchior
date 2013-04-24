@@ -9,15 +9,17 @@ var Lists = function(){
     }
 
     function map(func, list) {
-        console.log(window.func = func, window.list = list)
-        list.map(function (l) {
+        if(!func || !func.__aN__ || typeof func.__aN__ !== "function" || !list || !list.hasOwnProperty("length"))
+            return undefined;
+
+        return list.map(function (l) {
             if(l.__eOrV__) l = l.__eOrV__
-            var argsCopy = func.args.slice()
+            var argsCopy = func.args.slice(), returnVal
             func.args = func.args.concat([l])
-            func.__aN__([[]])
+            returnVal = func.__aN__([[]])
             func.args = argsCopy
+            return returnVal
         })
-        return func
     }
 
     return {
