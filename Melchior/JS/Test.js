@@ -1,16 +1,14 @@
 var Melchior = function () {
     "use strict";
 
-    var currentValue = null
+    var currentValue = {}
 
-    function expects (elem) {
-        console.log(elem)
-        currentValue = elem
+    function expects (namespace, elem) {
+        currentValue[namespace] = elem
     }
 
-    function valueOfTest () {
-        console.log("current value: ", currentValue)
-        return currentValue
+    function valueOfTest (namespace) {
+        return currentValue[namespace] || null;
     }
 
     return {
