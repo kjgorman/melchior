@@ -9,7 +9,7 @@ $runDom.$__12__3__0=
            new _A_($UHC.$Base.$_24,[$Melchior.$Test.$expects,$__]);
           var $__4=
            new _A_($UHC.$Base.$return,[$Melchior.$Dom.$Monad__DCT10__0__0]);
-          return new _A_($UHC.$Base.$_24,[$__4,$__3]);});
+          return new _A_($UHC.$Base.$_24_21,[$__4,$__3]);});
 $runDom.$main=
  new _A_(new _F_(function()
                  {return new _A_($UHC.$Base.$_24,[$Melchior.$Control.$runDom,$runDom.$__12__3__0]);}),[]);

@@ -4,10 +4,12 @@ var Melchior = function () {
     var currentValue = null
 
     function expects (elem) {
+        console.log(elem)
         currentValue = elem
     }
 
     function valueOfTest () {
+        console.log("current value: ", currentValue)
         return currentValue
     }
 

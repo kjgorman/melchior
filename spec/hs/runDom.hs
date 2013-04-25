@@ -3,4 +3,4 @@ import Melchior.Dom
 import Melchior.Test
 
 main :: IO Element
-main = runDom $ \html -> return $ expects $ toElement document
+main = runDom $ \html -> return $! expects $ toElement document
