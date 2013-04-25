@@ -13,6 +13,9 @@ module.exports = function(grunt) {
             build : {
                 command : "uhc -tjs userdefined.hs && find . -name '*.hs' | grep -v userdefined  | grep -v 'Language' | uhc -tjs"
             },
+            buildTests : {
+                command : "find . -name 'spec/hs/*hs' -exec uhc -tjs {} \;"
+            },
             copyDistToSpec : {
                 command : "cp dist/melchior.js spec/hs/melchior-helper.js"
             }
@@ -104,8 +107,14 @@ module.exports = function(grunt) {
     grunt.registerTask('default',
                        ['jshint',
                         'shell:build',
+                        'shell:buildTests',
                         'concat',
                         'shell:copyDistToSpec',
                         'jasmine']);
-    grunt.registerTask('travis', ['jshint', 'jasmine']);
+    grunt.registerTask('travis', ['jshint',
+                        'shell:build',
+                        'shell:buildTests',
+                        'concat',
+                        'shell:copyDistToSpec',
+                        'jasmine']);
 }
