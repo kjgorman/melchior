@@ -153,7 +153,9 @@
     var List = function () { }
 
     function safeList (lst) {
+        console.log("taking head of ", lst)
         if(lst[0].length) lst = lst[0]
+        console.log("and returning ", lst);
         return lst
     }
 
@@ -178,16 +180,14 @@
 }();var Melchior = function () {
     "use strict";
 
-    var currentValue = null
+    var currentValue = {}
 
-    function expects (elem) {
-        console.log(elem)
-        currentValue = elem
+    function expects (namespace, elem) {
+        currentValue[namespace] = elem
     }
 
-    function valueOfTest () {
-        console.log("current value: ", currentValue)
-        return currentValue
+    function valueOfTest (namespace) {
+        return currentValue[namespace] || null;
     }
 
     return {
@@ -50345,8 +50345,15 @@ var $Melchior=
  ($Melchior ? $Melchior : {});
 $Melchior.$Test=
  ($Melchior.$Test ? $Melchior.$Test : {});
-$Melchior.$Test.$expects=
- new _F_(function($__)
-         {var $__2=
+$Melchior.$Test.$mexpects=
+ new _F_(function($__,$__2)
+         {var $__3=
            _e_($__);
-          return Melchior.expects($__2);});
+          var $__4=
+           _e_($__2);
+          return Melchior.expects($__3,$__4);});
+$Melchior.$Test.$expects=
+ new _F_(function($s)
+         {var $__=
+           new _A_($Language.$UHC.$JScript.$ECMA.$String.$stringToJSString,[$s]);
+          return new _A_($Melchior.$Test.$mexpects,[$__]);});

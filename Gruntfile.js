@@ -29,18 +29,19 @@ module.exports = function(grunt) {
         }, 
         concat: {
             runDom : {
-                options: {
-                    separator:';'
-                },
+                options: { separator:';' },
                 src: ['spec/hs/runDom.js', 'spec/hs/spec-runDom.js'],
                 dest: 'spec/hs/runDom-spec.js'
             },
             getById : {
-                options: {
-                    separator:';'
-                },
+                options: { separator:';' },
                 src: ['spec/hs/getById-setup.js', 'spec/hs/getById.js', 'spec/hs/spec-getById.js'],
                 dest: 'spec/hs/getById-spec.js'
+            },
+            getByClass : {
+                options : { separator:';' },
+                src: ['spec/hs/getByClass-setup.js', 'spec/hs/getByClass.js', 'spec/hs/spec-getByClass.js'],
+                dest: 'spec/hs/getByClass-spec.js'
             },
             build : {
                 options: {
