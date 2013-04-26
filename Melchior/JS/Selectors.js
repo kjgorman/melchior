@@ -12,11 +12,13 @@ var Selectors = function () {
         if(elems.length) {
             for(; i < elems.length; i++) {
                 nodelist = elems[i];
+                if(elems[i].classList.contains(pattern)) returned.push(elems[i])
                 for(; j < nodelist.length; j++) {
                     returned.push.apply(returned, nodelist.item(j).getElementsByClassName(pattern))
                 }
             }
         } else {
+            if(elems.classList.contains(pattern)) returned.push(elems)
             returned.push(elems.getElementsByClassName(pattern))
         }
 
