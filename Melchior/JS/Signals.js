@@ -23,12 +23,12 @@ var Signals = function () {
         }
     }
 
-    function createEventedSignal (elem, event) {
+    function createEventedSignal (elem, event, key) {
         if(!elem || !elem.addEventListener || !event || typeof event !== "string")
             return undefined
         var s = new Signal()
-        elem.addEventListener(event, function () {
-            s.push(elem.value)
+        elem.addEventListener(event, function (e) {
+            s.push(elem[key || 'innerHTML'], e)
         })
         return s
     }
