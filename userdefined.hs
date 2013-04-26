@@ -32,7 +32,7 @@ main = runDom $ \html -> do
        return input
 
 clickableElems :: Dom [Element]
-clickableElems = get ((Selector $ byClass "specific-div") >>> (Selector $ byClass "clickable")) [toElement document]
+clickableElems = get (Selector $ byClass "clickable") [toElement document]
 
 manualMapBind :: [Element] -> Input -> Dom [Element]
 manualMapBind e i = sequence $ map (\x -> (bindBody (value i) x)) e

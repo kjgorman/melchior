@@ -24,6 +24,7 @@ var Signals = function () {
     }
 
     function createEventedSignal (elem, event, key) {
+        if(elem && elem[0] instanceof NodeList) elem = elem[0][0]
         if(elem && elem.length) elem = elem[0]
         if(!elem || !elem.addEventListener || !event || typeof event !== "string")
             return undefined
@@ -36,8 +37,8 @@ var Signals = function () {
 
     function bindToSignal (signal, callback) {
         if(!signal || !callback || !callback.args) return undefined
-
-        signal.registerListener(callback);
+        
+        signal.registerListener(callback)
         return {_1:{__aN__ : function() { return signal }}}
     }
 
