@@ -24,11 +24,12 @@ var Signals = function () {
     }
 
     function createEventedSignal (elem, event, key) {
+        if(elem && elem.length) elem = elem[0]
         if(!elem || !elem.addEventListener || !event || typeof event !== "string")
             return undefined
         var s = new Signal()
         elem.addEventListener(event, function (e) {
-            s.push(elem[key || 'innerHTML'], e)
+            s.push(elem[key || 'value'], e)
         })
         return s
     }

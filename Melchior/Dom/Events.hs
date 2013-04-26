@@ -4,6 +4,7 @@ data Event a = ElementEvt ElementEvent | MouseEvt MouseEvent
 
 instance Show (Event a) where
   show (ElementEvt a) = show a
+  show (MouseEvt a) = show a
 
 data ElementEvent = InputEvt | ChangeEvt | ResetEvt | SubmitEvt | InvalidEvt
 instance Show ElementEvent where
@@ -17,7 +18,7 @@ data MouseEvent = ClickEvt | DblClick | MouseDown | MouseUp | MouseEnter | Mouse
                 | MouseOut | MouseOver | MouseMove
 
 instance Show MouseEvent where
- show ClickEvt = "clickevt" 
+ show ClickEvt = "click" 
  show DblClick = "dblclick" 
  show MouseDown = "mousedown" 
  show MouseUp = "mouseup" 

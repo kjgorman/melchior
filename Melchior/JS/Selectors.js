@@ -19,6 +19,7 @@ var Selectors = function () {
         } else {
             returned.push(elems.getElementsByClassName(pattern))
         }
+
         return returned
     }    
     

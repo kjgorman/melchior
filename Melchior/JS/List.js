@@ -4,9 +4,7 @@ var Lists = function(){
     var List = function () { }
 
     function safeList (lst) {
-        console.log("taking head of ", lst)
         if(lst[0].length) lst = lst[0]
-        console.log("and returning ", lst);
         return lst
     }
 

@@ -19,12 +19,20 @@ foreign import js "log(%2, %1)"
 
 main :: IO Element
 main = runDom $ \html -> do
+       --do some selection
        input <- head $ get (Selector $ byId "input") $ [toElement document]
        output <- head $ get (Selector $ byId "output") $ [toElement document] 
        elems <- get ((Selector $ byClass "specific-div") >>> (Selector $ byClass "elem")) $ [toElement html]
+       clickable <- head $ clickableElems
+       --do some function bindng
        return $ manualMapBind elems (toInput input)
        bindBody (value $ toInput input) output
+       return $ sequence $ map (\x -> clickResponse (clickEdge clickable) x) elems
+       --return something i guess
        return input
+
+clickableElems :: Dom [Element]
+clickableElems = get ((Selector $ byClass "specific-div") >>> (Selector $ byClass "clickable")) [toElement document]
 
 manualMapBind :: [Element] -> Input -> Dom [Element]
 manualMapBind e i = sequence $ map (\x -> (bindBody (value i) x)) e
@@ -35,6 +43,9 @@ bindBody s e = bind s (\v -> setBody e v)
 value :: Input -> Signal String
 value i = createEventedSignal (Of "string") i (ElementEvt InputEvt)
 
-clickEdge :: Element -> Signal ()
-clickEdge e = createEventedSignal (Of ()) e (MouseEvt ClickEvt)
+clickEdge :: Element -> Signal String
+clickEdge e = createEventedSignalOf (Of "string") e (MouseEvt ClickEvt) "innerHTML"
+
+clickResponse :: Signal String -> Element -> Dom Element
+clickResponse s e = bind s (\v -> setBody e v)
 
