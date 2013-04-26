@@ -18,7 +18,7 @@ var Selectors = function () {
                 }
             }
         } else {
-            if(elems.classList.contains(pattern)) returned.push(elems)
+            if(elems && elems.classList.contains(pattern)) returned.push(elems)
             returned.push(elems.getElementsByClassName(pattern))
         }
 
