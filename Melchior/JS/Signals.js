@@ -3,17 +3,13 @@ var Signals = function () {
 
     var Signal = function () {
         this.registeredListeners = []
+        this.__isSignal = true
     }
 
     Signal.prototype.registerListener = function(callback) {
         this.registeredListeners.push(function (value) {
-            if(!callback || !callback.args) return;
-            //curry the extra argument
-            var argCopy = callback.args.slice() //shallow copy!
-            callback.args = callback.args.concat([value]);
-            callback.__aN__([[]])
-            //then uncurry it because it's actually the same object (?!)
-            callback.args = argCopy;
+            if(!callback || !callback.args) return
+            UHCFunction.apply(callback, value)
         })
     }
 
@@ -21,6 +17,15 @@ var Signals = function () {
         for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
             this.registeredListeners[i](value);
         }
+    }
+
+    Signal.prototype.pipe = function(transform) {
+        console.log("hello, world: ", transform);
+        var newSignal = new Signal()
+        this.registeredListeners.push(function (value) {
+            newSignal.push(UHCFunction.apply(transform, value))
+        });
+        return newSignal
     }
 
     function createEventedSignal (elem, event, key) {

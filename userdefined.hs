@@ -49,3 +49,6 @@ clickEdge e = createEventedSignalOf (Of "string") e (MouseEvt ClickEvt) "innerHT
 clickResponse :: Signal String -> Element -> Dom Element
 clickResponse s e = bind s (\v -> setBody e v)
 
+{-reverseSignal :: SF String String
+reverseSignal s = s |> (\v -> reverse v)-}
+

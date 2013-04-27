@@ -83,3 +83,22 @@ describe("listening for an evented signal with poorly defined callback should re
         expect(Signals.bindToSignal(signal, {})).toBe(undefined);
     });
 });
+
+describe("piping a signal should produce a new signal that will react to the old one", function () {
+    var element = document.createElement("div")
+    , originalSignal = Signals.createEventedSignal(element, "click");
+    
+    it("should produce a new signal", function () {
+        expect(originalSignal.pipe({args:[], __aN__:function() {}}).__isSignal).toBe(true);
+    });
+
+    it("should produce a value when the original signal receives a value", function () {
+        var global = false
+        ,   newSignal = originalSignal.pipe({args: [], __aN__: function () { global = true; return this.args }})
+        ,   event = document.createEvent("MouseEvents");
+        event.initMouseEvent("click", true, true, window,
+                             0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        element.dispatchEvent(event);
+        expect(global).toBe(true);
+    });
+});

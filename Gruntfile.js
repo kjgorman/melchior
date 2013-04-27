@@ -53,6 +53,7 @@ module.exports = function(grunt) {
                     "Melchior/JS/Signals.js",
                     "Melchior/JS/List.js",
                     "Melchior/JS/Test.js",
+                    "Melchior/JS/Function.js",
                     "/usr/local/lib//uhc-1.1.3/lib/js/libEH-RTS.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_Base.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_BoxArray.mjs",

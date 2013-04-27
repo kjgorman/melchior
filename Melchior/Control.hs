@@ -11,6 +11,7 @@ module Melchior.Control
   , (>>>)
   , (<<<)
   , (&&&)
+  , (|>)
   ) where
 
 import Language.UHC.JScript.Primitives
@@ -37,6 +38,12 @@ s &&& t = \x -> ampersand (s x, t x)
 
 foreign import js "Signals.ampersand(%1)"
   ampersand :: (Signal b, Signal c) -> Signal (b, c)
+
+(|>) :: Signal a -> (a -> b) -> Signal b
+s |> f = primPipeSignal s f
+
+foreign import js "Signals.pipe(%1, %2)"
+  primPipeSignal :: Signal a -> (a -> b) -> Signal b
 
 bind :: Signal a -> (a -> Dom ()) -> Dom Element
 bind s f = primBindFunctionToSignal s f
