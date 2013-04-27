@@ -20,10 +20,10 @@ var Signals = function () {
     }
 
     Signal.prototype.pipe = function(transform) {
-        console.log("hello, world: ", transform);
         var newSignal = new Signal()
         this.registeredListeners.push(function (value) {
-            newSignal.push(UHCFunction.apply(transform, value))
+            var res = UHCFunction.apply(transform, value)
+            newSignal.push(res)
         });
         return newSignal
     }

@@ -20,6 +20,12 @@
         return arg;
     }
 
+    this.reversal = function (str) {
+        var ret = "", i=str.length
+        for(;i > 0; i--) ret += str[i] || ""
+        return ret
+    }
+
     return {
         set: this.set,
         get: this.get, 

@@ -27,7 +27,7 @@ main = runDom $ \html -> do
        --do some function bindng
        return $ manualMapBind elems (toInput input)
        bindBody (value $ toInput input) output
-       return $ sequence $ map (\x -> clickResponse (clickEdge clickable) x) elems
+       return $ sequence $ map (clickResponse (clickEdge clickable)) elems
        --return something i guess
        return input
 
@@ -47,8 +47,10 @@ clickEdge :: Element -> Signal String
 clickEdge e = createEventedSignalOf (Of "string") e (MouseEvt ClickEvt) "innerHTML"
 
 clickResponse :: Signal String -> Element -> Dom Element
-clickResponse s e = bind s (\v -> setBody e v)
+clickResponse s e = bind (reverseSignal s) (\v -> setBody e v)
 
-{-reverseSignal :: SF String String
-reverseSignal s = s |> (\v -> reverse v)-}
+reverseSignal :: SF String String
+reverseSignal s = pipe s (\v -> reversal v)
 
+foreign import js "reversal(%1)"
+  reversal :: String -> String
