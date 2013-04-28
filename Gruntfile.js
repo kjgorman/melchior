@@ -43,6 +43,11 @@ module.exports = function(grunt) {
                 src: ['spec/hs/getByClass-setup.js', 'spec/hs/getByClass.js', 'spec/hs/spec-getByClass.js'],
                 dest: 'spec/hs/getByClass-spec.js'
             },
+            getByTagName : {
+                options : {separator: ';' },
+                src: ['spec/hs/getByTagName-setup.js', 'spec/hs/getByTagName.js', 'spec/hs/spec-getByTagName.js'],
+                dest: 'spec/hs/getByTagName-spec.js'
+            },
             build : {
                 options: {
                     separator:';'

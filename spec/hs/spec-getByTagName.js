@@ -3,11 +3,13 @@ describe("it should select the textarea", function () {
         expect(Melchior.valueOfTest("getByTagName")).toNotBe(null);
     });
 
-    it("should return an element", function () {
-        expect(Melchior.valueOfTest("getByTagName") instanceof HTMLElement).toBe(true);
+    it("should be a list", function () {
+        expect(Melchior.valueOfTest("getByTagName") instanceof HTMLElement).toBe(false);
     });
 
     it("should return the textarea", function () {
-        expect(Melchior.valueOfTest("getByTagName").tagName).toBe("TEXTAREA");
+        for(var i = 0; i < Melchior.valueOfTest("getByTagName"); i++) {
+            expect(Melchior.valueOfTest("getByTagName")[i].tagName).toBe("TEXTAREA")
+        }
     });
 });

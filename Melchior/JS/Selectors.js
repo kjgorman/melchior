@@ -25,7 +25,7 @@ var Selectors = function () {
         return returned
     }    
     
-    Selector.prototype.selectByTagName = function(elems, pattern) { 
+    Selector.prototype.selectByTag = function(elems, pattern) { 
         var returned = [], i = 0, j = 0, nodeList = []
         if(elems.length) {
             for(; i < elems.length; i++) { 
@@ -39,6 +39,7 @@ var Selectors = function () {
             if(elems && elems.tagName && elems.tagName === pattern) returned.push(elems)
             returned.push(elems.getElementsByTagName(pattern))
         }
+
         return returned
     }
 
