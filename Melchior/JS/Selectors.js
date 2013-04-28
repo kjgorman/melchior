@@ -25,6 +25,23 @@ var Selectors = function () {
         return returned
     }    
     
+    Selector.prototype.selectByTagName = function(elems, pattern) { 
+        var returned = [], i = 0, j = 0, nodeList = []
+        if(elems.length) {
+            for(; i < elems.length; i++) { 
+                nodeList = elems[i]
+                if(elems[i].tagName && elems[i].tagName === pattern) returned.push(elems[i])
+                for(; j < nodeList.length; j++) {
+                    returned.push.apply(returned, nodeList.item(j).getElementsByTagName(pattern))
+                }
+            }
+        } else {
+            if(elems && elems.tagName && elems.tagName === pattern) returned.push(elems)
+            returned.push(elems.getElementsByTagName(pattern))
+        }
+        return returned
+    }
+
     Selector.prototype.toInput = function(elem) {
         if(elem && elem.length) {
             return elem.map(oneToOneToInput).filter(function(e) { return e !== null; })

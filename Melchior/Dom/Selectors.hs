@@ -30,3 +30,9 @@ byClass s e = Dom $ sequence $ map (primGetByClass $ stringToJSString s) e
 
 foreign import js "Selectors.selectByClass(%2, %1)"
   primGetByClass :: JSString -> Element -> IO Element
+
+byTag :: String -> [Element] -> Dom [Element]
+byTag s e = Dom $ sequence $ map (primGetByTag $ stringToJSString s) e
+
+foreign import js "Selectors.selectByTag(%2, %1)"
+  primGetByTag :: JSString -> Element -> IO Element
