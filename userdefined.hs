@@ -9,26 +9,21 @@ import Melchior.Dom.Selectors
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 import Language.UHC.JScript.Primitives
 
-import Prelude hiding (head, map, (.), id)
-
-foreign import js "document"
-  elem :: Element
-
 foreign import js "log(%2, %1)"
-  inspect :: JSString -> Element -> Element
+  inspect :: JSString -> a -> a
 
 main :: IO Element
 main = runDom $ \html -> do
        --do some selection
-       input <- head $ get (Selector $ byId "input") $ [toElement document]
-       output <- head $ get (Selector $ byId "output") $ [toElement document] 
-       elems <- get ((Selector $ byClass "specific-div") >>> (Selector $ byClass "elem")) $ [toElement html]
-       clickable <- head $ clickableElems
+       input <- head $ pass (stringToJSString "get") $ get (Selector $ byId "input") $ [toElement html]
+       output <- head $ get (Selector $ byId "output") $ [toElement html] 
+       elems <- pass (stringToJSString "elem") $ get ((Selector $ byClass "specific-div") >>> (Selector $ byClass "elem")) $ [toElement html]
+                --          
+--       clickable <- head $ clickableElems
        --do some function bindng
-       return $ manualMapBind elems (toInput input)
        bindBody (value $ toInput input) output
-       return $ sequence $ map (clickResponse (clickEdge clickable)) elems
-       --return something i guess
+--       return $ manualMapBind elems (toInput input)
+--       return $ sequence $ map (clickResponse (clickEdge clickable)) elems
        return input
 
 clickableElems :: Dom [Element]

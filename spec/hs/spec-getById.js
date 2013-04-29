@@ -7,7 +7,7 @@ describe("it should return an element", function () {
         expect(Melchior.valueOfTest("getById") instanceof HTMLElement).toBe(true);
     });
     
-    it("should be the element", function () {
+    it("should be a list of only the  element", function () {
         expect(Melchior.valueOfTest("getById").id).toBe("anElement");
     });
 });

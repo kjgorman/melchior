@@ -3,8 +3,20 @@ var Selectors = function () {
 
     var Selector = function () { }
 
+    function flatten (lst) {
+        var i = 0, j, returned = []
+        for(; i < lst.length; i++) {
+            if(lst[i] instanceof NodeList) {
+                for(j = 0; j < lst[i].length; j++) {
+                    returned.push(lst[i][j])
+                }
+            } else returned.push.apply(lst[i])
+        }
+        return returned
+    }
+
     Selector.prototype.selectById = function(elem, pattern) {
-        return elem.getElementById(pattern)
+        return [elem.getElementById(pattern)]
     }
   
     Selector.prototype.selectByClass = function(elems, pattern) {
@@ -21,8 +33,7 @@ var Selectors = function () {
             if(elems && elems.classList &&elems.classList.contains(pattern)) returned.push(elems)
             returned.push(elems.getElementsByClassName(pattern))
         }
-
-        return returned
+        return flatten(returned)
     }    
     
     Selector.prototype.selectByTag = function(elems, pattern) { 

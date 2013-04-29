@@ -9,6 +9,7 @@ var Signals = function () {
     Signal.prototype.registerListener = function(callback) {
         this.registeredListeners.push(function (value) {
             if(!callback || !callback.args) return
+            
             UHCFunction.apply(callback, value)
         })
     }
@@ -41,8 +42,9 @@ var Signals = function () {
     }
 
     function bindToSignal (signal, callback) {
+        console.log(signal, window.callback = callback)
         if(!signal || !callback || !callback.args) return undefined
-        
+
         signal.registerListener(callback)
         return {_1:{__aN__ : function() { return signal }}}
     }
