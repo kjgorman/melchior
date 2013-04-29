@@ -33,6 +33,6 @@ describe("mapping should apply the signal but not modify it", function () {
             __aN__ : function () { return this.args[0]+1 },
             args   : []
         };
-        expect(Lists.map(aSignal, [1,2,3])).toEqual([2,3,4]);
+        expect(Lists.fromUHCList(Lists.map(aSignal, [1,2,3]))).toEqual([2,3,4]);
     });
 });
