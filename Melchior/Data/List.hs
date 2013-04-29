@@ -33,7 +33,7 @@ foreign import js "Lists.lconcat(%1)"
 map :: (a -> b) -> [a] -> [b]
 map f xs = primMap (\i -> f $ indexJSArray ys i) $ listToJSArray $ [0..(length xs)-1]
            where
-             ys = safe $ listToJSArray xs
+             ys = safe $ listToJSArray $ inspect (stringToJSString "xs") $ xs
 
 
   

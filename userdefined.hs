@@ -16,13 +16,12 @@ main :: IO Element
 main = runDom $ \html -> do
        --do some selection
        input <- head $ pass (stringToJSString "get") $ get (Selector $ byId "input") $ [toElement html]
-       output <- head $ get (Selector $ byId "output") $ [toElement html] 
-       elems <- pass (stringToJSString "elem") $ get ((Selector $ byClass "specific-div") >>> (Selector $ byClass "elem")) $ [toElement html]
-                --          
+       output <- head $ get ((Selector $ byClass "specific-div") >>> ((Selector $ byId "output")) $ [toElement html] 
+       elems <- get ((Selector $ byClass "elem")) $ [toElement html]
 --       clickable <- head $ clickableElems
        --do some function bindng
        bindBody (value $ toInput input) output
---       return $ manualMapBind elems (toInput input)
+       return $ manualMapBind elems (toInput input)
 --       return $ sequence $ map (clickResponse (clickEdge clickable)) elems
        return input
 
