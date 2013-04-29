@@ -4,6 +4,7 @@ var Lists = function(){
     var List = function () { }
 
     function lconcat (lst) {
+        //TODO -- this will obviously fail for more than one key...
         return toUHCList(lst._1)
     }
 
