@@ -33,6 +33,7 @@ var Selectors = function () {
             if(elems && elems.classList &&elems.classList.contains(pattern)) returned.push(elems)
             returned.push(elems.getElementsByClassName(pattern))
         }
+        console.log("flattening", returned, flatten(returned))
         return flatten(returned)
     }    
     

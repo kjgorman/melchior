@@ -29,6 +29,10 @@ var Signals = function () {
         return newSignal
     }
 
+    Signal.prototype.__aN__ = function () {
+        return this
+    }
+
     function createEventedSignal (elem, event, key) {
         if(elem && elem[0] instanceof NodeList) elem = elem[0][0]
         if(elem && elem.length) elem = elem[0]
@@ -44,13 +48,13 @@ var Signals = function () {
     function bindToSignal (signal, callback) {
         console.log(signal, window.callback = callback)
         if(!signal || !callback || !callback.args) return undefined
-        var yieldSignal = function () { return signal }
+
         signal.registerListener(callback)
         return {
             _1: {
-                __aN__ : yieldSignal
+                __aN__ : signal.__aN__
             },
-            __aN__: yieldSignal
+            __aN__: signal.__aN__
         }
     }
 
