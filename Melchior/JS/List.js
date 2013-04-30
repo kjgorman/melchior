@@ -9,11 +9,13 @@ var Lists = function(){
     }
 
     function safeList (lst) {
+        console.log("lst", lst)
         if(lst && lst[0].length) lst = lst[0]
         return lst
     }
 
     function map(func, list) {
+        console.log("window.func", window.func = func, list)
         if(!func || !func.__aN__ || typeof func.__aN__ !== "function" || !list || !list.hasOwnProperty("length"))
             return undefined;
         var mapped = list.map(function (l) {
@@ -52,11 +54,11 @@ var Lists = function(){
 
     function length(lst) {
         if(lst && lst.length) return lst.length
-        var len = 0
+        var len = 0, cont = false
         do {
             lst = lst._2
             len++
-        } while (lst && lst.__eOrV__ && lst.__eOrV__._tag_ !== 1)
+        } while (lst && (cont || lst._tag_ === 0))
         return len
     }
 
