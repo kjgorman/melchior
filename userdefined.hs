@@ -18,11 +18,11 @@ main = runDom $ \html -> do
        input <- head $ pass (stringToJSString "get") $ get (Selector $ byId "input") $ [toElement html]
        output <- head $ get (Selector $ byId "output") $ [toElement html] 
        elems <- get ((Selector $ byClass "specific-div") >>> (Selector $ byClass "elem")) $ [toElement html]
---       clickable <- head $ clickableElems
+       clickable <- head $ clickableElems
        --do some function bindng
        bindBody (value $ toInput input) output
        return $ manualMapBind elems (toInput input)
---       return $ sequence $ map (clickResponse (clickEdge clickable)) elems
+       return $ sequence $ map (clickResponse (clickEdge clickable)) elems
        return input
 
 clickableElems :: Dom [Element]
