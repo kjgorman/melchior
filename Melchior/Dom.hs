@@ -65,7 +65,7 @@ foreign import js "Selectors.toSpan(%2)"
   toSpan :: (DomNode a) => a -> Span
 
 foreign import js "set(%1, 'innerHTML', %2)"
-  setBody :: Element -> String -> Dom ()
+  setBody :: Element -> JSString -> Dom ()
 
 {-
 getAttr :: String -> Element -> Dom String
