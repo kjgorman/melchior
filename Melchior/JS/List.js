@@ -26,7 +26,10 @@ var Lists = function(){
             return returnVal
         })
 
-        return toUHCList(mapped)
+        return {
+            __eOrV__ : toUHCList(mapped),
+            __aN__ : function () { return this.__eOrV__ }
+        }
     }
 
     function toUHCList(lst) {
@@ -44,6 +47,7 @@ var Lists = function(){
     }
 
     function fromUHCList(lst) {
+        if(lst.__eOrV__) lst = lst.__eOrV__
         var returned = []
         do {
             returned.push(lst._1.__eOrV__)

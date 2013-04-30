@@ -44,9 +44,14 @@ var Signals = function () {
     function bindToSignal (signal, callback) {
         console.log(signal, window.callback = callback)
         if(!signal || !callback || !callback.args) return undefined
-
+        var yieldSignal = function () { return signal }
         signal.registerListener(callback)
-        return {_1:{__aN__ : function() { return signal }}}
+        return {
+            _1: {
+                __aN__ : yieldSignal
+            },
+            __aN__: yieldSignal
+        }
     }
 
     function ampersand(pair) {

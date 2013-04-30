@@ -21,7 +21,7 @@ main = runDom $ \html -> do
 --       clickable <- head $ clickableElems
        --do some function bindng
        bindBody (value $ toInput input) output
---       return $ manualMapBind elems (toInput input)
+       return $ manualMapBind elems (toInput input)
 --       return $ sequence $ map (clickResponse (clickEdge clickable)) elems
        return input
 
