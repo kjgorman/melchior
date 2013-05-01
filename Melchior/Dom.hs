@@ -15,6 +15,10 @@ module Melchior.Dom
     , force
     , document
     , setBody
+    , addClass
+    , removeClass
+    , parentOf
+    , siblings
     ) where
 
 --dependencies
@@ -66,6 +70,18 @@ foreign import js "Selectors.toSpan(%2)"
 
 foreign import js "set(%1, 'innerHTML', %2)"
   setBody :: Element -> JSString -> Dom ()
+
+foreign import js "addClass(%2, %1)"
+  addClass :: JSString -> Element -> JSString
+
+foreign import js "removeClass(%2, %1)"
+  removeClass :: JSString -> Element -> JSString
+
+foreign import js "%1.parentNode"
+  parentOf :: Element -> Element
+
+foreign import js "%1.parentNode.children"
+  siblings :: Element -> [Element]
 
 {-
 getAttr :: String -> Element -> Dom String

@@ -27,9 +27,22 @@
         return ret
     }
 
+    this.addClass = function(element, classString) {
+        console.log(element, classString)
+        element.classList.add(classString)
+        return classString
+    }
+
+    this.removeClass = function(element, classString) {
+        console.log(element, classString)
+        element.classList.remove(classString)
+        return classString
+    }
+
     return {
         set: this.set,
         get: this.get, 
+        addClass: this.addClass,
         id: this.id,
         log: this.log
     }

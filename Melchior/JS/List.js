@@ -57,12 +57,15 @@ var Lists = function(){
     }
 
     function length(lst) {
+
         if(lst && lst.length) return lst.length
         var len = 0, cont = false
         do {
-            lst = lst._2
+            cont = false
+            lst = evaluatable(lst._2) ? _e_(lst._2) : lst._2
             len++
         } while (lst && (cont || lst._tag_ === 0))
+
         return len
     }
 
