@@ -28,21 +28,33 @@
     }
 
     this.addClass = function(element, classString) {
-        console.log(element, classString)
+        console.log("adding", element, classString)
         element.classList.add(classString)
-        return classString
+        
+        return {
+            __aN__: function() { return classString }
+        }
     }
 
     this.removeClass = function(element, classString) {
-        console.log(element, classString)
+        console.log("removing", element, classString)
         element.classList.remove(classString)
-        return classString
+
+        return {
+            __aN__: function() { return classString }
+        }
+    }
+
+    this.siblings = function(element) {
+        return Lists.toUHCList(Array.prototype.slice.call(element.parentNode.children))
     }
 
     return {
         set: this.set,
         get: this.get, 
         addClass: this.addClass,
+        removeClass: this.removeClass,
+        siblings: this.siblings,
         id: this.id,
         log: this.log
     }

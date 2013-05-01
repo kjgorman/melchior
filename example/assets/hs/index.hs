@@ -19,7 +19,8 @@ setupNavLinks = \html -> do
   links <- get (Selector $ byClass "link") $ [toElement html]
   clickableLinks <- return $ map clickListener links
   return $ contentSwitcher clickableLinks content
-  return $ pass (stringToJSString "mapped") $ map tabSwitcher $ zip clickableLinks links
+  return $ map tabDeHighlighter $ zip clickableLinks links
+  return $ map tabSwitcher $ zip clickableLinks links
   head $ return links
 
 clickListener :: Element -> Signal JSString
@@ -28,6 +29,9 @@ clickListener e = createEventedSignalOf (Of $ stringToJSString "string") e (Mous
 contentSwitcher :: [Signal JSString] -> Element -> [Dom Element]
 contentSwitcher signals content = map (\x -> bind x (replaceBody content)) signals
 
+tabDeHighlighter :: (Signal JSString, Element) -> Signal JSString
+tabDeHighlighter (s, e) = pipe s (\x -> UHC.Base.head $ map stripClass (siblings $ parentOf e))
+                          where stripClass = (removeClass $ stringToJSString "active")
 tabSwitcher :: (Signal JSString, Element) -> Signal JSString
 tabSwitcher (s, e) = pipe s (\x -> addClass (stringToJSString "active") $ parentOf e)
                                        

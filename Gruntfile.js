@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         },
         shell : {
             build : {
-                command : "uhc -tjs userdefined.hs && find . -name '*.hs' | grep -v userdefined  | grep -v 'Language' | uhc -tjs"
+                command : "uhc -tjs example/misc/userdefined.hs && find . -name '*.hs' | grep -v userdefined  | grep -v 'Language' | uhc -tjs"
             },
             buildTests : {
                 command : "find . -name 'spec/hs/*hs' -exec uhc -tjs {} \;"

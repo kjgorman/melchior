@@ -57,7 +57,6 @@ var Lists = function(){
     }
 
     function length(lst) {
-
         if(lst && lst.length) return lst.length
         var len = 0, cont = false
         do {
@@ -74,6 +73,7 @@ var Lists = function(){
         length: length, 
         safeList : safeList,
         map : map,
-        fromUHCList : fromUHCList
+        fromUHCList : fromUHCList,
+        toUHCList : toUHCList
     }
 }()

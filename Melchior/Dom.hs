@@ -80,7 +80,7 @@ foreign import js "removeClass(%2, %1)"
 foreign import js "%1.parentNode"
   parentOf :: Element -> Element
 
-foreign import js "%1.parentNode.children"
+foreign import js "siblings(%1)"
   siblings :: Element -> [Element]
 
 {-
