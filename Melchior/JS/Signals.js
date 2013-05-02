@@ -9,7 +9,6 @@ var Signals = function () {
     Signal.prototype.registerListener = function(callback) {
         this.registeredListeners.push(function (value) {
             if(!callback || !callback.args) return
-            
             UHCFunction.apply(callback, value)
         })
     }

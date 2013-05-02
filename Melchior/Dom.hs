@@ -17,6 +17,7 @@ module Melchior.Dom
     , setBody
     , addClass
     , removeClass
+    , toggle
     , parentOf
     , siblings
     ) where
@@ -71,16 +72,19 @@ foreign import js "Selectors.toSpan(%2)"
 foreign import js "set(%1, 'innerHTML', %2)"
   setBody :: Element -> JSString -> Dom ()
 
-foreign import js "addClass(%2, %1)"
+foreign import js "Dom.addClass(%2, %1)"
   addClass :: JSString -> Element -> JSString
 
-foreign import js "removeClass(%2, %1)"
+foreign import js "Dom.removeClass(%2, %1)"
   removeClass :: JSString -> Element -> JSString
+
+foreign import js "Dom.toggle(%2, %1)"
+  toggle :: JSString -> Element -> JSString
 
 foreign import js "%1.parentNode"
   parentOf :: Element -> Element
 
-foreign import js "siblings(%1)"
+foreign import js "Dom.siblings(%1)"
   siblings :: Element -> [Element]
 
 {-
