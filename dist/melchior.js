@@ -354,16 +354,20 @@
     var DomOperations = function () { }
 
     DomOperations.prototype.addClass = function(element, classString) {
-        console.log("adding", element, classString)
-        element.classList.add(classString)
-        
+        if(element === null) return null
+        if(!element || !classString) return undefined
+
+        element.classList.add(classString)        
+
         return {
             __aN__: function() { return classString }
         }
     }
 
     DomOperations.prototype.removeClass = function(element, classString) {
-        console.log("removing", element, classString)
+        if(element === null) return null
+        if(!element || !classString) return undefined
+
         element.classList.remove(classString)
 
         return {
@@ -372,11 +376,11 @@
     }
 
     DomOperations.prototype.toggle = function(element, classString) {
-        console.log("toggling", element, classString)
-        if(element.classList.contains(classString))
-            element.classList.remove(classString)
-        else
-            element.classList.add(classString)
+        if(element === null) return null
+        if(!element || !classString) return undefined
+
+        element.classList.toggle(classString)
+
         return {
             __aN__ : function () { return classString }
         }

@@ -11,18 +11,30 @@ import Prelude hiding ((.), id, head, map)
 main :: IO Element
 main = runDom $ \html -> do
   setupNavLinks html
+  setupClickListeners html
   return $ toElement $ html
 
 setupNavLinks :: Document -> Dom Element
 setupNavLinks = \html -> do
+  --element selection is here
   content <- head $ get (Selector $ byId "jumbotron") $ [toElement html]
   links <- get (Selector $ byClass "link") $ [toElement html]
+  --signal creation is here
   clickEvents <- return $ map clickListener links
+  --and we can then pipe signals of events through a function
   return $ contentSwitcher clickEvents content
   return $ map tabDeHighlighter $ zip clickEvents links
   return $ map tabSwitcher $ zip clickEvents links
+  --and some arbitrary return is here
   head $ return links
 
+setupClickListeners :: Document -> Dom Element
+setupClickListeners = \html -> do
+  checkBoxes <- get (Selector $ byClass "check") $ [toElement html]
+  checkClick <- return $ map clickListener checkBoxes
+  return $ map strike $ zip checkClick checkBoxes
+  head $ return checkBoxes
+  
 clickListener :: Element -> Signal JSString
 clickListener e = createEventedSignalOf (Of $ stringToJSString "string") e (MouseEvt ClickEvt) "innerHTML"
 
@@ -39,6 +51,8 @@ tabSwitcher (s, e) = pipe s (\x -> addClass (stringToJSString "active") $ parent
 replaceBody :: Element -> JSString -> Dom ()
 replaceBody e s = setBody e $ contentFor $ jsStringToString s
 
+strike :: (Signal JSString, Element) -> Signal JSString
+strike (s, e) = pipe s (\x -> toggle (stringToJSString "checked") $ UHC.Base.head $ siblings e)
 
 --
 --here be dragons / unimplementedness
