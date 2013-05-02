@@ -48,6 +48,7 @@ var Lists = function(){
 
     function fromUHCList(lst) {
         if(lst.__eOrV__) lst = lst.__eOrV__
+        if(lst._tag_ === 1) return []
         var returned = []
         do {
             returned.push(lst._1.__eOrV__)
@@ -68,12 +69,17 @@ var Lists = function(){
         return len
     }
 
+    function emptyUHCList() {
+        return toUHCList([])
+    }
+
     return {
         lconcat : lconcat,
         length: length, 
         safeList : safeList,
         map : map,
         fromUHCList : fromUHCList,
-        toUHCList : toUHCList
+        toUHCList : toUHCList,
+        emptyUHCList : emptyUHCList
     }
 }()

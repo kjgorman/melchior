@@ -36,3 +36,21 @@ describe("mapping should apply the signal but not modify it", function () {
         expect(Lists.fromUHCList(Lists.map(aSignal, [1,2,3]))).toEqual([2,3,4]);
     });
 });
+
+describe("round tripping uhc list", function () {
+    it("should return empty list from uhc empty list", function () {
+        expect(Lists.fromUHCList(Lists.emptyUHCList())).toEqual([])
+    })
+
+    it("should return empty uhc list from empty list", function () {
+        expect(Lists.toUHCList([])).toEqual(Lists.emptyUHCList())
+    })
+
+    it("should roundtrip", function () {
+        expect(Lists.fromUHCList(Lists.toUHCList([1,2,3]))).toEqual([1,2,3])
+    })
+
+    it("should have the correct length once converted", function () {
+        expect(Lists.length(Lists.toUHCList([1,2,3,4,5]))).toBe(5)
+    })
+});

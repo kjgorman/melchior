@@ -37,6 +37,10 @@ var Dom = function() {
     }
 
     DomOperations.prototype.siblings = function(element) {
+        if(element === null) return null
+        if(!element) return undefined
+        if(!element.parentNode) return Lists.emptyUHCList()
+
         return Lists.toUHCList(Array.prototype.slice.call(element.parentNode.children).filter(function(e) {
             return e !== element
         }))

@@ -63,3 +63,26 @@ describe("removing a class should remove, and be idempotent", function () {
     });
 
 });
+
+describe("siblings should return siblings", function () {
+    var someElements = document.createElement("div");
+    [1,2,3,4].map(function() { someElements.appendChild(document.createElement("div")) });
+    
+    it("should return null for null", function () {
+        expect(Dom.siblings(null)).toBe(null)
+    });
+
+    it("should return undefined for undefined", function () {
+        expect(Dom.siblings(undefined)).toBe(undefined)
+    });
+
+    it("should return nothing for a node with no parent", function () {
+        expect(Dom.siblings(someElements)).toEqual(Lists.emptyUHCList())
+    });
+
+    it("should return it's siblings", function () {
+        expect(Lists.fromUHCList(Dom.siblings(someElements.children[0])))
+            .toEqual(Array.prototype.slice.call(someElements.children, 1))
+    });
+
+});
