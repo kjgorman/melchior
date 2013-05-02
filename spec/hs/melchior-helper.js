@@ -279,6 +279,7 @@
 
     function fromUHCList(lst) {
         if(lst.__eOrV__) lst = lst.__eOrV__
+        if(lst._tag_ === 1) return []
         var returned = []
         do {
             returned.push(lst._1.__eOrV__)
@@ -299,13 +300,18 @@
         return len
     }
 
+    function emptyUHCList() {
+        return toUHCList([])
+    }
+
     return {
         lconcat : lconcat,
         length: length, 
         safeList : safeList,
         map : map,
         fromUHCList : fromUHCList,
-        toUHCList : toUHCList
+        toUHCList : toUHCList,
+        emptyUHCList : emptyUHCList
     }
 }()
 ;var Melchior = function () {
@@ -387,6 +393,10 @@
     }
 
     DomOperations.prototype.siblings = function(element) {
+        if(element === null) return null
+        if(!element) return undefined
+        if(!element.parentNode) return Lists.emptyUHCList()
+
         return Lists.toUHCList(Array.prototype.slice.call(element.parentNode.children).filter(function(e) {
             return e !== element
         }))
