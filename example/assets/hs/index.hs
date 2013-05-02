@@ -15,28 +15,33 @@ main = runDom $ \html -> do
 
 setupNavLinks :: Document -> Dom Element
 setupNavLinks = \html -> do
-  content <- head $ get (Selector $ byId "main-content") $ [toElement html]
+  content <- head $ get (Selector $ byId "jumbotron") $ [toElement html]
   links <- get (Selector $ byClass "link") $ [toElement html]
-  clickableLinks <- return $ map clickListener links
-  return $ contentSwitcher clickableLinks content
-  return $ map tabDeHighlighter $ zip clickableLinks links
-  return $ map tabSwitcher $ zip clickableLinks links
+  clickEvents <- return $ map clickListener links
+  return $ contentSwitcher clickEvents content
+  return $ map tabDeHighlighter $ zip clickEvents links
+  return $ map tabSwitcher $ zip clickEvents links
   head $ return links
 
 clickListener :: Element -> Signal JSString
 clickListener e = createEventedSignalOf (Of $ stringToJSString "string") e (MouseEvt ClickEvt) "innerHTML"
 
-contentSwitcher :: [Signal JSString] -> Element -> [Dom Element]
-contentSwitcher signals content = map (\x -> bind x (replaceBody content)) signals
+contentSwitcher :: [Signal JSString] -> Element -> [Signal (Dom ())]
+contentSwitcher signals content = map (\x -> pipe x (replaceBody content)) signals
 
 tabDeHighlighter :: (Signal JSString, Element) -> Signal JSString
 tabDeHighlighter (s, e) = pipe s (\x -> UHC.Base.head $ map stripClass (siblings $ parentOf e))
                           where stripClass = (removeClass $ stringToJSString "active")
+                                
 tabSwitcher :: (Signal JSString, Element) -> Signal JSString
 tabSwitcher (s, e) = pipe s (\x -> addClass (stringToJSString "active") $ parentOf e)
                                        
 replaceBody :: Element -> JSString -> Dom ()
 replaceBody e s = setBody e $ contentFor $ jsStringToString s
+
+
+--
+--here be dragons / unimplementedness
 
 contentFor :: String -> JSString
 contentFor "About" = stringToJSString $ "<div>When in doubt, rip off twitter!</div>"
@@ -50,19 +55,6 @@ fromTemplate "Home" = "<div class='jumbotron'>\
 \          <h1>FRP Demo</h1>\
 \          <p class='lead'>foo bar quux</p>\
 \          <a class='btn btn-large btn-success' href='#'>Button!</a>\
-\        </div>\
-\\
-\        <hr>\
-\\
-\        <div class='row-fluid marketing'>\
-\          <div class='span6'>\
-\            <h4>Subheading</h4>\
-\            <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>\
-\          </div>\
-\\
-\          <div class='span6'>\
-\            <h4>Subheading</h4>\
-\            <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>\
 \        </div>"
 
 foreign import js "log(%2, %1)"
