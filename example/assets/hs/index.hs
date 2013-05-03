@@ -22,7 +22,7 @@ setupNavLinks = \html -> do
   --signal creation is here
   clickEvents <- return $ map clickListener links
   --and we can then pipe signals of events through a function
-  return $ map (tabSwitcher >>> (tabClassSwitcher &&& (contentSwitcher content))) clickEvents
+  return $ map (tabClassSwitcher >>> (tabSwitcher &&& (contentSwitcher content))) clickEvents
   --and some arbitrary return is here
   head $ return links
 
@@ -39,17 +39,19 @@ clickListener e = createEventedSignalOf (Of $ stringToJSString "string") e (Mous
 contentSwitcher :: Element -> Signal JSString -> Signal (Dom ())
 contentSwitcher content signal = pipe signal (replaceBody content)
                                   
-tabClassSwitcher :: Signal JSString -> Signal JSString
-tabClassSwitcher s = pipe s (\x -> first $ map stripClass $  siblings $ parentOf $ source $ s)
-                          where stripClass = (removeClass $ stringToJSString "active")
-                                
-tabSwitcher :: Signal JSString -> Signal JSString
-tabSwitcher s = pipe s (\x -> addClass (stringToJSString "active") $ parentOf $ source s)
-                                       
+tabClassSwitcher :: SF JSString JSString
+tabClassSwitcher s = pipe s (\x -> passThrough x $ map stripClass $  siblings $ parentOf $ source $ s)
+                          where
+                            passThrough x _ = x                                
+                            stripClass = (removeClass $ stringToJSString "active")
+
+tabSwitcher :: SF JSString JSString
+tabSwitcher s = pipe s (\_ -> addClass (stringToJSString "active") $ parentOf $ source s)
+                  
 replaceBody :: Element -> JSString -> Dom ()
 replaceBody e s = setBody e $ contentFor $ jsStringToString s
 
-strike :: Signal JSString -> Signal JSString
+strike :: SF JSString JSString
 strike s = pipe s (\x -> toggle (stringToJSString "checked") $ UHC.Base.head $ siblings $ source s)
 
 --

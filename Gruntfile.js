@@ -64,6 +64,7 @@ module.exports = function(grunt) {
                     "Melchior/JS/Function.js",
                     "Melchior/JS/Dom.js",
                     "Melchior/JS/Events.js", 
+                    "Melchior/JS/Tuple.js",
                     "/usr/local/lib//uhc-1.1.3/lib/js/libEH-RTS.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_Base.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_BoxArray.mjs",

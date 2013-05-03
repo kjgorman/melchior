@@ -33,8 +33,13 @@ s >>> t = \x -> t $ s x
 (<<<) :: SF b c -> SF a b -> SF a c
 s <<< t = \x -> s $ t x
 
-(&&&) :: SF a b -> SF a c -> SF a (Signal b, Signal c)
-s &&& t = \x -> undefined
+(&&&) :: SF a b -> SF a c -> SF a (b, c)
+s &&& t = \x -> toSF (s x, t x)
+                where
+                  toSF (Signal b, Signal c) = Signal $ pair (b, c)
+
+foreign import js "Tuples.pair(%1)"
+  pair :: (JSPtr a, JSPtr b) -> JSPtr (a, b)
 
 foreign import js "Signals.source(%1)"
   source :: Signal a -> Element
