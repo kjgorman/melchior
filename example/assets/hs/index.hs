@@ -1,4 +1,4 @@
-import Control.Category
+import Control.Category hiding ((>>>), (<<<))
 import Melchior.Control
 import Melchior.Data.List
 import Melchior.Dom
@@ -22,9 +22,7 @@ setupNavLinks = \html -> do
   --signal creation is here
   clickEvents <- return $ map clickListener links
   --and we can then pipe signals of events through a function
-  return $ contentSwitcher clickEvents content
-  return $ map tabClassSwitcher clickEvents
-  return $ map tabSwitcher $ zip clickEvents links
+  return $ map (tabSwitcher >>> (tabClassSwitcher &&& (contentSwitcher content))) clickEvents
   --and some arbitrary return is here
   head $ return links
 
@@ -32,27 +30,27 @@ setupClickListeners :: Document -> Dom Element
 setupClickListeners = \html -> do
   checkBoxes <- get (Selector $ byClass "check") $ [toElement html]
   checkClick <- return $ map clickListener checkBoxes
-  return $ map strike $ zip checkClick checkBoxes
+  return $ map strike checkClick 
   head $ return checkBoxes
   
 clickListener :: Element -> Signal JSString
 clickListener e = createEventedSignalOf (Of $ stringToJSString "string") e (MouseEvt ClickEvt) "innerHTML"
 
-contentSwitcher :: [Signal JSString] -> Element -> [Signal (Dom ())]
-contentSwitcher signals content = map (\x -> pipe x (replaceBody content)) signals
+contentSwitcher :: Element -> Signal JSString -> Signal (Dom ())
+contentSwitcher content signal = pipe signal (replaceBody content)
                                   
 tabClassSwitcher :: Signal JSString -> Signal JSString
-tabClassSwitcher s = pipe s (\x -> UHC.Base.head $ map stripClass (pass (stringToJSString "siblings") $ siblings $ parentOf $ source s))
+tabClassSwitcher s = pipe s (\x -> first $ map stripClass $  siblings $ parentOf $ source $ s)
                           where stripClass = (removeClass $ stringToJSString "active")
                                 
-tabSwitcher :: (Signal JSString, Element) -> Signal JSString
-tabSwitcher (s, e) = pipe s (\x -> addClass (stringToJSString "active") $ parentOf e)
+tabSwitcher :: Signal JSString -> Signal JSString
+tabSwitcher s = pipe s (\x -> addClass (stringToJSString "active") $ parentOf $ source s)
                                        
 replaceBody :: Element -> JSString -> Dom ()
 replaceBody e s = setBody e $ contentFor $ jsStringToString s
 
-strike :: (Signal JSString, Element) -> Signal JSString
-strike (s, e) = pipe s (\x -> toggle (stringToJSString "checked") $ UHC.Base.head $ siblings e)
+strike :: Signal JSString -> Signal JSString
+strike s = pipe s (\x -> toggle (stringToJSString "checked") $ UHC.Base.head $ siblings $ source s)
 
 --
 --here be dragons / unimplementedness

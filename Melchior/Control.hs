@@ -29,16 +29,16 @@ runDom f = io
            where Dom io = f document
 
 (>>>) :: SF a b -> SF b c -> SF a c
-s >>> t = t . s
+s >>> t = \x -> t $ s x
 
 (<<<) :: SF b c -> SF a b -> SF a c
-s <<< t = s . t
+s <<< t = \x -> s $ t x
 
 (&&&) :: SF a b -> SF a c -> SF a (b, c)
-s &&& t = \x -> ampersand (s x, t x)
+s &&& t = \x -> ampersand s t x
 
 foreign import js "Signals.ampersand(%1)"
-  ampersand :: (Signal b, Signal c) -> Signal (b, c)
+  ampersand :: SF a b -> SF a c -> SF a (b, c)
 
 foreign import js "Signals.source(%1)"
   source :: Signal a -> Element

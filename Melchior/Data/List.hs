@@ -2,6 +2,7 @@ module Melchior.Data.List
        (
          -- * functions
          head
+       , first
        , map
        , lconcat
        ) where
@@ -14,6 +15,12 @@ import Prelude hiding (head, map)
 
 head :: (DomNode a) => Dom [a] -> Dom a
 head i = inspect (stringToJSString "head") i >>= \x -> return $ indexJSArray (listToJSArray $ x) 0
+
+first :: [a] -> a
+first = primLazyHead
+
+foreign import js "Lists.head(%1)"
+  primLazyHead :: [a] -> a
 
 foreign import js "Lists.length(%1)"
   length :: [a] -> Int

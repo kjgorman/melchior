@@ -25,6 +25,7 @@ var Signals = function () {
         var newSignal = new Signal(this)
         this.registeredListeners.push(function (value, event) {
             var res = UHCFunction.apply(transform, value, event)
+            console.log("pushing res", res, transform, value)
             newSignal.push(res, event)
         });
         return newSignal
@@ -63,15 +64,15 @@ var Signals = function () {
         }
     }
 
-    function ampersand(pair) {
-        console.log(pair);
+    function ampersand(arg, fst, snd) {
+        console.log("&&&:", arg, fst, snd);
     }
 
     function source (signal) {
         if(signal === null) return null
         if(!signal) return signal
 
-        return signal.source || Signal.prototype.source.call(signal)
+        return Signal.prototype.source.call(signal)
     }
 
     return {

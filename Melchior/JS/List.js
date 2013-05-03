@@ -70,6 +70,15 @@ var Lists = function(){
         return len
     }
 
+    function head(lst) {
+        if(lst === null) return null
+        if(!lst) return lst
+        console.log("trying to take head of the list", lst)
+        if(!lst._1) return undefined
+        console.log("returning", lst._1)
+        return lst._1
+    }
+
     function emptyUHCList() {
         return toUHCList([])
     }
@@ -81,6 +90,7 @@ var Lists = function(){
         map : map,
         fromUHCList : fromUHCList,
         toUHCList : toUHCList,
-        emptyUHCList : emptyUHCList
+        emptyUHCList : emptyUHCList,
+        head : head
     }
 }()
