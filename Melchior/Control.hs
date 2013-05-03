@@ -7,7 +7,6 @@ module Melchior.Control
   , runDom
   , createEventedSignal
   , createEventedSignalOf
-  , bind
   , (>>>)
   , (<<<)
   , (&&&)
@@ -34,8 +33,8 @@ s >>> t = \x -> t $ s x
 (<<<) :: SF b c -> SF a b -> SF a c
 s <<< t = \x -> s $ t x
 
-(&&&) :: SF a b -> SF a c -> SF a (b, c)
-s &&& t = undefined
+(&&&) :: SF a b -> SF a c -> SF a (Signal b, Signal c)
+s &&& t = \x -> undefined
 
 foreign import js "Signals.source(%1)"
   source :: Signal a -> Element
@@ -45,12 +44,6 @@ pipe s f = primPipeSignal s f
 
 foreign import js "%1.pipe(%2)"
   primPipeSignal :: Signal a -> (a -> b) -> Signal b
-
-bind :: Signal a -> (a -> Dom ()) -> Dom Element
-bind s f = primBindFunctionToSignal s f
-
-foreign import js "Signals.bindToSignal(%1, %2)"
-  primBindFunctionToSignal :: Signal a -> (a -> Dom ()) -> Dom Element
 
 createEventedSignal :: (DomNode a) => Of c -> a -> Event b -> Signal c
 createEventedSignal o el evt = primCreateEventedSignal o el $ (stringToJSString . show) evt
