@@ -1,7 +1,7 @@
 module Melchior.Dom.Events where
 
 data Event a = ElementEvt ElementEvent | MouseEvt MouseEvent
-
+            
 instance Show (Event a) where
   show (ElementEvt a) = show a
   show (MouseEvt a) = show a

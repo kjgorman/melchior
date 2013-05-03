@@ -1,8 +1,10 @@
 var Signals = function () {
     "use strict";
 
-    var Signal = function () {
+    var Signal = function (source) {
+        console.log("initialising signal with source: ", source)
         this.registeredListeners = []
+        this.source = source
         this.__isSignal = true
     }
 
@@ -13,17 +15,17 @@ var Signals = function () {
         })
     }
 
-    Signal.prototype.push = function(value) {
+    Signal.prototype.push = function(value, event) {
         for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
-            this.registeredListeners[i](value);
+            this.registeredListeners[i](value, event);
         }
     }
 
     Signal.prototype.pipe = function(transform) {
-        var newSignal = new Signal()
-        this.registeredListeners.push(function (value) {
-            var res = UHCFunction.apply(transform, value)
-            newSignal.push(res)
+        var newSignal = new Signal(this)
+        this.registeredListeners.push(function (value, event) {
+            var res = UHCFunction.apply(transform, value, event)
+            newSignal.push(res, event)
         });
         return newSignal
     }
@@ -32,12 +34,16 @@ var Signals = function () {
         return this
     }
 
+    Signal.prototype.source = function () {
+        return this.source instanceof Signal ? this.source.source : this.source;
+    }
+
     function createEventedSignal (elem, event, key) {
         if(elem && elem[0] instanceof NodeList) elem = elem[0][0]
         if(elem && elem.length) elem = elem[0]
         if(!elem || !elem.addEventListener || !event || typeof event !== "string")
             return undefined
-        var s = new Signal()
+        var s = new Signal(elem)
         elem.addEventListener(event, function (e) {
             s.push(elem[key || 'value'], e)
         })
@@ -61,9 +67,17 @@ var Signals = function () {
         console.log(pair);
     }
 
+    function source (signal) {
+        if(signal === null) return null
+        if(!signal) return signal
+
+        return signal.source || Signal.prototype.source.call(signal)
+    }
+
     return {
         createEventedSignal: createEventedSignal,
         bindToSignal: bindToSignal,
-        ampersand: ampersand
+        ampersand: ampersand,
+        source:source
     }
 }()

@@ -18,6 +18,9 @@ module.exports = function(grunt) {
             },
             copyDistToSpec : {
                 command : "cp dist/melchior.js spec/hs/melchior-helper.js"
+            },
+            copyDistToExample : {
+                command : "cp dist/melchior.js example/assets/"
             }
         },
         jshint : {
@@ -60,6 +63,7 @@ module.exports = function(grunt) {
                     "Melchior/JS/Test.js",
                     "Melchior/JS/Function.js",
                     "Melchior/JS/Dom.js",
+                    "Melchior/JS/Events.js", 
                     "/usr/local/lib//uhc-1.1.3/lib/js/libEH-RTS.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_Base.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_BoxArray.mjs",
@@ -120,4 +124,5 @@ module.exports = function(grunt) {
                         'shell:copyDistToSpec',
                         'jasmine']);
     grunt.registerTask('travis', ['jshint', 'jasmine']);
+    grunt.registerTask('example', ['jshint','shell:build','shell:buildTests','concat','shell:copyDistToSpec','jasmine', 'shell:copyDistToExample']);
 }

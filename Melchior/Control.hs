@@ -12,6 +12,7 @@ module Melchior.Control
   , (<<<)
   , (&&&)
   , pipe
+  , source
   ) where
 
 import Language.UHC.JScript.Primitives
@@ -38,6 +39,9 @@ s &&& t = \x -> ampersand (s x, t x)
 
 foreign import js "Signals.ampersand(%1)"
   ampersand :: (Signal b, Signal c) -> Signal (b, c)
+
+foreign import js "Signals.source(%1)"
+  source :: Signal a -> Element
 
 pipe :: Signal a -> (a -> b) -> Signal b
 pipe s f = primPipeSignal s f

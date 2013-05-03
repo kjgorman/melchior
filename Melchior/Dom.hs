@@ -23,6 +23,7 @@ module Melchior.Dom
     ) where
 
 --dependencies
+import Melchior.Dom.Events
 import Control.Monad (liftM)
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Primitives

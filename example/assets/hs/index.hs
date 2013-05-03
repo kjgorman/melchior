@@ -23,7 +23,7 @@ setupNavLinks = \html -> do
   clickEvents <- return $ map clickListener links
   --and we can then pipe signals of events through a function
   return $ contentSwitcher clickEvents content
-  return $ map tabDeHighlighter $ zip clickEvents links
+  return $ map tabClassSwitcher clickEvents
   return $ map tabSwitcher $ zip clickEvents links
   --and some arbitrary return is here
   head $ return links
@@ -40,9 +40,9 @@ clickListener e = createEventedSignalOf (Of $ stringToJSString "string") e (Mous
 
 contentSwitcher :: [Signal JSString] -> Element -> [Signal (Dom ())]
 contentSwitcher signals content = map (\x -> pipe x (replaceBody content)) signals
-
-tabDeHighlighter :: (Signal JSString, Element) -> Signal JSString
-tabDeHighlighter (s, e) = pipe s (\x -> UHC.Base.head $ map stripClass (siblings $ parentOf e))
+                                  
+tabClassSwitcher :: Signal JSString -> Signal JSString
+tabClassSwitcher s = pipe s (\x -> UHC.Base.head $ map stripClass (pass (stringToJSString "siblings") $ siblings $ parentOf $ source s))
                           where stripClass = (removeClass $ stringToJSString "active")
                                 
 tabSwitcher :: (Signal JSString, Element) -> Signal JSString
