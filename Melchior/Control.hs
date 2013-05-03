@@ -35,10 +35,7 @@ s >>> t = \x -> t $ s x
 s <<< t = \x -> s $ t x
 
 (&&&) :: SF a b -> SF a c -> SF a (b, c)
-s &&& t = \x -> ampersand s t x
-
-foreign import js "Signals.ampersand(%1)"
-  ampersand :: SF a b -> SF a c -> SF a (b, c)
+s &&& t = undefined
 
 foreign import js "Signals.source(%1)"
   source :: Signal a -> Element

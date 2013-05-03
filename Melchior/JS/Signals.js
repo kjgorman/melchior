@@ -64,10 +64,6 @@ var Signals = function () {
         }
     }
 
-    function ampersand(arg, fst, snd) {
-        console.log("&&&:", arg, fst, snd);
-    }
-
     function source (signal) {
         if(signal === null) return null
         if(!signal) return signal
@@ -78,7 +74,6 @@ var Signals = function () {
     return {
         createEventedSignal: createEventedSignal,
         bindToSignal: bindToSignal,
-        ampersand: ampersand,
         source:source
     }
 }()
