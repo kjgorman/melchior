@@ -54,3 +54,39 @@ describe("round tripping uhc list", function () {
         expect(Lists.length(Lists.toUHCList([1,2,3,4,5]))).toBe(5)
     })
 });
+
+describe("lconcat should actually concat things", function () {
+    it("should return null for null", function () {
+        expect(Lists.lconcat(null)).toBe(null)
+    })
+
+    it("should return undefined for undefined", function () {
+        expect(Lists.lconcat(undefined)).toBe(undefined)
+    })
+
+    it("should return just the list if only one", function () {
+        expect(Lists.fromUHCList(Lists.lconcat(
+            {
+                _tag_:0,
+                _1:[1,2,3],
+                _2:{_tag_:1}
+            }
+        ))).toEqual([1,2,3])
+    })
+
+    it("should return the concatenated list for two", function () {
+        expect(Lists.fromUHCList(Lists.lconcat(
+            {
+                _tag_:0,
+              _1:[1,2],
+              _2: {
+                  _tag_:0,
+                  _1:[3],
+                  _2:{
+                      _tag_:1
+                  }
+              }
+            })))
+            .toEqual([1,2,3])
+    })
+});

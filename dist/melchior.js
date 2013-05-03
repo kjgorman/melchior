@@ -235,8 +235,9 @@
     var List = function () { }
 
     function lconcat (lst) {
-        //TODO -- this will obviously fail for more than one key...
-        return toUHCList(lst._1)
+        if(lst === null) return null
+        if(!lst) return undefined
+        return toUHCList(fromUHCList(lst).reduce(function(a, b) { return a.concat(b) }))
     }
 
     function safeList (lst) {
@@ -282,7 +283,7 @@
         if(lst._tag_ === 1) return []
         var returned = []
         do {
-            returned.push(lst._1.__eOrV__)
+            returned.push(lst._1.__eOrV__ || lst._1)
             lst = lst._2
         } while(lst._1 && lst._tag_ !== 1)
         return returned
