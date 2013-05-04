@@ -12,7 +12,6 @@ module Melchior.Dom
     , toElement
     , toInput
     , toDiv
-    , force
     , document
     , setBody
     , addClass
@@ -44,17 +43,10 @@ instance Monad Dom where
   (Dom io) >>= k = Dom $ io >>= \x -> let Dom io' = k x in io'
   
 class DomNode a where
-  force :: a -> a
-
 instance DomNode Element where
-  force el = toElement $ el
-
 instance DomNode Input where
-  force i  = toInput $ i
-
 instance DomNode Document where
-  force d = toDocument $ d
-
+  
 foreign import js "id(%2)"
   toElement :: (DomNode a) => a -> Element
                
