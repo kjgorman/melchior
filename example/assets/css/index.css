@@ -1,4 +1,4 @@
-span.checked {
+.checked {
   text-decoration: line-through;
   color: grey;
 }
