@@ -5,7 +5,7 @@ var UHCFunction = function () {
         console.log("applying", func, value)
         var argCopy, result
         argCopy = func.args.slice()
-        if(value || value === "") func.args = func.args.concat([value])
+        if(value || value === "" || value === 0) func.args = func.args.concat([value])
         result = func.__aN__([[]])
         func.args = argCopy
         return result
