@@ -46,7 +46,10 @@ var Signals = function () {
             return undefined
         var s = new Signal(elem)
         elem.addEventListener(event, function (e) {
-            s.push(elem[key || 'value'], e)
+            s.push({
+                __eOrV__: elem[key || 'value'],
+                __aN__: function() { return this.__eOrV__ }
+            }, e)
         })
         return s
     }
@@ -71,9 +74,17 @@ var Signals = function () {
         return Signal.prototype.source.call(signal)
     }
 
+    function applicable (argument) {
+        if(!(argument instanceof _F_)) return {
+            __aN__ : function () { return argument }
+        }
+        else return argument
+    }
+
     return {
         createEventedSignal: createEventedSignal,
         bindToSignal: bindToSignal,
-        source:source
+        source:source,
+        applicable:applicable
     }
 }()
