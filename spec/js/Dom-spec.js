@@ -86,3 +86,16 @@ describe("siblings should return siblings", function () {
     });
 
 });
+
+describe("getters and setters should perfom sanely", function () {
+    var anElement = document.createElement("div"); anElement.innerHTML = test = "foo";
+
+    it("should get foo", function () {
+        expect(Dom.get(anElement, "innerHTML")).toEqual("foo")
+    })
+
+    it("should set bar", function () {
+        expect(Dom.set(anElement, "innerHTML", "bar")).toEqual("bar")
+    })
+
+});

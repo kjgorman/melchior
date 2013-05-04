@@ -12,6 +12,7 @@ main :: IO Element
 main = runDom $ \html -> do
   setupNavLinks html
   setupClickListeners html
+  setupMainButton html
   return $ toElement html
 
 setupNavLinks :: Document -> Dom Element
@@ -31,7 +32,13 @@ setupClickListeners = \html -> do
   checkBoxes <- get (Selector $ byClass "check") $ [toElement html]
   return $ map strike $ map clickListener checkBoxes
   head $ return checkBoxes
-  
+
+setupMainButton :: Document -> Dom Element
+setupMainButton = \html -> do
+  mainButton <- head $ get (Selector $ byClass "btn-success") $ [toElement html]
+  return $ strike $ clickListener mainButton
+  return mainButton
+
 clickListener :: Element -> Signal JSString
 clickListener e = createEventedSignalOf (Of $ stringToJSString "string") e (MouseEvt ClickEvt) "innerHTML"
 

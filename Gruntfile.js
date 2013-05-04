@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         },
         shell : {
             build : {
-                command : "find Melchior -name '*.hs' | uhc -tjs"
+                command : "uhc -tjs example/assets/hs/index.js && find Melchior -name '*.hs' | uhc -tjs"
             },
             buildTests : {
                 command : "find . -name 'spec/hs/*hs' -exec uhc -tjs {} \;"
