@@ -102,3 +102,17 @@ describe("piping a signal should produce a new signal that will react to the old
         expect(global).toBe(true);
     });
 });
+
+describe("binding and piping signals should continue to track their source", function () {
+    var element = document.createElement("div")
+      , signal = Signals.createEventedSignal(element, "click");
+
+    it("should have a reference to it's source", function () {
+        expect(signal.source()).toBe(element)
+    })
+
+    var pipedSignal = signal.pipe()
+    it("should persist reference to piped signals", function () {
+        expect(pipedSignal.source()).toBe(element)
+    })
+});

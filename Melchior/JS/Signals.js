@@ -4,7 +4,7 @@ var Signals = function () {
     var Signal = function (source) {
         console.log("initialising signal with source: ", source)
         this.registeredListeners = []
-        this.source = source
+        this._source = source
         this.__isSignal = true
     }
 
@@ -36,7 +36,7 @@ var Signals = function () {
     }
 
     Signal.prototype.source = function () {
-        return this.source instanceof Signal ? this.source.source : this.source;
+        return this._source instanceof Signal ? this._source.source() : this._source;
     }
 
     function createEventedSignal (elem, event, key) {
