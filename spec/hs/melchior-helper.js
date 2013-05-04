@@ -21,12 +21,6 @@
         return arg;
     }
 
-    this.reversal = function (str) {
-        var ret = "", i=str.length
-        for(;i > 0; i--) ret += str[i] || ""
-        return ret
-    }
-
 }();;var Selectors = function () {
     "use strict";
 
@@ -135,7 +129,7 @@
     var Signal = function (source) {
         console.log("initialising signal with source: ", source)
         this.registeredListeners = []
-        this.source = source
+        this._source = source
         this.__isSignal = true
     }
 
@@ -167,7 +161,7 @@
     }
 
     Signal.prototype.source = function () {
-        return this.source instanceof Signal ? this.source.source : this.source;
+        return this._source instanceof Signal ? this._source.source() : this._source;
     }
 
     function createEventedSignal (elem, event, key) {
@@ -206,7 +200,6 @@
     }
 
     function applicable (argument) {
-        console.log("is this applicable? ", argument)
         if(!(argument instanceof _F_)) return {
             __aN__ : function () { return argument }
         }

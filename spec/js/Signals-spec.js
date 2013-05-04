@@ -116,3 +116,9 @@ describe("binding and piping signals should continue to track their source", fun
         expect(pipedSignal.source()).toBe(element)
     })
 });
+
+describe("signals require applicable node elements pushed into them", function () {
+    it("should be applicable", function () {
+        expect(Signals.applicable("a string literal").hasOwnProperty("__aN__")).toBe(true)
+    })
+})

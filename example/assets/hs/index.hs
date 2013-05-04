@@ -12,7 +12,7 @@ main :: IO Element
 main = runDom $ \html -> do
   setupNavLinks html
   setupClickListeners html
-  return $ toElement $ html
+  return $ toElement html
 
 setupNavLinks :: Document -> Dom Element
 setupNavLinks = \html -> do
@@ -29,27 +29,26 @@ setupNavLinks = \html -> do
 setupClickListeners :: Document -> Dom Element
 setupClickListeners = \html -> do
   checkBoxes <- get (Selector $ byClass "check") $ [toElement html]
-  checkClick <- return $ map clickListener checkBoxes
-  return $ map strike checkClick 
+  return $ map strike $ map clickListener checkBoxes
   head $ return checkBoxes
   
 clickListener :: Element -> Signal JSString
 clickListener e = createEventedSignalOf (Of $ stringToJSString "string") e (MouseEvt ClickEvt) "innerHTML"
 
-contentSwitcher :: Element -> Signal JSString -> Signal (Dom ())
+contentSwitcher :: Element -> SF JSString (Dom ())
 contentSwitcher content signal = pipe signal (replaceBody content)
                                   
 tabClassSwitcher :: SF JSString JSString
-tabClassSwitcher s = pipe s (\x -> passThrough x $ map stripClass $  siblings $ parentOf $ source $ s)
+tabClassSwitcher s = pipe s (\x -> passThrough x $ map stripClass $ siblings $ parentOf $ source $ s)
                           where
-                            passThrough x _ = x                                
                             stripClass = (removeClass $ stringToJSString "active")
 
 tabSwitcher :: SF JSString JSString
 tabSwitcher s = pipe s (\_ -> addClass (stringToJSString "active") $ parentOf $ source s)
                   
 replaceBody :: Element -> JSString -> Dom ()
-replaceBody e s = setBody e $ contentFor $ jsStringToString s
+replaceBody e s = setBody e $ contentFor $ jsStringToString $ s 
+
 
 strike :: SF JSString JSString
 strike s = pipe s (\x -> toggle (stringToJSString "checked") $ UHC.Base.head $ siblings $ source s)
