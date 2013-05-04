@@ -93,9 +93,7 @@ var Selectors = function () {
 
 
     Selector.prototype.toDocument = function(elem) {
-        //the assumption here being that only the document has
-        //Selector.prototype defined... #TODO - probably an actual value to check
-        return elem && elem.doctype !== undefined ? elem : null
+        return elem ? elem instanceof HTMLDocument ? elem : null : null
     }
     
     return new Selector()
