@@ -30,6 +30,12 @@ module.exports = function(grunt) {
                 expr: true
             }
         }, 
+        watch : {
+            scripts : {
+                files: ['Melchior/JS/**/*.js'],
+                tasks: ['jshint', 'jasmine', 'shell:build']
+            },
+        },
         concat: {
             runDom : {
                 options: { separator:';' },
@@ -114,6 +120,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-jasmine");
     grunt.loadNpmTasks("grunt-contrib-jshint");
+    grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-shell");
     
 
@@ -123,7 +130,8 @@ module.exports = function(grunt) {
                         'shell:buildTests',
                         'concat',
                         'shell:copyDistToSpec',
-                        'jasmine']);
+                        'jasmine',
+                        'watch']);
     grunt.registerTask('travis', ['jshint', 'jasmine']);
     grunt.registerTask('example', ['jshint','shell:build','shell:buildTests','concat','shell:copyDistToSpec','jasmine', 'shell:copyDistToExample']);
 }

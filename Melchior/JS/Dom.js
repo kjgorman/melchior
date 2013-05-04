@@ -45,5 +45,16 @@ var Dom = function() {
         }))
     }
 
+    DomOperations.prototype.set = function(elem, key, value) {
+        if(elem.length) elem = elem[0]
+        if(elem) elem[key] = value
+        return elem[key]
+    }
+
+    DomOperations.prototype.get = function(elem, key) {
+        if (elem._1) elem = elem._1
+        return elem[key]
+    }
+    
     return new DomOperations()
 }()
