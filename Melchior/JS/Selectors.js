@@ -16,6 +16,7 @@ var Selectors = function () {
     }
 
     Selector.prototype.selectById = function(elem, pattern) {
+        console.log(elem, pattern)
         return [elem.getElementById(pattern)]
     }
   

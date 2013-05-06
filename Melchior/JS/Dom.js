@@ -4,6 +4,7 @@ var Dom = function() {
     var DomOperations = function () { }
 
     DomOperations.prototype.addClass = function(element, classString) {
+        console.log("adding", element, classString)
         if(element === null) return null
         if(!element || !classString) return undefined
 
@@ -15,6 +16,7 @@ var Dom = function() {
     }
 
     DomOperations.prototype.removeClass = function(element, classString) {
+        console.log("removing", element, classString)
         if(element === null) return null
         if(!element || !classString) return undefined
 
@@ -40,6 +42,8 @@ var Dom = function() {
         if(element === null) return null
         if(!element) return undefined
         if(!element.parentNode) return Lists.emptyUHCList()
+        console.log("finding siblings of", element)
+        console.log("returning approx.: ", element.parentNode.children)
         return Lists.toUHCList(Array.prototype.slice.call(element.parentNode.children).filter(function(e) {
             return e !== element
         }))

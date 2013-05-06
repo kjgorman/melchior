@@ -28,6 +28,7 @@
     }
 
     Selector.prototype.selectById = function(elem, pattern) {
+        console.log(elem, pattern)
         return [elem.getElementById(pattern)]
     }
   
@@ -138,7 +139,7 @@
         this.registeredListeners.push(function (value, event) {
             var res = UHCFunction.apply(transform, value, event)
             console.log("pushing res", res, transform, value)
-            newSignal.push(res, event)
+            newSignal.push(applicable(res), event)
         });
         return newSignal
     }
@@ -341,6 +342,7 @@
     var DomOperations = function () { }
 
     DomOperations.prototype.addClass = function(element, classString) {
+        console.log("adding", element, classString)
         if(element === null) return null
         if(!element || !classString) return undefined
 
@@ -352,6 +354,7 @@
     }
 
     DomOperations.prototype.removeClass = function(element, classString) {
+        console.log("removing", element, classString)
         if(element === null) return null
         if(!element || !classString) return undefined
 
@@ -377,6 +380,8 @@
         if(element === null) return null
         if(!element) return undefined
         if(!element.parentNode) return Lists.emptyUHCList()
+        console.log("finding siblings of", element)
+        console.log("returning approx.: ", element.parentNode.children)
         return Lists.toUHCList(Array.prototype.slice.call(element.parentNode.children).filter(function(e) {
             return e !== element
         }))

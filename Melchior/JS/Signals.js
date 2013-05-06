@@ -26,7 +26,7 @@ var Signals = function () {
         this.registeredListeners.push(function (value, event) {
             var res = UHCFunction.apply(transform, value, event)
             console.log("pushing res", res, transform, value)
-            newSignal.push(res, event)
+            newSignal.push(applicable(res), event)
         });
         return newSignal
     }
