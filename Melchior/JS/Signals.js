@@ -68,13 +68,6 @@ var Signals = function () {
         }
     }
 
-    function source (signal) {
-        if(signal === null) return null
-        if(!signal) return signal
-
-        return Signal.prototype.source.call(signal)
-    }
-
     function applicable (argument) {
         console.log("wrapping in applicable node", argument)
         if(!(argument instanceof _F_)) return {
@@ -93,7 +86,6 @@ var Signals = function () {
     return {
         createEventedSignal: createEventedSignal,
         bindToSignal: bindToSignal,
-        source:source,
         applicable:applicable,
         signalIO:signalIO
     }
