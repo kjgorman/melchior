@@ -24,7 +24,8 @@ setupNavLinks = \html -> do
   clickEvents <- return $ map clickListener links
   --and we can then pipe signals of events through a function
   return $ map (removeSiblingClass "active" >>> addClassToParent "active") clickEvents
-  return $ map (addClassToSiblings "hidden"  >>> removeClassFrom "hidden") $ map liftSignal clickEvents
+  return $ map (addClassToSiblings "hidden" >>> removeClassFrom "hidden") $ map liftSignal clickEvents
+  return $ map (removeClassFrom "hidden" >>> removeClassFrom "hidden") $ map liftSignal clickEvents  
   --
   --and some arbitrary return is here
   head $ return links
