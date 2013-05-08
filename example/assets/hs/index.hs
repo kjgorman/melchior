@@ -23,9 +23,9 @@ setupNavLinks = \html -> do
   --signal creation is here
   clickEvents <- return $ map clickListener links
   --and we can then pipe signals of events through a function
-  return $ map (removeSiblingClass "active" >>>
-                (addClassToParent "active" &&&
-                 (addSiblingClassTo "foo" >>> removeClassFrom "hidden"))) clickEvents
+  return $ map (removeSiblingClass "active" >>> addClassToParent "active") clickEvents
+  return $ map (addClassToSiblings "hidden"  >>> removeClassFrom "hidden") $ map liftSignal clickEvents
+  --
   --and some arbitrary return is here
   head $ return links
 
@@ -42,25 +42,34 @@ setupMainButton = \html -> do
   return mainButton
 
 clickListener :: Element -> Signal JSString
-clickListener e = createEventedSignalOf (Of $ stringToJSString "string") e (MouseEvt ClickEvt) "innerHTML"
-                                  
+clickListener e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) "innerHTML"
+
+addClassToParent :: String -> SF JSString JSString
+addClassToParent cls s = pipe s (\x -> addClass (stringToJSString cls) $ parentOf $ source s)
+
 removeSiblingClass :: String -> SF JSString JSString
 removeSiblingClass cls s = pipe s (\x -> passThrough x $ map stripClass $ siblings $ parentOf $ source $ s)
                           where
                             stripClass = (removeClass $ stringToJSString cls)
 
-addSiblingClassTo :: String -> SF JSString (Dom JSString)
-addSiblingClassTo cls s = pipe s (\x -> (head $ get (Selector $ byId $ jsStringToString x) $ [toElement document])
-                                        >>= \y -> return $ pass (stringToJSString "passing thru") $ passThrough x $ map (addClass $ stringToJSString cls) $ siblings $ y)
+liftSignal :: Signal a -> Signal (Dom a)
+liftSignal s = pipe s (\x -> pass (stringToJSString "lifted") $ return $! x)
 
+addClassToSiblings :: String -> SF (Dom JSString) (Dom JSString)
+addClassToSiblings cls s = pipe s (\z -> signalIO $! do
+                                      y <- z
+                                      elem <- head $ get (Selector $ byId $ jsStringToString y) [toElement document]
+                                      return $! map (addClass $ stringToJSString cls) $ siblings elem
+                                      z)
+
+                                        
 removeClassFrom :: String -> SF (Dom JSString) (Dom JSString)
-removeClassFrom  cls s = pipe s (\x -> x >>= \y -> (head $ get (Selector $ byId $ jsStringToString y) $ [toElement document])
-                                         >>= \z -> return $ removeClass (stringToJSString cls) z)
-
-addClassToParent :: String -> SF JSString JSString
-addClassToParent cls s = pipe s (\x -> addClass (stringToJSString cls) $ parentOf $ source s)
-                  
-
+removeClassFrom  cls s = pipe s (\x -> signalIO $! do
+                                    y <- x
+                                    elem <- head $ get (Selector $ byId $ jsStringToString y) [toElement document]
+                                    return $! removeClass (stringToJSString cls) elem
+                                    x)
+                
 strike :: SF JSString JSString
 strike s = pipe s (\x -> toggle (stringToJSString "checked") $ UHC.Base.head $ siblings $ source s)
 

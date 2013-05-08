@@ -22,11 +22,12 @@ var Signals = function () {
     }
 
     Signal.prototype.pipe = function(transform) {
+        console.log("constructing with transform", transform)
         var newSignal = new Signal(this)
         this.registeredListeners.push(function (value, event) {
             var res = UHCFunction.apply(transform, value, event)
-            console.log("pushing res", res, transform, value)
-            newSignal.push(applicable(res), event)
+            console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
+            newSignal.push(res, event)
         });
         return newSignal
     }
@@ -75,16 +76,23 @@ var Signals = function () {
     }
 
     function applicable (argument) {
+        console.log("wrapping in applicable node", argument)
         if(!(argument instanceof _F_)) return {
             __aN__ : function () { return argument }
         }
         else return argument
     }
 
+    function signalIO(signalVal) {
+        console.log("doing some manual signal io", window.sigval = signalVal)
+        return _e_(signalVal._1)
+    }
+
     return {
         createEventedSignal: createEventedSignal,
         bindToSignal: bindToSignal,
         source:source,
-        applicable:applicable
+        applicable:applicable,
+        signalIO:signalIO
     }
 }()

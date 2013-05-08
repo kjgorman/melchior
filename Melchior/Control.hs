@@ -13,6 +13,7 @@ module Melchior.Control
   , pipe
   , source
   , passThrough
+  , signalIO
   ) where
 
 import Language.UHC.JScript.Primitives
@@ -44,6 +45,9 @@ foreign import js "Tuples.pair(%1)"
 
 foreign import js "Signals.source(%1)"
   source :: Signal a -> Element
+
+foreign import js "Signals.signalIO(%1)"
+  signalIO :: Dom a -> Dom a
 
 passThrough :: a -> b -> a
 passThrough x y = y `seq` (applicable x)

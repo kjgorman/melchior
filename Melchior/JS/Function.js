@@ -2,7 +2,7 @@ var UHCFunction = function () {
     "use strict";
 
     function applyNode(func, value) {
-        console.log("applying", func, value)
+        console.log("applying", window.func = func, window.val = value)
         var argCopy, result
         argCopy = func.args.slice()
         if(value || value === "" || value === 0) func.args = func.args.concat([value])

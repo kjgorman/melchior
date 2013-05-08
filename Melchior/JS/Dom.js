@@ -8,7 +8,7 @@ var Dom = function() {
         if(element === null) return null
         if(!element || !classString) return undefined
 
-        element.classList.add(classString)        
+        element.classList.add(classString)
 
         return {
             __aN__: function() { return classString }
