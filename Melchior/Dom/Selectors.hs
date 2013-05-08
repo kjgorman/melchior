@@ -19,7 +19,7 @@ instance Category Selector where
 
 foreign import js "log(%2, %1)"
   pass :: JSString -> a -> a
-          
+
 get :: (DomNode b) => Selector a b -> [a] -> Dom [b]
 get (Selector s) el = s el
 

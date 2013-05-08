@@ -40,6 +40,8 @@ s &&& t = \x -> toSF (s x, t x)
                 where
                   toSF (Signal b, Signal c) = Signal $ pair (b, c)
 
+
+ -- * Misc. primitive signal operations
 foreign import js "Tuples.pair(%1)"
   pair :: (JSPtr a, JSPtr b) -> JSPtr (a, b)
 
@@ -49,20 +51,20 @@ foreign import js "Signals.source(%1)"
 foreign import js "Signals.signalIO(%1)"
   signalIO :: Dom a -> Dom a
 
-foreign import js "log(%2, %1)"
-  pass :: JSString -> a -> a
-
-passThrough :: a -> b -> a
-passThrough x y = pass (stringToJSString "y seq") y `seq` (applicable x)
-
 foreign import js "Signals.applicable(%1)"
   applicable :: a -> a
+
+-- * Routing
+passThrough :: a -> b -> a
+passThrough x y =  y `seq` (applicable x)
 
 pipe :: Signal a -> (a -> b) -> Signal b
 pipe s f = primPipeSignal s f
 
 foreign import js "%1.pipe(%2)"
   primPipeSignal :: Signal a -> (a -> b) -> Signal b
+
+-- * Signal creation
 
 createEventedSignal :: (DomNode a) => Of c -> a -> Event b -> Signal c
 createEventedSignal o el evt = primCreateEventedSignal o el $ (stringToJSString . show) evt

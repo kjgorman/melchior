@@ -181,13 +181,6 @@
         }
     }
 
-    function source (signal) {
-        if(signal === null) return null
-        if(!signal) return signal
-
-        return Signal.prototype.source.call(signal)
-    }
-
     function applicable (argument) {
         console.log("wrapping in applicable node", argument)
         if(!(argument instanceof _F_)) return {
@@ -206,7 +199,6 @@
     return {
         createEventedSignal: createEventedSignal,
         bindToSignal: bindToSignal,
-        source:source,
         applicable:applicable,
         signalIO:signalIO
     }
@@ -424,13 +416,15 @@
 
     var Tuple = function () { }
 
+    //TODO --- implement ampersand properly
     Tuple.prototype.pair = function (tpl) {
         console.log("tuple: ", tpl)
         return tpl
     }
 
     return new Tuple()
-}();// Copyright (c) 2005  Tom Wu
+}()
+;// Copyright (c) 2005  Tom Wu
 // All Rights Reserved.
 // See "LICENSE" for details.
 
