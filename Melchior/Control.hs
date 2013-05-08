@@ -49,8 +49,11 @@ foreign import js "Signals.source(%1)"
 foreign import js "Signals.signalIO(%1)"
   signalIO :: Dom a -> Dom a
 
+foreign import js "log(%2, %1)"
+  pass :: JSString -> a -> a
+
 passThrough :: a -> b -> a
-passThrough x y = y `seq` (applicable x)
+passThrough x y = pass (stringToJSString "y seq") y `seq` (applicable x)
 
 foreign import js "Signals.applicable(%1)"
   applicable :: a -> a
