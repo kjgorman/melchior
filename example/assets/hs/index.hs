@@ -30,7 +30,7 @@ setupNavLinks = \html -> do
   head $ return links
 
 terminal :: SF (Dom a) (Dom a)
-terminal s = pipe s (\x -> x)
+terminal s = pipe s (\x -> pass (stringToJSString "reached terminal of signal network") $! x)
 
 setupClickListeners :: Document -> Dom Element
 setupClickListeners = \html -> do
@@ -77,10 +77,10 @@ removeClassFrom  cls s = pipe s (\x -> signalIO $ do
                                     return $! y)
                 
 strike :: SF (Dom JSString) (Dom JSString)
-strike s = pipe s (\x -> signalIO $ do
+strike s = pipe s (\x -> signalIO $! do
                          y <- x
                          elem <- head $ get (Selector $ byId $ jsStringToString y) [toElement document]
-                         return $! toggle (stringToJSString "checked") $ UHC.Base.head $ siblings $ elem
+                         return $! toggle (stringToJSString "checked") elem
                          x
                   )
 
