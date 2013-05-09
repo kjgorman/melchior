@@ -48,7 +48,7 @@ var Signals = function () {
         var s = new Signal(elem)
         elem.addEventListener(event, function (e) {
             s.push({
-                __eOrV__: elem[key || 'value'],
+                __eOrV__: Dom.get(elem, key),
                 __aN__: function() { return this.__eOrV__ }
             }, e)
         })

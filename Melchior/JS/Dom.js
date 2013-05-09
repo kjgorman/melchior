@@ -57,7 +57,13 @@ var Dom = function() {
 
     DomOperations.prototype.get = function(elem, key) {
         if (elem._1) elem = elem._1
-        return elem[key]
+        var ret = elem[key]
+
+        if(ret) return ret
+        if(elem.attributes && elem.attributes.getNamedItem(key)) {
+            return elem.attributes.getNamedItem(key).value            
+        }
+        return elem
     }
     
     return new DomOperations()

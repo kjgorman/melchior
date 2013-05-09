@@ -12,7 +12,6 @@ main :: IO Element
 main = runDom $ \html -> do
   setupNavLinks html
   setupClickListeners html
-  setupMainButton html
   return $ toElement html
 
 setupNavLinks :: Document -> Dom Element
@@ -21,7 +20,7 @@ setupNavLinks = \html -> do
   content <- head $ get (Selector $ byId "jumbotron") $ [toElement html]
   links <- get (Selector $ byClass "link") $ [toElement html]
   --signal creation is here
-  clickEvents <- return $ map clickListener links
+  clickEvents <- return $ map (clickListener "innerHTML") links
   --and we can then pipe signals of events through a function
   return $ map (removeSiblingClass "active" >>>
                 addClassToParent "active" >>>
@@ -36,17 +35,12 @@ terminal s = pipe s (\x -> x)
 setupClickListeners :: Document -> Dom Element
 setupClickListeners = \html -> do
   checkBoxes <- get (Selector $ byClass "check") $ [toElement html]
-  return $ map strike $ map clickListener checkBoxes
+  clickEvents  <- return $ map (clickListener "data-reactive") checkBoxes
+  return $ map (strike >>> terminal) $ map liftSignal clickEvents
   head $ return checkBoxes
 
-setupMainButton :: Document -> Dom Element
-setupMainButton = \html -> do
-  mainButton <- head $ get (Selector $ byClass "btn-success") $ [toElement html]
-  return $ strike $ clickListener mainButton
-  return mainButton
-
-clickListener :: Element -> Signal JSString
-clickListener e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) "innerHTML"
+clickListener :: String -> Element -> Signal JSString
+clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
 
 addClassToParent :: String -> SF (Dom JSString) (Dom JSString)
 addClassToParent cls s = pipe s (\x -> passThrough x $! signalIO $ do
@@ -82,8 +76,13 @@ removeClassFrom  cls s = pipe s (\x -> signalIO $ do
                                     return $! removeClass (stringToJSString cls) elem
                                     return $! y)
                 
-strike :: SF JSString JSString
-strike s = pipe s (\x -> toggle (stringToJSString "checked") $ UHC.Base.head $ siblings $ source s)
+strike :: SF (Dom JSString) (Dom JSString)
+strike s = pipe s (\x -> signalIO $ do
+                         y <- x
+                         elem <- head $ get (Selector $ byId $ jsStringToString y) [toElement document]
+                         return $! toggle (stringToJSString "checked") $ UHC.Base.head $ siblings $ elem
+                         x
+                  )
 
 --
 --here be dragons / unimplementedness
