@@ -42,47 +42,40 @@ setupClickListeners = \html -> do
 clickListener :: String -> Element -> Signal JSString
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
 
-addClassToParent :: String -> SF (Dom JSString) (Dom JSString)
-addClassToParent cls s = pipe s (\x -> passThrough x $! signalIO $ do
-                                       y <- x
-                                       elem <- head $ get (Selector $ byClass $ jsStringToString y) [toElement document]
-                                       return $! addClass (stringToJSString cls) $ parentOf $ elem
-                                       x)
-
-removeSiblingClass :: String -> SF (Dom JSString) (Dom JSString)
-removeSiblingClass cls s = pipe s (\x -> passThrough x $! signalIO $ do
-                                         y <- x
-                                         elem <- head $ get (Selector $ byClass $ jsStringToString y) [toElement document]
-                                         return $! map stripClass $ siblings $ parentOf $ elem
-                                         x)
-                          where
-                            stripClass = (removeClass $ stringToJSString cls)
-
 liftSignal :: Signal a -> Signal (Dom a)
 liftSignal s = pipe s (\x -> pass (stringToJSString "lifted") $ return $! x)
 
-addClassToSiblings :: String -> SF (Dom JSString) (Dom JSString)
-addClassToSiblings cls s = pipe s (\z -> passThrough z $! signalIO $ do
-                                      y <- z
-                                      elem <- head $ get (Selector $ byId $ jsStringToString y) [toElement document]
-                                      return $! map (addClass $ stringToJSString cls) $ siblings elem
-                                      z)
+getOne :: (String -> [Element] -> Dom [Element]) -> JSString -> Dom Element
+getOne x y = head $ get (Selector $ x $ jsStringToString y) [toElement document]
 
-                                        
+doSignalIO :: (String -> [Element] -> Dom [Element]) -> (Element -> Dom a) -> Dom JSString -> Dom JSString
+doSignalIO sel fn x = do
+  y <- x
+  elem <- getOne sel y
+  fn elem
+  x
+
+addClassToParent :: String -> SF (Dom JSString) (Dom JSString)
+addClassToParent cls s = pipe s (\x -> passThrough x $! signalIO $ doSignalIO byClass fn x)
+                         where fn = \elem -> return $! addClass (stringToJSString cls) $ parentOf elem
+
+removeSiblingClass :: String -> SF (Dom JSString) (Dom JSString)
+removeSiblingClass cls s = pipe s (\x -> passThrough x $! signalIO $ doSignalIO byClass fn x)                                                                                
+                          where
+                            fn = \elem -> return $! map stripClass $ siblings $ parentOf $ elem
+                            stripClass = (removeClass $ stringToJSString cls)
+
+addClassToSiblings :: String -> SF (Dom JSString) (Dom JSString)
+addClassToSiblings cls s = pipe s (\x -> passThrough x $! signalIO $ doSignalIO byId fn x)
+                           where fn = \elem -> return $! map (addClass $ stringToJSString cls) $ siblings elem
+                                       
 removeClassFrom :: String -> SF (Dom JSString) (Dom JSString)
-removeClassFrom  cls s = pipe s (\x -> signalIO $ do
-                                    y <- x
-                                    elem <- head $ get (Selector $ byId $ jsStringToString y) [toElement document]
-                                    return $! removeClass (stringToJSString cls) elem
-                                    return $! y)
+removeClassFrom  cls s = pipe s (\x -> signalIO $ doSignalIO byId fn x)
+                         where fn = \elem -> return $! removeClass (stringToJSString cls) elem
                 
 strike :: SF (Dom JSString) (Dom JSString)
-strike s = pipe s (\x -> signalIO $! do
-                         y <- x
-                         elem <- head $ get (Selector $ byId $ jsStringToString y) [toElement document]
-                         return $! toggle (stringToJSString "checked") elem
-                         x
-                  )
+strike s = pipe s (\x -> signalIO $! doSignalIO byId fn x)
+           where fn = \elem -> return $! toggle (stringToJSString "checked") elem
 
 --
 --here be dragons / unimplementedness
