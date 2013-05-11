@@ -42,9 +42,6 @@ setupClickListeners = \html -> do
 clickListener :: String -> Element -> Signal JSString
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
 
-liftSignal :: Signal a -> Signal (Dom a)
-liftSignal s = pipe s (\x -> pass (stringToJSString "lifted") $ return $! x)
-
 getOne :: (String -> [Element] -> Dom [Element]) -> JSString -> Dom Element
 getOne x y = head $ get (Selector $ x $ jsStringToString y) [toElement document]
 
@@ -54,28 +51,31 @@ doSignalIO sel fn x = do
   elem <- getOne sel y
   fn elem
   x
+  
+liftSignal :: Signal a -> Signal (Dom a)
+liftSignal s = pipe s (\x -> pass (stringToJSString "lifted") $ return $! x)
 
 addClassToParent :: String -> SF (Dom JSString) (Dom JSString)
-addClassToParent cls s = pipe s (\x -> passThrough x $! signalIO $ doSignalIO byClass fn x)
-                         where fn = \elem -> return $! addClass (stringToJSString cls) $ parentOf elem
+addClassToParent cls s = pipe s (\x -> passThrough x $ signalIO $ doSignalIO byClass fn x)
+                         where fn = \elem -> return $ addClass (stringToJSString cls) $ parentOf elem
 
 removeSiblingClass :: String -> SF (Dom JSString) (Dom JSString)
-removeSiblingClass cls s = pipe s (\x -> passThrough x $! signalIO $ doSignalIO byClass fn x)                                                                                
+removeSiblingClass cls s = pipe s (\x -> passThrough x $ signalIO $ doSignalIO byClass fn x)                                                                                
                           where
-                            fn = \elem -> return $! map stripClass $ siblings $ parentOf $ elem
+                            fn = \elem -> return $ map stripClass $ siblings $ parentOf $ elem
                             stripClass = (removeClass $ stringToJSString cls)
 
 addClassToSiblings :: String -> SF (Dom JSString) (Dom JSString)
-addClassToSiblings cls s = pipe s (\x -> passThrough x $! signalIO $ doSignalIO byId fn x)
-                           where fn = \elem -> return $! map (addClass $ stringToJSString cls) $ siblings elem
+addClassToSiblings cls s = pipe s (\x -> passThrough x $ signalIO $ doSignalIO byId fn x)
+                           where fn = \elem -> return $ map (addClass $ stringToJSString cls) $ siblings elem
                                        
 removeClassFrom :: String -> SF (Dom JSString) (Dom JSString)
 removeClassFrom  cls s = pipe s (\x -> signalIO $ doSignalIO byId fn x)
-                         where fn = \elem -> return $! removeClass (stringToJSString cls) elem
+                         where fn = \elem -> return $ removeClass (stringToJSString cls) elem
                 
 strike :: SF (Dom JSString) (Dom JSString)
-strike s = pipe s (\x -> signalIO $! doSignalIO byId fn x)
-           where fn = \elem -> return $! toggle (stringToJSString "checked") elem
+strike s = pipe s (\x -> signalIO $ doSignalIO byId fn x)
+           where fn = \elem -> return $ toggle (stringToJSString "checked") elem
 
 --
 --here be dragons / unimplementedness

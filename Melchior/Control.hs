@@ -80,5 +80,5 @@ createEventedSignalOf o el evt key = primCreateEventedSignalOf o el evtStr keySt
   
 foreign import js "Signals.createEventedSignal(%3, %4, %5)"
   primCreateEventedSignalOf :: (DomNode a) => Of c -> a -> JSString -> JSString -> Signal c
-                               
+
 
