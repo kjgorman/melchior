@@ -131,7 +131,15 @@ module.exports = function(grunt) {
                         'concat',
                         'shell:copyDistToSpec',
                         'jasmine',
-                        'watch']);
+                       ]);
+    grunt.registerTask('dev',
+                       ['jshint',
+                        'shell:build',
+                        'shell:buildTests',
+                        'concat',
+                        'shell:copyDistToSpec',
+                        'jasmine',
+                        'watch'] 
     grunt.registerTask('travis', ['jshint', 'jasmine']);
     grunt.registerTask('example', ['jshint','shell:build','shell:buildTests','concat','shell:copyDistToSpec','jasmine', 'shell:copyDistToExample']);
 }

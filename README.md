@@ -19,10 +19,11 @@ the grunt dependencies, then go ahead and actually get a copy of [grunt](http://
 (for which you'll probably need sudo; if not available omit the -g flag and muck around with path variables to do a 
 local install).
 
+ok so you actually need to compile all the hs into js first so that the tests in the grunt build step will work. I find the 
+easiest way to do that is: `find . -name "*hs" -exec uhc -tjs {} \;` which is sort of shit admittedly but nonetheless gets the 
+job done.
+
 then you should be able to just `grunt` from the root dir, and it will build the `.hs` into javascript, then concat
 the files into `dist/melchior.js`.
 
-at the moment it will always look for `userdefined.hs` in the root dir but hacking around on the gruntfile should remove
-that dependency trivially. the only other gotcha is that when you add a new module import you'll need to appropriately
-update the `./lib` folder and gruntfile as appropriate... a bit of a hassle but not outrageous, and more than worth the
-task based build/test/link that grunt will give.
+
