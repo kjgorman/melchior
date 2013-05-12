@@ -13,7 +13,15 @@ main :: IO Element
 main = runDom $ \html -> do
   setupNavLinks html
   setupClickListeners html
+  testXHR html
   return $ toElement html
+
+testXHR :: Document -> Dom Element
+testXHR = \html -> do
+  button <- head $ get (Selector $ byClass "btn-success") $ [toElement html]
+  buttonClick <- return $ clickListener "innerHTML" button
+  return $ (getXHR GET "/data") $ liftSignal buttonClick
+  return button
 
 setupNavLinks :: Document -> Dom Element
 setupNavLinks = \html -> do
@@ -23,10 +31,10 @@ setupNavLinks = \html -> do
   --signal creation is here
   clickEvents <- return $ map (clickListener "innerHTML") links
   --and we can then pipe signals of events through a function
-  return $ map (removeSiblingClass "active" >>>
-                addClassToParent "active" >>>
-                addClassToSiblings "hidden" >>>
-                removeClassFrom "hidden" >>>
+  return $ map (removeSiblingClass "active"   >>>
+                addClassToParent   "active"   >>>
+                addClassToSiblings "hidden"   >>>
+                removeClassFrom    "hidden"   >>>
                 terminal) $ map liftSignal clickEvents
   head $ return links
 

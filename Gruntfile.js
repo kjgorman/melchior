@@ -71,6 +71,7 @@ module.exports = function(grunt) {
                     "Melchior/JS/Dom.js",
                     "Melchior/JS/Events.js", 
                     "Melchior/JS/Tuple.js",
+                    "Melchior/JS/XHR.js",
                     "/usr/local/lib//uhc-1.1.3/lib/js/libEH-RTS.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_Base.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/UHC/UHC_BoxArray.mjs",
@@ -110,7 +111,8 @@ module.exports = function(grunt) {
                     "Melchior/Dom/Melchior_Dom_Events.mjs",
                     "Melchior/Melchior_Control.mjs",
                     "Melchior/Dom/Melchior_Dom_Selectors.mjs",
-                    "Melchior/Melchior_Test.mjs"
+                    "Melchior/Melchior_Test.mjs",
+                    "Melchior/Melchior_XHR.mjs"
                 ],
                 dest: 'dist/melchior.js'
             }

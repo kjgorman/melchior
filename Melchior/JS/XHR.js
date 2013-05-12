@@ -9,42 +9,46 @@ var XHR = function () {
         function () {return new ActiveXObject("Microsoft.XMLHTTP")}
     ]
 
-    function createXMLHTTPRequest() {
+    function createXMLHttpRequest() {
         var xmlHttpRequest = false;
         for (var i=0;i<XMLHttpFactories.length;i++) {
             try {
-                xmlhttp = XMLHttpFactories[i]()
+                xmlHttpRequest = XMLHttpFactories[i]()
             }
             catch (e) {
                 continue
             }
             break
         }
+        console.log("found browser xhr:" , xmlHttpRequest)
         return xmlHttpRequest
     }
 
 
     XHR.prototype.getXHR = function (method, resource) {
         if(!method || !resource) return
-        var xhr = createXMLHttpRequest()
+        var req = createXMLHttpRequest()
         if (!req) return
 
         req.open(method, resource, true /*async*/)
-        req.setRequestHeader("User-agent","Melchior/Signals-0.0.1")
+
         if(method !== "GET") req.setRequestHeader("Content-type","application/x-www-form-encoded")
-        
+        return req
     }
 
-    XHR.prototype.createXHRSignal = function (signal, method, resource) {
-        var outSignal = new Signal(this)
-        signal.registerListener(function(value) {
-            var req = getXHR()
-            req.onreadystatechange = function() {
-                if(req.readyState === 4) outSignal.push(req.response)
-                else return
-            }
-            req.send(value)
-        })
+    XHR.prototype.createXHRSignal = function (method, resource, value) {
+        var outSignal = new Signals.Signal(this)
+        console.log("creating an XHR signal w/", method, resource, value)
+
+        var req = this.getXHR(method, resource)
+        console.log("requesting", resource, method, req)
+        req.onreadystatechange = function() {
+            console.log("xhr got", req.response)
+            if(req.readyState === 4) outSignal.push(req.response)
+            else return
+        }
+        req.send(value)
+        console.log("xhr signal", outSignal)
         return outSignal
     }
 
