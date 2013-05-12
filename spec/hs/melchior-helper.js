@@ -331,7 +331,9 @@
     function apply(func, value) {
         if(func instanceof _F_)
             return func.__evN__(value)
-        else 
+        else if(func instanceof Function)
+            return func(value)
+        else
             return applyNode(func, value)        
     }
 
@@ -50352,7 +50354,7 @@ $Melchior.$Control.$toSFUNQ186=
           var $__11=
            new _A_($UHC.$Base.$_24,[$Melchior.$Control.$Signal__,$__10]);
           return $__11;});
-$Melchior.$Control.$__20__256__0=
+$Melchior.$Control.$__14__256__0=
  new _F_(function($s,$t,$x)
          {var $__=
            new _A_($t,[$x]);
@@ -50363,7 +50365,7 @@ $Melchior.$Control.$__20__256__0=
           return new _A_($Melchior.$Control.$toSFUNQ186,[$__6]);});
 $Melchior.$Control.$_26_26_26=
  new _F_(function($s,$t)
-         {return new _A_($Melchior.$Control.$__20__256__0,[$s,$t]);});
+         {return new _A_($Melchior.$Control.$__14__256__0,[$s,$t]);});
 $Melchior.$Control.$_24D__SignalDFLUHC_2eBase_2emoduleNameGENDatatype=
  new _F_(function($x)
          {return new _A_($UHC.$Base.$packedStringToString,["Melchior.Control"]);});

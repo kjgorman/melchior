@@ -14,7 +14,9 @@ var UHCFunction = function () {
     function apply(func, value) {
         if(func instanceof _F_)
             return func.__evN__(value)
-        else 
+        else if(func instanceof Function)
+            return func(value)
+        else
             return applyNode(func, value)        
     }
 

@@ -4,6 +4,7 @@ import Melchior.Data.List
 import Melchior.Dom
 import Melchior.Dom.Events
 import Melchior.Dom.Selectors
+import Melchior.XHR
 
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 import Prelude hiding ((.), id, head, map)
