@@ -20,7 +20,7 @@ testXHR :: Document -> Dom Element
 testXHR = \html -> do
   button <- head $ get (Selector $ byClass "btn-success") $ [toElement html]
   buttonClick <- return $ clickListener "innerHTML" button
-  return $ (getXHR GET "/data") $ liftSignal buttonClick
+  return $ (getXHR GET "/data" >>> appendEntry) $ liftSignal buttonClick
   return button
 
 setupNavLinks :: Document -> Dom Element
@@ -37,9 +37,6 @@ setupNavLinks = \html -> do
                 removeClassFrom    "hidden"   >>>
                 terminal) $ map liftSignal clickEvents
   head $ return links
-
-terminal :: SF (Dom a) (Dom a)
-terminal s = pipe s (\x -> pass (stringToJSString "reached terminal of signal network") $! x)
 
 setupClickListeners :: Document -> Dom Element
 setupClickListeners = \html -> do
@@ -60,10 +57,13 @@ doSignalIO sel fn x = do
   elem <- getOne sel y
   fn elem
   x
-  
-liftSignal :: Signal a -> Signal (Dom a)
-liftSignal s = pipe s (\x -> pass (stringToJSString "lifted") $ return $! x)
 
+appendEntry :: SF (Dom JSString) (Dom JSString)
+appendEntry s = pipe s (\x -> append x)
+
+foreign import js "Dom.hack(%1)"
+  append :: Dom JSString -> Dom JSString
+                
 addClassToParent :: String -> SF (Dom JSString) (Dom JSString)
 addClassToParent cls s = pipe s (\x -> passThrough x $ signalIO $ doSignalIO byClass fn x)
                          where fn = \elem -> return $ addClass (stringToJSString cls) $ parentOf elem
@@ -85,12 +85,6 @@ removeClassFrom  cls s = pipe s (\x -> signalIO $ doSignalIO byId fn x)
 strike :: SF (Dom JSString) (Dom JSString)
 strike s = pipe s (\x -> signalIO $ doSignalIO byId fn x)
            where fn = \elem -> return $ toggle (stringToJSString "checked") elem
-
---
---here be dragons / unimplementedness
-
-foreign import js "log(%2, %1)"
-  log :: Element -> JSString -> Dom ()
 
 foreign import js "log(%2, %1)"
   pass :: JSString -> a -> a

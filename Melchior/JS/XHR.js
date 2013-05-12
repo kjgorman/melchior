@@ -36,19 +36,21 @@ var XHR = function () {
         return req
     }
 
-    XHR.prototype.createXHRSignal = function (method, resource, value) {
-        var outSignal = new Signals.Signal(this)
-        console.log("creating an XHR signal w/", method, resource, value)
-
-        var req = this.getXHR(method, resource)
-        console.log("requesting", resource, method, req)
-        req.onreadystatechange = function() {
-            console.log("xhr got", req.response)
-            if(req.readyState === 4) outSignal.push(req.response)
-            else return
-        }
-        req.send(value) //should this send now?
-        console.log("xhr signal", outSignal)
+    XHR.prototype.createXHRSignal = function (method, resource, signal) {        
+        var outSignal = new Signals.Signal(signal)
+        console.log("creating an XHR signal w/", method, resource, signal)
+        signal.registerListener(function(value) {
+            var req = this.getXHR(method, resource)
+            console.log("requesting", resource, method, req)
+            req.onreadystatechange = function() {
+                console.log("xhr got", req.response)
+                outSignal.push(req.response)
+                console.log("pushed to", outSignal)
+            }
+            req.send(value) //should this send now?
+            console.log("xhr signal", outSignal)
+        })
+        
         return outSignal
     }
 

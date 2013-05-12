@@ -15,10 +15,10 @@ instance Show XHRMethod where
 -- getXHRRequest GET, "/all_the_things", sourceSignal
 
 getXHR :: XHRMethod -> String -> Signal (Dom a) -> Signal (Dom JSString)
-getXHR x s source = pipe source (\y -> primGetXHR (stringToJSString $ show x) (stringToJSString s) y)
+getXHR x s source = primGetXHR (stringToJSString $ show x) (stringToJSString s) source
 
 foreign import js "XHR.createXHRSignal(%1, %2, %3)"
-  primGetXHR :: JSString -> JSString -> Dom a -> Dom JSString
+  primGetXHR :: JSString -> JSString -> Signal (Dom a) -> Signal (Dom JSString)
 
 {-
 so getXHR will just be a prim function along the lines of

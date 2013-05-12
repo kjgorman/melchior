@@ -65,6 +65,15 @@ var Dom = function() {
         }
         return elem
     }
+
+    DomOperations.prototype.hack = function(str) {
+        console.log('hmmm')
+        var el = document.createElement("div");
+        el.innerHTML = str
+        document.getElementById("main-content")
+                .appendChild(el)
+        return str
+    }
     
     return new DomOperations()
 }()
