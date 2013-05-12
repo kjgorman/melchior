@@ -1,10 +1,10 @@
 module Melchior.XHR where
 
 import Melchior.Control
+import Melchior.Dom
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 
 data XHRMethod = GET | POST | PUT | DELETE
-data JSON --need to define this somewhere...
 
 instance Show XHRMethod where
   show GET = "GET"
@@ -14,11 +14,11 @@ instance Show XHRMethod where
 
 -- getXHRRequest GET, "/all_the_things", sourceSignal
 
-getXHR :: XHRMethod -> String -> Signal a -> Signal JSON
-getXHR x s source = primGetXHR (stringToJSString $ show x) (stringToJSString s) source
+getXHR :: XHRMethod -> String -> Signal (Dom a) -> Signal (Dom JSString)
+getXHR x s source = pipe source (\y -> primGetXHR (stringToJSString $ show x) (stringToJSString s) y)
 
 foreign import js "XHR.createXHRSignal(%1, %2, %3)"
-  primGetXHR :: JSString -> JSString -> Signal a -> Signal JSON
+  primGetXHR :: JSString -> JSString -> Dom a -> Dom JSString
 
 {-
 so getXHR will just be a prim function along the lines of

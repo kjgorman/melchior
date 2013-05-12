@@ -14,6 +14,8 @@ module Melchior.Control
   , source
   , passThrough
   , signalIO
+  , terminal
+  , liftSignal
   ) where
 
 import Language.UHC.JScript.Primitives
@@ -55,6 +57,11 @@ foreign import js "Signals.applicable(%1)"
   applicable :: a -> a
 
 -- * Routing
+
+terminal :: SF (Dom a) (Dom a)
+terminal s = pipe s (\x -> pass (stringToJSString "reached terminal of signal network") $! x)
+
+
 passThrough :: a -> b -> a
 passThrough x y =  y `seq` (applicable x)
 
@@ -65,6 +72,9 @@ foreign import js "%1.pipe(%2)"
   primPipeSignal :: Signal a -> (a -> b) -> Signal b
 
 -- * Signal creation
+
+liftSignal :: Signal a -> Signal (Dom a)
+liftSignal s = pipe s (\x -> pass (stringToJSString "lifted") $ return $! x)
 
 createEventedSignal :: (DomNode a) => Of c -> a -> Event b -> Signal c
 createEventedSignal o el evt = primCreateEventedSignal o el $ (stringToJSString . show) evt
@@ -81,4 +91,6 @@ createEventedSignalOf o el evt key = primCreateEventedSignalOf o el evtStr keySt
 foreign import js "Signals.createEventedSignal(%3, %4, %5)"
   primCreateEventedSignalOf :: (DomNode a) => Of c -> a -> JSString -> JSString -> Signal c
 
+foreign import js "log(%2, %1)"
+  pass :: JSString -> a -> a
 

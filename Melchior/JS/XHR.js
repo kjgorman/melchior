@@ -47,7 +47,7 @@ var XHR = function () {
             if(req.readyState === 4) outSignal.push(req.response)
             else return
         }
-        req.send(value)
+        req.send(value) //should this send now?
         console.log("xhr signal", outSignal)
         return outSignal
     }
