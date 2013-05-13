@@ -143,5 +143,5 @@ module.exports = function(grunt) {
                         'jasmine',
                         'watch']) 
     grunt.registerTask('travis', ['jshint', 'jasmine']);
-    grunt.registerTask('example', ['jshint','shell:build','shell:buildTests','concat','shell:copyDistToSpec','jasmine', 'shell:copyDistToExample']);
+    grunt.registerTask('example', ['jshint','shell:build','shell:buildTests','concat','shell:copyDistToSpec','shell:copyDistToExample']);
 }
