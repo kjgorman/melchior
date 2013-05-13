@@ -2,7 +2,8 @@
 module Melchior.Dom
     ( -- * Types
       Dom
-    , Element
+    , Element (unEl)
+    , Node
     , Document
     , Input
     , Div
@@ -41,15 +42,15 @@ foreign import js "document"
 instance Monad Dom where
   return = Dom . return
   (Dom io) >>= k = Dom $ io >>= \x -> let Dom io' = k x in io'
-  
+
 class DomNode a where
 instance DomNode Element where
 instance DomNode Input where
 instance DomNode Document where
-  
+
 foreign import js "id(%2)"
   toElement :: (DomNode a) => a -> Element
-               
+
 foreign import js "Selectors.toInput(%2)"
   toInput ::(DomNode a) =>  a -> Input
 

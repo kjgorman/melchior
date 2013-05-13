@@ -19,7 +19,7 @@ var Selectors = function () {
         console.log(elem, pattern)
         return [elem.getElementById(pattern)]
     }
-  
+
     Selector.prototype.selectByClass = function(elems, pattern) {
         var returned = [], i = 0, j = 0, nodelist = []
         if(elems.length) {
@@ -36,12 +36,12 @@ var Selectors = function () {
         }
         console.log("flattening", returned, flatten(returned))
         return flatten(returned)
-    }    
-    
-    Selector.prototype.selectByTag = function(elems, pattern) { 
+    }
+
+    Selector.prototype.selectByTag = function(elems, pattern) {
         var returned = [], i = 0, j = 0, nodeList = []
         if(elems.length) {
-            for(; i < elems.length; i++) { 
+            for(; i < elems.length; i++) {
                 nodeList = elems[i]
                 if(elems[i].tagName && elems[i].tagName === pattern) returned.push(elems[i])
                 for(; j < nodeList.length; j++) {
@@ -96,6 +96,6 @@ var Selectors = function () {
     Selector.prototype.toDocument = function(elem) {
         return elem ? elem instanceof HTMLDocument ? elem : null : null
     }
-    
+
     return new Selector()
 }()
