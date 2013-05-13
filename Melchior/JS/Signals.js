@@ -17,9 +17,7 @@ var Signals = function () {
     }
 
     Signal.prototype.push = function(value, event) {
-        console.log("pushing", value, event)
         for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
-            console.log("to: ", this.registeredListeners[i])
             this.registeredListeners[i](value, event);
         }
     }

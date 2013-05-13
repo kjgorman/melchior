@@ -45,10 +45,8 @@ var XHR = function () {
             req.onreadystatechange = function() {
                 console.log("xhr got", req.response)
                 outSignal.push(req.response)
-                console.log("pushed to", outSignal)
             }
             req.send(value) //should this send now?
-            console.log("xhr signal", outSignal)
         })
         
         return outSignal
