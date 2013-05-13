@@ -24,19 +24,25 @@ get :: (DomNode b) => Selector a b -> [a] -> Dom [b]
 get (Selector s) el = s el
 
 byId :: String -> [Element] -> Dom [Element]
-byId s e = Dom $ (sequence $ map (primGetById $ stringToJSString s) $ e) >>= \x -> return $ lconcat $ pass (stringToJSString "gbi") x
+byId s e = Dom $
+           (sequence $ map (primGetById $ stringToJSString s) $ e)
+           >>= \x -> return $ lconcat $ pass (stringToJSString "gbi") x
 
 foreign import js "Selectors.selectById(%2, %1)"
   primGetById :: JSString -> Element -> IO [Element]
 
 byClass :: String -> [Element] -> Dom [Element]
-byClass s e = Dom $ (sequence $ map (primGetByClass $ stringToJSString s) $ pass (stringToJSString "elems") e) >>= \x -> return $ lconcat $ pass (stringToJSString "gbc") x
+byClass s e = Dom $
+              (sequence $ map (primGetByClass $ stringToJSString s) $ pass (stringToJSString "elems") e)
+              >>= \x -> return $ lconcat $ pass (stringToJSString "gbc") x
 
 foreign import js "Selectors.selectByClass(%2, %1)"
   primGetByClass :: JSString -> Element -> IO [Element]
 
 byTag :: String -> [Element] -> Dom [Element]
-byTag s e = Dom $ (sequence $ map (primGetByTag $ stringToJSString s) $ e) >>= \x -> return $ lconcat $ pass (stringToJSString "gbtn") x
+byTag s e = Dom $
+            (sequence $ map (primGetByTag $ stringToJSString s) $ e)
+            >>= \x -> return $ lconcat $ pass (stringToJSString "gbtn") x
 
 foreign import js "Selectors.selectByTag(%2, %1)"
   primGetByTag :: JSString -> Element -> IO [Element]

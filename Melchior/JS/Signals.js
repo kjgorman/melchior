@@ -11,13 +11,15 @@ var Signals = function () {
     Signal.prototype.registerListener = function(callback) {
         console.log("registering listener", callback, this)
         this.registeredListeners.push(function (value) {
-            if(!callback || !callback.args) return
+            if(!callback) return
             UHCFunction.apply(callback, value)
         })
     }
 
     Signal.prototype.push = function(value, event) {
+        console.log("pushing", value, event)
         for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
+            console.log("to: ", this.registeredListeners[i])
             this.registeredListeners[i](value, event);
         }
     }
@@ -48,6 +50,7 @@ var Signals = function () {
             return undefined
         var s = new Signal(elem)
         elem.addEventListener(event, function (e) {
+            console.log("detected", event, "sending to", s)
             s.push({
                 __eOrV__: Dom.get(elem, key),
                 __aN__: function() { return this.__eOrV__ }

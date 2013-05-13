@@ -124,13 +124,15 @@
     Signal.prototype.registerListener = function(callback) {
         console.log("registering listener", callback, this)
         this.registeredListeners.push(function (value) {
-            if(!callback || !callback.args) return
+            if(!callback) return
             UHCFunction.apply(callback, value)
         })
     }
 
     Signal.prototype.push = function(value, event) {
+        console.log("pushing", value, event)
         for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
+            console.log("to: ", this.registeredListeners[i])
             this.registeredListeners[i](value, event);
         }
     }
@@ -161,6 +163,7 @@
             return undefined
         var s = new Signal(elem)
         elem.addEventListener(event, function (e) {
+            console.log("detected", event, "sending to", s)
             s.push({
                 __eOrV__: Dom.get(elem, key),
                 __aN__: function() { return this.__eOrV__ }
@@ -483,10 +486,10 @@
     }
 
     XHR.prototype.createXHRSignal = function (method, resource, signal) {        
-        var outSignal = new Signals.Signal(signal)
-        console.log("creating an XHR signal w/", method, resource, signal)
+        var outSignal = new Signals.Signal(signal), thus = this
+        console.log("creating an XHR signal w/", method, resource, window.signal = signal)
         signal.registerListener(function(value) {
-            var req = this.getXHR(method, resource)
+            var req = thus.getXHR(method, resource)
             console.log("requesting", resource, method, req)
             req.onreadystatechange = function() {
                 console.log("xhr got", req.response)
@@ -50603,7 +50606,7 @@ $Melchior.$Dom.$Selectors.$pass=
 $Melchior.$Dom.$Selectors.$get=
  new _F_(function($__,$__2)
          {return $__2;});
-$Melchior.$Dom.$Selectors.$__14__79__0=
+$Melchior.$Dom.$Selectors.$__15__79__0=
  new _F_(function($x)
          {var $__=
            new _A_($UHC.$Base.$packedStringToString,["gbc"]);
@@ -50637,9 +50640,9 @@ $Melchior.$Dom.$Selectors.$byClass=
           var $__11=
            new _A_($UHC.$Base.$_24,[$__10,$__9]);
           var $__12=
-           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__11,$Melchior.$Dom.$Selectors.$__14__79__0]);
+           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__11,$Melchior.$Dom.$Selectors.$__15__79__0]);
           return new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__12]);});
-$Melchior.$Dom.$Selectors.$__14__109__0=
+$Melchior.$Dom.$Selectors.$__15__109__0=
  new _F_(function($x)
          {var $__=
            new _A_($UHC.$Base.$packedStringToString,["gbi"]);
@@ -50667,9 +50670,9 @@ $Melchior.$Dom.$Selectors.$byId=
           var $__8=
            new _A_($UHC.$Base.$_24,[$__7,$__6]);
           var $__9=
-           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__8,$Melchior.$Dom.$Selectors.$__14__109__0]);
+           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__8,$Melchior.$Dom.$Selectors.$__15__109__0]);
           return new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__9]);});
-$Melchior.$Dom.$Selectors.$__14__139__0=
+$Melchior.$Dom.$Selectors.$__15__139__0=
  new _F_(function($x)
          {var $__=
            new _A_($UHC.$Base.$packedStringToString,["gbtn"]);
@@ -50697,7 +50700,7 @@ $Melchior.$Dom.$Selectors.$byTag=
           var $__8=
            new _A_($UHC.$Base.$_24,[$__7,$__6]);
           var $__9=
-           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__8,$Melchior.$Dom.$Selectors.$__14__139__0]);
+           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__8,$Melchior.$Dom.$Selectors.$__15__139__0]);
           return new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__9]);});
 $Melchior.$Dom.$Selectors.$Selector__=
  new _A_(new _F_(function()
@@ -50762,7 +50765,7 @@ $Melchior.$Dom.$Selectors.$__Rep1SelectorUNQ73SDCGENRepresentable1=
 $Melchior.$Dom.$Selectors.$__Rep1SelectorGENRepresentable1=
  new _A_(new _F_(function()
                  {return $Melchior.$Dom.$Selectors.$__Rep1SelectorUNQ73SDCGENRepresentable1;}),[]);
-$Melchior.$Dom.$Selectors.$Functor__DCT10__0__0DFLUHC_2eBase_2efmap=
+$Melchior.$Dom.$Selectors.$Functor__DCT11__0__0DFLUHC_2eBase_2efmap=
  new _F_(function($f,$__)
          {var $__3=
            new _A_($Control.$Monad.$liftM,[$UHC.$Base.$Monad__DCT73__85__0,$f]);
@@ -50773,50 +50776,50 @@ $Melchior.$Dom.$Selectors.$Functor__DCT10__0__0DFLUHC_2eBase_2efmap=
           var $__6=
            new _A_($Control.$Monad.$_3e_3d_3e,[$Melchior.$Dom.$Monad__DCT10__0__0,$__,$__5]);
           return new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Selectors.$Selector__,$__6]);});
-$Melchior.$Dom.$Selectors.$Functor__NEW92UNQ110DCT10__0__0RDC=
+$Melchior.$Dom.$Selectors.$Functor__NEW92UNQ110DCT11__0__0RDC=
  new _F_(function($Functor__)
          {var $Functor__2=
-           new _A_($Melchior.$Dom.$Selectors.$Functor__NEW94UNQ115EVLDCT10__0__0RDC,[$Functor__]);
+           new _A_($Melchior.$Dom.$Selectors.$Functor__NEW94UNQ115EVLDCT11__0__0RDC,[$Functor__]);
           return $Functor__2;});
-$Melchior.$Dom.$Selectors.$Functor__NEW94UNQ115EVLDCT10__0__0RDC=
+$Melchior.$Dom.$Selectors.$Functor__NEW94UNQ115EVLDCT11__0__0RDC=
  new _F_(function($Functor__)
          {var $Functor__2=
            _e_(new _A_($UHC.$Base.$Functor__CLS73__44__0,[$Functor__]));
           var $__4=
-           {_tag_:0,_1:$Melchior.$Dom.$Selectors.$Functor__DCT10__0__0DFLUHC_2eBase_2efmap};
+           {_tag_:0,_1:$Melchior.$Dom.$Selectors.$Functor__DCT11__0__0DFLUHC_2eBase_2efmap};
           return $__4;});
-$Melchior.$Dom.$Selectors.$Functor__UNQ110DCT10__0__0RDC=
+$Melchior.$Dom.$Selectors.$Functor__UNQ110DCT11__0__0RDC=
  new _A_(new _F_(function()
-                 {return new _A_($Melchior.$Dom.$Selectors.$Functor__NEW92UNQ110DCT10__0__0RDC,[$Melchior.$Dom.$Selectors.$Functor__UNQ110DCT10__0__0RDC]);}),[]);
-$Melchior.$Dom.$Selectors.$Functor__DCT10__0__0=
+                 {return new _A_($Melchior.$Dom.$Selectors.$Functor__NEW92UNQ110DCT11__0__0RDC,[$Melchior.$Dom.$Selectors.$Functor__UNQ110DCT11__0__0RDC]);}),[]);
+$Melchior.$Dom.$Selectors.$Functor__DCT11__0__0=
  new _A_(new _F_(function()
-                 {return $Melchior.$Dom.$Selectors.$Functor__UNQ110DCT10__0__0RDC;}),[]);
-$Melchior.$Dom.$Selectors.$Category__DCT10__1__0DFLControl_2eCategory_2e_2e=
+                 {return $Melchior.$Dom.$Selectors.$Functor__UNQ110DCT11__0__0RDC;}),[]);
+$Melchior.$Dom.$Selectors.$Category__DCT11__1__0DFLControl_2eCategory_2e_2e=
  new _F_(function($__,$__2)
          {var $__3=
            new _A_($Control.$Monad.$_3e_3d_3e,[$Melchior.$Dom.$Monad__DCT10__0__0,$__2,$__]);
           return new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Selectors.$Selector__,$__3]);});
-$Melchior.$Dom.$Selectors.$Category__NEW101UNQ123DCT10__1__0RDC=
+$Melchior.$Dom.$Selectors.$Category__NEW101UNQ123DCT11__1__0RDC=
  new _F_(function($Category__,$Category__2)
          {var $Category__3=
-           new _A_($Melchior.$Dom.$Selectors.$Category__NEW104UNQ126EVLDCT10__1__0RDC,[$Category__,$Category__2]);
+           new _A_($Melchior.$Dom.$Selectors.$Category__NEW104UNQ126EVLDCT11__1__0RDC,[$Category__,$Category__2]);
           return $Category__3;});
-$Melchior.$Dom.$Selectors.$Category__NEW104UNQ126EVLDCT10__1__0RDC=
+$Melchior.$Dom.$Selectors.$Category__NEW104UNQ126EVLDCT11__1__0RDC=
  new _F_(function($Category__,$Category__2)
          {var $Category__3=
            _e_(new _A_($Control.$Category.$Category__CLS37__0__0,[$Category__]));
           var $__6=
-           {_tag_:0,_1:$Melchior.$Dom.$Selectors.$Category__DCT10__1__0DFLControl_2eCategory_2e_2e,_2:$Category__2};
+           {_tag_:0,_1:$Melchior.$Dom.$Selectors.$Category__DCT11__1__0DFLControl_2eCategory_2e_2e,_2:$Category__2};
           return $__6;});
-$Melchior.$Dom.$Selectors.$Category__UNQ123DCT10__1__0RDC=
+$Melchior.$Dom.$Selectors.$Category__UNQ123DCT11__1__0RDC=
  new _A_(new _F_(function()
-                 {return new _A_($Melchior.$Dom.$Selectors.$Category__NEW101UNQ123DCT10__1__0RDC,[$Melchior.$Dom.$Selectors.$Category__UNQ123DCT10__1__0RDC,$Melchior.$Dom.$Selectors.$Category__DCT10__1__0DFLControl_2eCategory_2eid]);}),[]);
-$Melchior.$Dom.$Selectors.$Category__DCT10__1__0DFLControl_2eCategory_2eid=
+                 {return new _A_($Melchior.$Dom.$Selectors.$Category__NEW101UNQ123DCT11__1__0RDC,[$Melchior.$Dom.$Selectors.$Category__UNQ123DCT11__1__0RDC,$Melchior.$Dom.$Selectors.$Category__DCT11__1__0DFLControl_2eCategory_2eid]);}),[]);
+$Melchior.$Dom.$Selectors.$Category__DCT11__1__0DFLControl_2eCategory_2eid=
  new _A_(new _F_(function()
-                 {return new _A_($Control.$Category.$id,[$Melchior.$Dom.$Selectors.$Category__UNQ123DCT10__1__0RDC]);}),[]);
-$Melchior.$Dom.$Selectors.$Category__DCT10__1__0=
+                 {return new _A_($Control.$Category.$id,[$Melchior.$Dom.$Selectors.$Category__UNQ123DCT11__1__0RDC]);}),[]);
+$Melchior.$Dom.$Selectors.$Category__DCT11__1__0=
  new _A_(new _F_(function()
-                 {return $Melchior.$Dom.$Selectors.$Category__UNQ123DCT10__1__0RDC;}),[]);
+                 {return $Melchior.$Dom.$Selectors.$Category__UNQ123DCT11__1__0RDC;}),[]);
 $Melchior.$Dom.$Selectors.$_24D__SelectorDFLUHC_2eBase_2emoduleNameGENDatatype=
  new _F_(function($x)
          {return new _A_($UHC.$Base.$packedStringToString,["Melchior.Dom.Selectors"]);});

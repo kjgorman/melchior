@@ -20,7 +20,7 @@ testXHR :: Document -> Dom Element
 testXHR = \html -> do
   button <- head $ get (Selector $ byClass "btn-success") $ [toElement html]
   buttonClick <- return $ clickListener "innerHTML" button
-  return $ (getXHR GET "/data" >>> appendEntry) $ liftSignal buttonClick
+  return $ (getXHR GET "/data" >>> appendEntry >>> terminal) $ liftSignal buttonClick
   return button
 
 setupNavLinks :: Document -> Dom Element

@@ -37,10 +37,10 @@ var XHR = function () {
     }
 
     XHR.prototype.createXHRSignal = function (method, resource, signal) {        
-        var outSignal = new Signals.Signal(signal)
-        console.log("creating an XHR signal w/", method, resource, signal)
+        var outSignal = new Signals.Signal(signal), thus = this
+        console.log("creating an XHR signal w/", method, resource, window.signal = signal)
         signal.registerListener(function(value) {
-            var req = this.getXHR(method, resource)
+            var req = thus.getXHR(method, resource)
             console.log("requesting", resource, method, req)
             req.onreadystatechange = function() {
                 console.log("xhr got", req.response)
