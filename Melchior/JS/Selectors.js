@@ -97,5 +97,22 @@ var Selectors = function () {
         return elem ? elem instanceof HTMLDocument ? elem : null : null
     }
 
+
+    /***
+     * 
+     */
+    
+    Selector.prototype.idEq = function(el_a, el_b) {
+        return el_a.id === el_b.id
+    }
+
+    Selector.prototype.clEq = function(el_a, clsName) {
+        return el_a instanceof HTMLElement && el_a.classList.contains(clsName)
+    }
+
+    Selector.prototype.tag = function(node, tagName) {
+        return node.tagName === tagName.toUpperCase()
+    }
+
     return new Selector()
 }()

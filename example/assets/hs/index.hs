@@ -23,7 +23,7 @@ setupNavLinks = \html -> do
 runSelector :: Selector a b -> a -> IO b
 runSelector (Selector s) = s
 
-addClassTo :: Signal JSString -> Signal (IO (Maybe JSString))--hmmm
+addClassTo :: Signal JSString -> Signal (IO (Maybe JSString))
 addClassTo s = pipe s (\x -> (runSelector (byId $ jsStringToString x) [toElement document])
                              >>= (\x -> return $ fmap (addClass $ stringToJSString "active") x))
                         

@@ -61,43 +61,42 @@ instance Nodes [] where
 data Selector a b = Selector (a -> IO b)
 
 instance Functor (Selector a) where
-    fmap f (Selector g) = Selector $ liftM f . g
+    fmap f (Selector g) = Selector $  (\x -> liftM f $ g x)
 
 instance Category Selector where
     id = Selector return
     (Selector f) . (Selector g) = Selector $ g >=> f
 
-
 select :: Selector [Element] b -> Dom b
 select = Dom . runSelector
 
-foreign import js "runSelector(%1)"
+foreign import js "Selectors.runSelector(%1)"
     runSelector :: Selector [Element] b -> IO b
 
 
 byId :: (Node a, Nodes f) => String -> Selector (f a) (Maybe a)
-byId eid = Selector $
-    liftM toMaybe . filterIO (idEq (stringToJSString eid) . unwrap)
+byId eid = Selector $ \x -> 
+    (liftM toMaybe) $ filterIO (\y -> idEq (stringToJSString eid) $ unwrap y) x
 
-foreign import js "idEq(%2, %1)"
+foreign import js "Selectors.idEq(%2, %1)"
     idEq :: JSString -> JSPtr Node -> IO Bool
 
 byClass :: (Node a, Nodes f) => String -> Selector (f a) (f a)
-byClass ecl = Selector $ filterIO (clEq (stringToJSString ecl) . unwrap)
+byClass ecl = Selector $ filterIO (\x -> clEq (stringToJSString ecl) $ unwrap x)
 
-foreign import js "clEq(%2, %1)"
+foreign import js "Selectors.clEq(%2, %1)"
     clEq :: JSString -> JSPtr Node -> IO Bool
 
 children :: (Nodes f) => Selector (f Element) [Element]
-children = Selector $ liftM (fmap Element) . concatMapIO (chlQ . unwrap)
+children = Selector $ \y -> liftM (fmap Element) $ concatMapIO (\x -> chlQ $ unwrap x) y
 
 foreign import js "%1.childNodes"
     chlQ :: JSPtr Node -> IO [JSPtr Node]
 
 inputs :: Nodes f => Selector (f Element) (f Input)
-inputs = Selector $ liftM (fmap $ Input . unEl) . filterIO (inpF . unwrap)
+inputs = Selector $ \z -> liftM (fmap $ \y -> Input $ unEl y) $ filterIO (\x -> inpF $ unwrap x) z
 
-foreign import js "tag(%1, 'input')"
+foreign import js "Selectors.tag(%1, 'input')"
     inpF :: JSPtr Node -> IO Bool
 
 
