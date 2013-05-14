@@ -3,7 +3,7 @@ module Melchior.Dom.Selectors
       Selector
 
       -- * Running selectors
-    {-, select-}
+    , select
 
       -- * Building selectors
     , byId
@@ -57,6 +57,8 @@ instance Nodes [] where
     toList = id
     toMaybe = listToMaybe
 
+foreign import js "log(%2, %1)"
+  pass :: JSString -> a -> a
 
 data Selector a b = Selector (a -> IO b)
 
@@ -68,7 +70,7 @@ instance Category Selector where
     (Selector f) . (Selector g) = Selector $ g >=> f
 
 select :: Selector [Element] b -> Dom b
-select = Dom . runSelector
+select x = Dom $ runSelector x
 
 foreign import js "Selectors.runSelector(%1)"
     runSelector :: Selector [Element] b -> IO b
@@ -90,7 +92,7 @@ foreign import js "Selectors.clEq(%2, %1)"
 children :: (Nodes f) => Selector (f Element) [Element]
 children = Selector $ \y -> liftM (fmap Element) $ concatMapIO (\x -> chlQ $ unwrap x) y
 
-foreign import js "%1.childNodes"
+foreign import js "Selectors.children(%1)"
     chlQ :: JSPtr Node -> IO [JSPtr Node]
 
 inputs :: Nodes f => Selector (f Element) (f Input)

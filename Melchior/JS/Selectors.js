@@ -107,11 +107,30 @@ var Selectors = function () {
     }
 
     Selector.prototype.clEq = function(el_a, clsName) {
-        return el_a instanceof HTMLElement && el_a.classList.contains(clsName)
+        console.log(el_a, clsName, el_a instanceof HTMLElement)
+        if(el_a instanceof HTMLElement && el_a.classList.contains(clsName)) {
+            return el_a
+        }
     }
 
     Selector.prototype.tag = function(node, tagName) {
         return node.tagName === tagName.toUpperCase()
+    }
+
+    Selector.prototype.children = function(el) {
+        console.log("children of", el, el.childNodes)
+        var ret = [], fringe = Array.prototype.slice.call(el.childNodes)
+        while(fringe.length > 0) {
+            ret.push(fringe[0])
+            fringe.push.apply(fringe, fringe[0].childNodes)
+            fringe = fringe.slice(1)
+        }
+        return Lists.toUHCList(ret)
+    }
+
+    Selector.prototype.runSelector = function(sel) {
+        console.log("how exactly do I run ", sel)
+        return Lists.emptyUHCList();
     }
 
     return new Selector()

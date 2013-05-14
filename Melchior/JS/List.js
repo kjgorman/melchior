@@ -43,7 +43,7 @@ var Lists = function(){
                 __eOrV__ : lst[0],
                 __aN__ : function() { return lst[0] }
             },
-            _2 : toUHCList(lst.slice(1))
+            _2 : toUHCList(Array.prototype.slice.call(lst, 1))
         }
     }
 
