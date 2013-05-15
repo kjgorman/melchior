@@ -58,8 +58,8 @@ foreign import js "Signals.applicable(%1)"
 
 -- * Routing
 
-terminal :: SF (Dom a) (Dom a)
-terminal s = pipe s (\x -> pass (stringToJSString "reached terminal of signal network") $! x)
+terminal :: SF (IO a) (IO a)
+terminal s = pipe s (\x -> pass (stringToJSString "terminal") $! x)
 
 
 passThrough :: a -> b -> a
