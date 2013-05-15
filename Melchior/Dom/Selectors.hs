@@ -19,7 +19,6 @@ import Data.Maybe (listToMaybe, maybeToList)
 import Data.Monoid
 import Melchior.Dom
 {-import Melchior.Data.List-}
-import Language.UHC.JScript.ECMA.Bool
 import Language.UHC.JScript.ECMA.String
 import Language.UHC.JScript.Primitives
 import Prelude hiding ((.), id)
@@ -32,7 +31,7 @@ instance Node Element where
 
 class Functor f => Nodes f where
     concatMapIO :: (a -> IO [b]) -> f a -> IO [b]
-    filterIO :: (a -> IO JSBool) -> f a -> IO (f a)
+    filterIO :: (a -> IO Bool) -> f a -> IO (f a)
     toList :: f a -> [a]
     toMaybe :: f a -> Maybe a
 
@@ -56,12 +55,13 @@ instance Nodes [] where
     filterIO _ []       = return []
     filterIO f (x : xs) = do
       keep <- f x
-      take keep x
-        where take _true x  = liftM (x:) $ filterIO f xs
-              take _false _ = liftM id   $ filterIO f xs
-
+      liftM (if keep then (x:) else id) $ filterIO f xs
     toList = id
     toMaybe = listToMaybe
+
+
+foreign import js "log(%2, %1)"
+  pass :: JSString -> a -> a
 
 data Selector a b = Selector (a -> IO b)
 
@@ -84,13 +84,13 @@ byId eid = Selector $ \x ->
     (liftM toMaybe) $ filterIO (\y -> idEq (stringToJSString eid) $ unwrap y) x
 
 foreign import js "Selectors.idEq(%2, %1)"
-    idEq :: JSString -> JSPtr Node -> IO JSBool
+    idEq :: JSString -> JSPtr Node -> IO Bool
 
 byClass :: (Node a, Nodes f) => String -> Selector (f a) (f a)
 byClass ecl = Selector $ filterIO (\x -> clEq (stringToJSString ecl) $ unwrap x)
 
 foreign import js "Selectors.clEq(%2, %1)"
-    clEq :: JSString -> JSPtr Node -> IO JSBool
+    clEq :: JSString -> JSPtr Node -> IO Bool
 
 children :: (Nodes f) => Selector (f Element) [Element]
 children = Selector $ \y -> liftM (fmap Element) $ concatMapIO (\x -> chlQ $ unwrap x) y
@@ -102,6 +102,6 @@ inputs :: Nodes f => Selector (f Element) (f Input)
 inputs = Selector $ \z -> liftM (fmap $ \y -> Input $ unEl y) $ filterIO (\x -> inpF $ unwrap x) z
 
 foreign import js "Selectors.tag(%1, 'input')"
-    inpF :: JSPtr Node -> IO JSBool
+    inpF :: JSPtr Node -> IO Bool
 
 

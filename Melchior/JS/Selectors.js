@@ -107,11 +107,11 @@ var Selectors = function () {
     }
 
     Selector.prototype.clEq = function(el_a, clsName) {
-        console.log(el_a, clsName, el_a instanceof HTMLElement)
+        console.log("class check", el_a, clsName, el_a instanceof HTMLElement)        
         if(el_a instanceof HTMLElement && el_a.classList.contains(clsName)) {
-            return true
+            return $UHC.$Base.$True__
         } else {
-            return false
+            return $UHC.$Base.$False__
         }
     }
 
@@ -121,11 +121,10 @@ var Selectors = function () {
 
     Selector.prototype.children = function(el) {
         console.log("children of", el, el.childNodes)
-        var ret = [], fringe = Array.prototype.slice.call(el.childNodes),
-           isElem = function(e) { return el instanceof HTMLElement }
+        var ret = [], fringe = Array.prototype.slice.call(el.childNodes)
         while(fringe.length > 0) {
-            ret.push(fringe[0])
-            fringe.push.apply(fringe, Array.prototype.filter.call(fringe[0].childNodes,isElem))
+            if(fringe[0] instanceof HTMLElement) ret.push(fringe[0])
+            fringe.push.apply(fringe, fringe[0].childNodes)
             fringe = fringe.slice(1)
         }
         console.log("returning children ", ret)
