@@ -51,11 +51,14 @@ instance Nodes [] where
         list <- f x
         liftM (list ++) $ concatMapIO f xs
     filterIO _ []       = return []
-    filterIO f (x : xs) = do
-        keep <- f x
-        liftM (if keep then (x :) else id) $ filterIO f xs
+    filterIO f (x : xs) = liftM (x:) $ filterIO f xs{-do
+      keep <- f x
+      liftM (if keep then (x:) else id) $ filterIO f xs-}
     toList = id
     toMaybe = listToMaybe
+
+foreign import js "Lists.emptyUHCList()"
+  emptyList :: []
 
 foreign import js "log(%2, %1)"
   pass :: JSString -> a -> a
@@ -77,7 +80,7 @@ foreign import js "Selectors.runSelector(%1)"
 
 
 byId :: (Node a, Nodes f) => String -> Selector (f a) (Maybe a)
-byId eid = Selector $ \x -> 
+byId eid = Selector $ \x ->
     (liftM toMaybe) $ filterIO (\y -> idEq (stringToJSString eid) $ unwrap y) x
 
 foreign import js "Selectors.idEq(%2, %1)"

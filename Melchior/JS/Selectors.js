@@ -119,18 +119,25 @@ var Selectors = function () {
 
     Selector.prototype.children = function(el) {
         console.log("children of", el, el.childNodes)
-        var ret = [], fringe = Array.prototype.slice.call(el.childNodes)
+        var ret = [], fringe = Array.prototype.slice.call(el.childNodes),
+           isElem = function(e) { return el instanceof HTMLElement }
         while(fringe.length > 0) {
             ret.push(fringe[0])
-            fringe.push.apply(fringe, fringe[0].childNodes)
+            fringe.push.apply(fringe, Array.prototype.filter.call(fringe[0].childNodes,isElem))
             fringe = fringe.slice(1)
         }
+        console.log("returning children ", ret)
         return Lists.toUHCList(ret)
     }
 
     Selector.prototype.runSelector = function(sel) {
         console.log("how exactly do I run ", sel)
         return Lists.emptyUHCList();
+    }
+
+    Selector.prototype.ensureList = function(lst) {
+        console.log("is this a list?: ", lst)
+        return lst
     }
 
     return new Selector()
