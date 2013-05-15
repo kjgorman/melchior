@@ -58,16 +58,10 @@ instance Nodes [] where
       keep <- f x
       take keep x
         where take _true x  = liftM (x:) $ filterIO f xs
-              take _false _ = liftM id $ filterIO f xs
+              take _false _ = liftM id   $ filterIO f xs
 
     toList = id
     toMaybe = listToMaybe
-
-foreign import js "Lists.emptyUHCList()"
-  emptyList :: []
-
-foreign import js "log(%2, %1)"
-  pass :: JSString -> a -> a
 
 data Selector a b = Selector (a -> IO b)
 
