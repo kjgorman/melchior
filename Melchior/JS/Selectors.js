@@ -103,7 +103,8 @@ var Selectors = function () {
      */
     
     Selector.prototype.idEq = function(el_a, el_b) {
-        return el_a.id === el_b.id
+        console.log("idEq", el_a, el_b)
+        return el_a.id === el_b.id ? $UHC.$Base.$True__ : $UHC.$Base.$False__
     }
 
     Selector.prototype.clEq = function(el_a, clsName) {

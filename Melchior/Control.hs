@@ -51,7 +51,7 @@ foreign import js "Signals.source(%1)"
   source :: Signal a -> Element
 
 foreign import js "Signals.signalIO(%1)"
-  signalIO :: Dom a -> Dom a
+  signalIO :: IO a -> IO a
 
 foreign import js "Signals.applicable(%1)"
   applicable :: a -> a

@@ -41,9 +41,7 @@ instance Nodes Maybe where
     filterIO _ Nothing  = return Nothing
     filterIO f (Just x) = do
         keep <- f x
-        return $ maybe keep x
-          where maybe _true x  = Just x
-                maybe _false _ = Nothing
+        return $ if keep then Just x else Nothing
     toList = maybeToList
     toMaybe = id
 
