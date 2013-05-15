@@ -109,7 +109,9 @@ var Selectors = function () {
     Selector.prototype.clEq = function(el_a, clsName) {
         console.log(el_a, clsName, el_a instanceof HTMLElement)
         if(el_a instanceof HTMLElement && el_a.classList.contains(clsName)) {
-            return el_a
+            return true
+        } else {
+            return false
         }
     }
 
