@@ -16,18 +16,26 @@ setupNavLinks :: Document -> Dom Element
 setupNavLinks = \html -> do
   links <- Dom $ runSelector (byClass "link" . children) [toElement html]
   clicks <- return $ map (clickListener "innerHTML") links
-  return $ map (addClassTo >>> terminal) clicks
+  return $ map (rmClassFromParentSiblings >>> addClassTo >>> terminal)clicks
   return $ toElement html
 
 runSelector :: Selector a b -> a -> IO b
 runSelector (Selector s) = s
 
-addClassTo :: Signal (JSString) -> Signal (IO [JSString])
+addClassTo :: Signal (IO JSString) -> Signal (IO JSString)
 addClassTo s = pipe s (\x -> do
-                             elems <- runSelector ((byClass $ jsStringToString x) . children) [toElement document]
-                             return $ fmap (\y -> (addClass $ stringToJSString "active") $ parentOf y) elems
+                             cls <- x
+                             elems <- runSelector ((byClass $ jsStringToString cls) . children) [toElement document]
+                             return $ UHC.Base.head $ map (\y -> (addClass $ stringToJSString "active") $ parentOf y) elems
                       )
 
+rmClassFromParentSiblings :: Signal (JSString) -> Signal (IO JSString)
+rmClassFromParentSiblings s = pipe s (\x -> do
+                                       elems <- runSelector ((byClass $ jsStringToString x) . children) [toElement document]
+                                       return $! UHC.Base.head $ map (\y -> (removeClass $ stringToJSString "active") y )
+                                               $ concatMap (\x -> siblings $ parentOf x) elems
+                                       return x
+                                     )
 
 
 clickListener :: String -> Element -> Signal (JSString)

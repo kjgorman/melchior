@@ -31,23 +31,24 @@ var Signals = function () {
             newSignal.push(res, event)
             if(newSignal.registeredListeners.length === 0) {
                 //execute IO if no one is listening -- i.e. we are at a terminal
-                try {
-                    evaluate(res)
-                } catch (e) {
-                    console.error("error evaluating signal result")
-                    console.error(e.stack)
-                }
+                console.log("evaluating io")
+                evaluate(res)
             }
         });
         return newSignal
     }
 
     function evaluate(thunk) {
-        var curr = thunk;
+        var curr = thunk
         do {                  //hmmmmmm
             curr = curr._1 || curr[1] || _e_(curr)
             console.log(curr)
+            if(hasPrimitiveValue(curr)) break
         } while(curr.hasOwnProperty("__eOrV__") || curr[0] || curr._1)
+    }
+
+    function hasPrimitiveValue(val) {
+        return !(val === null || val === undefined || val instanceof Object)
     }
 
     Signal.prototype.__aN__ = function () {
