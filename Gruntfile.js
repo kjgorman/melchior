@@ -27,7 +27,8 @@ module.exports = function(grunt) {
             all: ["Melchior/JS/**/*.js"],
             options : {
                 asi : true,
-                expr: true
+                expr: true,
+                newcap : false
             }
         }, 
         watch : {

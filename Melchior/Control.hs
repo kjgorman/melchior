@@ -38,14 +38,15 @@ s >>> t = \x -> t $ s x
 s <<< t = \x -> s $ t x
 
 (&&&) :: SF a b -> SF a c -> SF a (b, c)
-s &&& t = \x -> toSF (s x, t x)
-                where
-                  toSF (Signal b, Signal c) = Signal $ pair (b, c)
+s &&& t = \x -> primAmpersands s t x
 
+-- * Misc. primitive signal operations
 
- -- * Misc. primitive signal operations
+foreign import js "Tuples.pair(%1, %2, %3)"
+  primAmpersands :: SF a b -> SF a c -> Signal a -> Signal (b, c)
+
 foreign import js "Tuples.pair(%1)"
-  pair :: (JSPtr a, JSPtr b) -> JSPtr (a, b)
+  pair :: JSPtr a -> a
 
 foreign import js "Signals.source(%1)"
   source :: Signal a -> Element
@@ -58,7 +59,7 @@ foreign import js "Signals.applicable(%1)"
 
 -- * Routing
 
-terminal :: SF (IO a) (IO a)
+terminal :: SF a a 
 terminal s = pipe s (\x -> pass (stringToJSString "terminal") $! x)
 
 

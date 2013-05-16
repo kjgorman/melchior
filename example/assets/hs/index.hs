@@ -17,8 +17,8 @@ setupNavLinks = \html -> do
   links <- Dom $ runSelector (byClass "link" . children) [toElement html]
   clicks <- return $ map (clickListener "innerHTML") links
   return $ map (rmClassFromParentSiblings >>> addClassTo >>> terminal) clicks
-  return $ map (hideSiblings >>> terminal) clicks
-  return $ map (showCurrent >>> terminal) clicks
+  return $ map ((hideSiblings &&& showCurrent) >>> terminal) clicks
+--  return $ map (showCurrent >>> terminal) clicks
   return $ toElement html
 
 runSelector :: Selector a b -> a -> IO b
