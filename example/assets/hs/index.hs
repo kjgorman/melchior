@@ -16,7 +16,9 @@ setupNavLinks :: Document -> Dom Element
 setupNavLinks = \html -> do
   links <- Dom $ runSelector (byClass "link" . children) [toElement html]
   clicks <- return $ map (clickListener "innerHTML") links
-  return $ map (rmClassFromParentSiblings >>> addClassTo >>> terminal)clicks
+  return $ map (rmClassFromParentSiblings >>> addClassTo >>> terminal) clicks
+  return $ map (hideSiblings >>> terminal) clicks
+  return $ map (showCurrent >>> terminal) clicks
   return $ toElement html
 
 runSelector :: Selector a b -> a -> IO b
@@ -26,17 +28,29 @@ addClassTo :: Signal (IO JSString) -> Signal (IO JSString)
 addClassTo s = pipe s (\x -> do
                              cls <- x
                              elems <- runSelector ((byClass $ jsStringToString cls) . children) [toElement document]
-                             return $ UHC.Base.head $ map (\y -> (addClass $ stringToJSString "active") $ parentOf y) elems
+                             return $! map (\y -> (addClass $ stringToJSString "active") $ parentOf y) elems
+                             return cls
                       )
 
 rmClassFromParentSiblings :: Signal (JSString) -> Signal (IO JSString)
 rmClassFromParentSiblings s = pipe s (\x -> do
                                        elems <- runSelector ((byClass $ jsStringToString x) . children) [toElement document]
-                                       return $! UHC.Base.head $ map (\y -> (removeClass $ stringToJSString "active") y )
+                                       return $! map (\y -> (removeClass $ stringToJSString "active") y )
                                                $ concatMap (\x -> siblings $ parentOf x) elems
                                        return x
                                      )
 
+hideSiblings :: Signal (JSString) -> Signal (IO (Maybe JSString))
+hideSiblings s = pipe s (\x -> do
+                               elem <- runSelector ((byId $ jsStringToString x) . children) [toElement document]
+                               return $! fmap UHC.Base.head $ fmap (\y -> map (addClass $ stringToJSString "hidden") $ y) $ fmap siblings elem
+                        )
+
+showCurrent :: Signal (JSString) -> Signal (IO (Maybe JSString))
+showCurrent s = pipe s (\x -> do
+                            elem <- runSelector ((byId $ jsStringToString $ x) . children) [toElement document]
+                            return $! fmap (removeClass $ stringToJSString "hidden") elem
+                       )
 
 clickListener :: String -> Element -> Signal (JSString)
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s

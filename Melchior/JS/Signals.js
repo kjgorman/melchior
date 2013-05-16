@@ -41,6 +41,7 @@ var Signals = function () {
     function evaluate(thunk) {
         var curr = thunk
         do {                  //hmmmmmm
+            console.log("pre curr", window.curr = curr)
             curr = curr._1 || curr[1] || _e_(curr)
             console.log(curr)
             if(hasPrimitiveValue(curr)) break

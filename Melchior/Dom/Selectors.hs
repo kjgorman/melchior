@@ -64,8 +64,8 @@ foreign import js "log(%2, %1)"
 data Selector a b = Selector (a -> IO b)
 
 instance Functor (Selector a) where
-    fmap f (Selector g) = Selector $  (\x -> liftM f $ g x)
-
+    fmap f (Selector g) = Selector $ \x -> liftM f $ g x
+    
 instance Category Selector where
     id = Selector return
     (Selector f) . (Selector g) = Selector $ g >=> f

@@ -103,7 +103,6 @@ var Selectors = function () {
      */
     
     Selector.prototype.idEq = function(el_a, idS) {
-        console.log("idEq", el_a, idS)
         return el_a.id === idS ? $UHC.$Base.$True__ : $UHC.$Base.$False__
     }
 

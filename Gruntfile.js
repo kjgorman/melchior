@@ -112,6 +112,7 @@ module.exports = function(grunt) {
                     "Melchior/Melchior_Control.mjs",
                     "Melchior/Dom/Melchior_Dom_Selectors.mjs",
                     "Melchior/Melchior_Test.mjs",
+                    "Melchior/Melchior_Tuple.mjs",
                     "Melchior/Melchior_XHR.mjs"
                 ],
                 dest: 'dist/melchior.js'
