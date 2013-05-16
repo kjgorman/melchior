@@ -29,8 +29,25 @@ var Signals = function () {
             var res = UHCFunction.apply(transform, value, event)
             console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
             newSignal.push(res, event)
+            if(newSignal.registeredListeners.length === 0) {
+                //execute IO if no one is listening -- i.e. we are at a terminal
+                try {
+                    evaluate(res)
+                } catch (e) {
+                    console.error("error evaluating signal result")
+                    console.error(e.stack)
+                }
+            }
         });
         return newSignal
+    }
+
+    function evaluate(thunk) {
+        var curr = thunk;
+        do {                  //hmmmmmm
+            curr = curr._1 || curr[1] || _e_(curr)
+            console.log(curr)
+        } while(curr.hasOwnProperty("__eOrV__") || curr[0] || curr._1)
     }
 
     Signal.prototype.__aN__ = function () {
@@ -79,7 +96,7 @@ var Signals = function () {
     }
 
     function signalIO(signalVal) {
-        console.log(signalVal)
+        console.log("signal io", signalVal)
         var res = _e_(signalVal._1)
         if(res) UHCFunction.apply(res, [])
         console.log("doing some manual signal io", signalVal, window.sigval = res)
