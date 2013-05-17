@@ -42,14 +42,21 @@ var Signals = function () {
         var curr = thunk
         do {                  //hmmmmmm
             console.log("pre curr", window.curr = curr)
-            curr = curr._1 || curr[1] || _e_(curr)
-            console.log(curr)
-            if(hasPrimitiveValue(curr)) break
-        } while(curr.hasOwnProperty("__eOrV__") || curr[0] || curr._1)
+            if(curr._1) try {
+                Lists.fromUHCList(curr).map(evaluate)
+                break
+            } catch(e) { curr = curr._1}
+            if(curr instanceof Array && curr.length > 0) {
+                curr.map(evaluate) 
+                break
+            } else curr = _e_(curr) || null            
+            console.log("post curr", curr)
+            if(hasPrimitiveValue(curr) || !curr) break
+        } while(curr.hasOwnProperty("__eOrV__") || curr[0] || curr._1 || curr._F_)
     }
 
     function hasPrimitiveValue(val) {
-        return !(val === null || val === undefined || val instanceof Object)
+        return !(val instanceof Object)
     }
 
     Signal.prototype.__aN__ = function () {

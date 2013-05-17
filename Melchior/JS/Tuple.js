@@ -9,7 +9,15 @@ var Tuples = function () {
         var newSignal = new Signals.Signal([s, t])
         x.registerListener(function(value) {
             var sRes = UHCFunction.apply(s, x), tRes = UHCFunction.apply(t, x)
-            newSignal.push(new _A_(new _F_( function() { return [sRes, tRes] }, [] )))
+            newSignal.push({
+                __aN__ : function () { return this.__eOrV__ },
+                __eOrV__: new _A_(new _F_(function() {
+                    return {__aN__: function() {
+                        return Lists.toUHCList([sRes, tRes])
+                    }
+                           }
+                }),[])
+                          })
         })
         return newSignal
     }
