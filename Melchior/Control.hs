@@ -68,8 +68,14 @@ passThrough x y =  y `seq` (applicable x)
 pipe :: Signal a -> (a -> b) -> Signal b
 pipe s f = primPipeSignal s f
 
+pipeWithEvent :: Signal a -> (a -> Event c -> b) -> Signal b
+pipeWithEvent s f = primPipeSignalWithEvent s f
+
 foreign import js "%1.pipe(%2)"
   primPipeSignal :: Signal a -> (a -> b) -> Signal b
+
+foreign import js "%1.pipe(%2)"
+  primPipeSignalWithEvent :: Signal a -> (a -> Event c -> b) -> Signal b
 
 -- * Signal creation
 

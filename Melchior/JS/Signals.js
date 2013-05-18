@@ -52,7 +52,7 @@ var Signals = function () {
             } else try {
                 curr = _e_(curr)
             } catch (e) {
-                return
+                return curr
             }
             console.log("post curr", curr)
             if(hasPrimitiveValue(curr) || !curr) break
@@ -80,7 +80,7 @@ var Signals = function () {
         elem.addEventListener(event, function (e) {
             console.log("detected", event, "sending to", s)
             s.push({
-                __eOrV__: Dom.get(elem, key),
+                __eOrV__: Dom.get(elem, key) || e,
                 __aN__: function() { return this.__eOrV__ }
             }, e)
         })

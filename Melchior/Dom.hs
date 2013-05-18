@@ -14,13 +14,13 @@ module Melchior.Dom
     , toInput
     , toDiv
     , document
-    , setBody
     , addClass
     , removeClass
     , toggle
     , parentOf
     , siblings
     , append
+    , set
     ) where
 
 --dependencies
@@ -64,9 +64,6 @@ foreign import js "Selectors.toDiv(%2)"
 foreign import js "Selectors.toSpan(%2)"
   toSpan :: (DomNode a) => a -> Span
 
-foreign import js "Dom.set(%1, 'innerHTML', %2)"
-  setBody :: Element -> JSString -> Dom ()
-
 foreign import js "Dom.addClass(%2, %1)"
   addClass :: JSString -> Element -> JSString
 
@@ -81,6 +78,9 @@ foreign import js "%1.parentNode"
 
 foreign import js "Dom.siblings(%1)"
   siblings :: Element -> [Element]
+
+foreign import js "Dom.set(%1, %2, %3)"
+  set :: Element -> JSString -> a -> a
 
 foreign import js "Dom.hack(%1)"
   append :: JSString -> JSString

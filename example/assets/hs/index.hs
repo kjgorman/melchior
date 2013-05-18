@@ -19,14 +19,19 @@ setupNavLinks = \html -> do
   links <- Dom $ select (byClass "link" . children) [toElement html]
   check <- Dom $ select (byClass "check" . children) [toElement html]
   button <- Dom $ select (byClass "btn-success" . children) [toElement html]
+  container <- Dom $ select (byClass "container-narrow" . children) [toElement html]
   --reactivity
   clicks <- return $ map (clickListener "innerHTML") links
   reactiveClicks <- return $ map (clickListener "data-reactive") check
   buttonClick <- return $ map (clickListener "innerHTML") button
+  mouseMove <- return $ map (\e -> createEventedSignal (Of MouseMove) e (MouseEvt MouseMove)) container
   --signal functions
+  -- interesting-ish network
   return $ map (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal) clicks
   return $ map (strike >>> terminal) reactiveClicks
+  -- xhr driven signal
   return $ map ((getXHR GET "/data") >>> append >>> terminal) buttonClick
+  return $ map (getCoords >>> putCoords >>> terminal) mouseMove
   return $ toElement html
 
 addClassTo :: SF (IO JSString) (IO JSString)
@@ -70,6 +75,15 @@ strike s = pipe s (\x -> do
 
 append :: Signal (JSString) -> Signal (JSString)
 append s = pipe s (\x -> Melchior.Dom.append x)
+
+getCoords :: Signal MouseEvent -> Signal (Int, Int)
+getCoords s = pipe s (\x -> coords x)
+
+putCoords :: Signal (Int, Int) -> Signal (IO (Maybe (Int, Int)))
+putCoords s = pipe s (\x -> do
+                            elem <- select (byId "where-at" . children) [toElement document]
+                            return $ fmap (\y -> set y (stringToJSString "innerHTML") x) elem
+                     )
 
 foreign import js "log(%2, %1)"
   pass :: JSString -> a -> a

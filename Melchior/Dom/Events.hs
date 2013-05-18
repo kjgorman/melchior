@@ -28,3 +28,5 @@ instance Show MouseEvent where
  show MouseOver = "mouseover"
  show MouseMove = "mousemove"
 
+foreign import js "Events.coordinates(%1)"
+  coords :: MouseEvent -> (Int, Int)

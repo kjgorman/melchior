@@ -7,5 +7,10 @@ var Events = function() {
         return evt ? evt.target || evt.source : evt
     }
 
+    Event.prototype.coordinates = function(evt) {
+        console.log("EVENTING ::: ", evt)
+        return [evt.pageX, evt.pageY]
+    }
+
     return new Event()
 }()
