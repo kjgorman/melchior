@@ -49,7 +49,11 @@ var Signals = function () {
             if(curr instanceof Array && curr.length > 0) {
                 curr.map(evaluate) 
                 break
-            } else curr = _e_(curr) || null            
+            } else try {
+                curr = _e_(curr)
+            } catch (e) {
+                return
+            }
             console.log("post curr", curr)
             if(hasPrimitiveValue(curr) || !curr) break
         } while(curr.hasOwnProperty("__eOrV__") || curr[0] || curr._1 || curr._F_)

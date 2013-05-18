@@ -20,6 +20,7 @@ module Melchior.Dom
     , toggle
     , parentOf
     , siblings
+    , append
     ) where
 
 --dependencies
@@ -80,6 +81,9 @@ foreign import js "%1.parentNode"
 
 foreign import js "Dom.siblings(%1)"
   siblings :: Element -> [Element]
+
+foreign import js "Dom.hack(%1)"
+  append :: JSString -> JSString
 
 {-
 getAttr :: String -> Element -> Dom String

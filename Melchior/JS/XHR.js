@@ -44,7 +44,9 @@ var XHR = function () {
             console.log("requesting", resource, method, req)
             req.onreadystatechange = function() {
                 console.log("xhr got", req.response)
-                outSignal.push(req.response)
+                console.log("req.readystate", req.readystate)
+                if(req.readyState === 4)
+                    outSignal.push(req.response)
             }
             req.send(value) //should this send now?
         })

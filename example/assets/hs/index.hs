@@ -15,22 +15,31 @@ main = runDom setupNavLinks
 
 setupNavLinks :: Document -> Dom Element
 setupNavLinks = \html -> do
-  links <- Dom $ runSelector (byClass "link" . children) [toElement html]
+  --element selection
+  links <- Dom $ select (byClass "link" . children) [toElement html]
+  check <- Dom $ select (byClass "check" . children) [toElement html]
+  button <- Dom $ select (byClass "btn-success" . children) [toElement html]
+  --reactivity
   clicks <- return $ map (clickListener "innerHTML") links
+  reactiveClicks <- return $ map (clickListener "data-reactive") check
+  buttonClick <- return $ map (clickListener "innerHTML") button
+  --signal functions
   return $ map (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal) clicks
+  return $ map (strike >>> terminal) reactiveClicks
+  return $ map ((getXHR GET "/data") >>> append >>> terminal) buttonClick
   return $ toElement html
 
-addClassTo :: Signal (IO JSString) -> Signal (IO JSString)
+addClassTo :: SF (IO JSString) (IO JSString)
 addClassTo s = pipe s (\x -> do
                              cls <- x
-                             elems <- runSelector ((byClass $ jsStringToString cls) . children) [toElement document]
+                             elems <- select ((byClass $ jsStringToString cls) . children) [toElement document]
                              return $! map (\y -> (addClass $ stringToJSString "active") $ parentOf y) elems
                              return cls
                       )
 
 rmClassFromParentSiblings :: Signal (JSString) -> Signal (IO JSString)
 rmClassFromParentSiblings s = pipe s (\x -> do
-                                       elems <- runSelector ((byClass $ jsStringToString x) . children) [toElement document]
+                                       elems <- select ((byClass $ jsStringToString x) . children) [toElement document]
                                        return $! map (\y -> (removeClass $ stringToJSString "active") y )
                                                $ concatMap (\x -> siblings $ parentOf x) elems
                                        return x
@@ -39,19 +48,28 @@ rmClassFromParentSiblings s = pipe s (\x -> do
 hideSiblings :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 hideSiblings s = pipe s (\x -> do
                                idS <- x
-                               elem <- runSelector ((byId $ jsStringToString idS) . children) [toElement document]
+                               elem <- select ((byId $ jsStringToString idS) . children) [toElement document]
                                return $ fmap UHC.Base.head $ fmap (\y -> map (addClass $ stringToJSString "hidden") $ y) $ fmap siblings elem
                         )
 
 showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent s = pipe s (\x -> do
                             idS <- x
-                            elem <- runSelector ((byId $ jsStringToString $ idS) . children) [toElement document]
+                            elem <- select ((byId $ jsStringToString $ idS) . children) [toElement document]
                             return $! fmap (removeClass $ stringToJSString "hidden") elem
                        )
 
 clickListener :: String -> Element -> Signal (JSString)
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
+
+strike :: Signal JSString -> Signal (IO (Maybe JSString))
+strike s = pipe s (\x -> do
+                      elem <- select ((byId $ jsStringToString x) .children) [toElement document]
+                      return $! fmap (toggle $ stringToJSString "checked") elem
+                  )
+
+append :: Signal (JSString) -> Signal (JSString)
+append s = pipe s (\x -> Melchior.Dom.append x)
 
 foreign import js "log(%2, %1)"
   pass :: JSString -> a -> a
