@@ -4,20 +4,20 @@ var Tuples = function () {
     var Tuple = function () { }
 
     //TODO --- implement ampersand properly
-    Tuple.prototype.pair = function (s, t, x) {
-        console.log("tuple: ", s, t, x)
-        var newSignal = new Signals.Signal([s, t])
-        x.registerListener(function(value) {
-            var sRes = UHCFunction.apply(s, x), tRes = UHCFunction.apply(t, x)
-            newSignal.push({
-                __aN__ : function () { return this.__eOrV__ },
-                __eOrV__: new _A_(new _F_(function() {
-                    return {__aN__: function() {
-                        return Lists.toUHCList([sRes, tRes])
-                    }
-                           }
-                }),[])
-                          })
+    // inpSignal --> signal a
+    // s -> \signal a -> \signal b
+    // t -> \signal a -> \signal c
+    Tuple.prototype.pair = function (s, t, inpSignal) {
+        console.log("tuple: ", s, t, inpSignal)
+        var newSignal = new Signals.Signal(inpSignal),
+            withS = _e_(UHCFunction.apply(s, inpSignal)),
+            withT = _e_(UHCFunction.apply(t, inpSignal))
+        console.log("&&&: ", withS, withT)
+        withS.registerListener(function(value) {
+            newSignal.push(value)
+        })
+        withT.registerListener(function(value) {
+            newSignal.push(value)
         })
         return newSignal
     }

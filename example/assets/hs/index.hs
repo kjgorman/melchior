@@ -1,4 +1,5 @@
 import Control.Category hiding ((>>>), (<<<))
+import Data.Maybe
 import Melchior.Control
 import Melchior.Data.List
 import Melchior.Dom
@@ -16,9 +17,7 @@ setupNavLinks :: Document -> Dom Element
 setupNavLinks = \html -> do
   links <- Dom $ runSelector (byClass "link" . children) [toElement html]
   clicks <- return $ map (clickListener "innerHTML") links
-  return $ map (rmClassFromParentSiblings >>> addClassTo >>> terminal) clicks
-  return $ map ((hideSiblings &&& showCurrent) >>> terminal) clicks
---  return $ map (showCurrent >>> terminal) clicks
+  return $ map (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal) clicks
   return $ toElement html
 
 runSelector :: Selector a b -> a -> IO b
@@ -40,15 +39,17 @@ rmClassFromParentSiblings s = pipe s (\x -> do
                                        return x
                                      )
 
-hideSiblings :: Signal (JSString) -> Signal (IO (Maybe JSString))
+hideSiblings :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 hideSiblings s = pipe s (\x -> do
-                               elem <- runSelector ((byId $ jsStringToString x) . children) [toElement document]
-                               return $! fmap UHC.Base.head $ fmap (\y -> map (addClass $ stringToJSString "hidden") $ y) $ fmap siblings elem
+                               idS <- x
+                               elem <- runSelector ((byId $ jsStringToString idS) . children) [toElement document]
+                               return $ fmap UHC.Base.head $ fmap (\y -> map (addClass $ stringToJSString "hidden") $ y) $ fmap siblings elem
                         )
 
-showCurrent :: Signal (JSString) -> Signal (IO (Maybe JSString))
+showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent s = pipe s (\x -> do
-                            elem <- runSelector ((byId $ jsStringToString $ x) . children) [toElement document]
+                            idS <- x
+                            elem <- runSelector ((byId $ jsStringToString $ idS) . children) [toElement document]
                             return $! fmap (removeClass $ stringToJSString "hidden") elem
                        )
 

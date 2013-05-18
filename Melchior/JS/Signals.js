@@ -17,7 +17,10 @@ var Signals = function () {
     }
 
     Signal.prototype.push = function(value, event) {
-        for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
+        if(this.registeredListeners.length === 0) {
+            console.log("evaluating", value)
+            evaluate(value)
+        } else for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
             this.registeredListeners[i](value, event);
         }
     }
@@ -28,12 +31,7 @@ var Signals = function () {
         this.registeredListeners.push(function (value, event) {
             var res = UHCFunction.apply(transform, value, event)
             console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
-            newSignal.push(res, event)
-            if(newSignal.registeredListeners.length === 0) {
-                //execute IO if no one is listening -- i.e. we are at a terminal
-                console.log("evaluating io")
-                evaluate(res)
-            }
+            newSignal.push(res, event)       
         });
         return newSignal
     }
@@ -117,6 +115,7 @@ var Signals = function () {
         bindToSignal: bindToSignal,
         applicable:applicable,
         signalIO:signalIO,
-        Signal:Signal
+        Signal:Signal,
+        evaluate: evaluate
     }
 }()

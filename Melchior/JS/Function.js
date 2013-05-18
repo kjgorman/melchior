@@ -4,7 +4,7 @@ var UHCFunction = function () {
     function applyNode(func, value) {
         console.log("applying node", window.func = func, window.val = value)
         var argCopy, result
-        argCopy = func.args.slice()
+        argCopy = func.args ? func.args.slice() : func.args = []
         if(value || value === "" || value === 0) func.args = func.args.concat([value])
         result = func.__aN__([[]])
         func.args = argCopy
