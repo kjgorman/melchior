@@ -17,6 +17,7 @@ var Signals = function () {
     }
 
     Signal.prototype.push = function(value, event) {
+        console.log("received", value, event)
         if(this.registeredListeners.length === 0) {
             console.log("evaluating", value)
             evaluate(value)
@@ -37,6 +38,7 @@ var Signals = function () {
     }
 
     function evaluate(thunk) {
+        if(!thunk) return
         var curr = thunk
         do {                  //hmmmmmm
             console.log("pre curr", window.curr = curr)
