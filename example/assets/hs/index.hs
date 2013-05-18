@@ -20,9 +20,6 @@ setupNavLinks = \html -> do
   return $ map (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal) clicks
   return $ toElement html
 
-runSelector :: Selector a b -> a -> IO b
-runSelector (Selector s) = s
-
 addClassTo :: Signal (IO JSString) -> Signal (IO JSString)
 addClassTo s = pipe s (\x -> do
                              cls <- x

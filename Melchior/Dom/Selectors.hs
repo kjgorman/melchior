@@ -3,8 +3,8 @@ module Melchior.Dom.Selectors
       Selector
 
       -- * Running selectors
-    , select
-
+--    , select
+      , runSelector
       -- * Building selectors
     , byId
     , byClass
@@ -70,12 +70,11 @@ instance Category Selector where
     id = Selector return
     (Selector f) . (Selector g) = Selector $ g >=> f
 
-select :: Selector [Element] b -> Dom b
-select x = Dom $ runSelector x
+{-select :: Selector [Element] b -> Dom b
+select x = Dom $ runSelector x-}
 
-foreign import js "Selectors.runSelector(%1)"
-    runSelector :: Selector [Element] b -> IO b
-
+runSelector :: Selector a b -> a -> IO b
+runSelector (Selector s) = s
 
 byId :: (Node a, Nodes f) => String -> Selector (f a) (Maybe a)
 byId eid = Selector $ \x ->

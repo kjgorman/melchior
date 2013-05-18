@@ -38,26 +38,6 @@ module.exports = function(grunt) {
             },
         },
         concat: {
-            runDom : {
-                options: { separator:';' },
-                src: ['spec/hs/runDom.js', 'spec/hs/spec-runDom.js'],
-                dest: 'spec/hs/runDom-spec.js'
-            },
-            getById : {
-                options: { separator:';' },
-                src: ['spec/hs/getById-setup.js', 'spec/hs/getById.js', 'spec/hs/spec-getById.js'],
-                dest: 'spec/hs/getById-spec.js'
-            },
-            getByClass : {
-                options : { separator:';' },
-                src: ['spec/hs/getByClass-setup.js', 'spec/hs/getByClass.js', 'spec/hs/spec-getByClass.js'],
-                dest: 'spec/hs/getByClass-spec.js'
-            },
-            getByTagName : {
-                options : {separator: ';' },
-                src: ['spec/hs/getByTagName-setup.js', 'spec/hs/getByTagName.js', 'spec/hs/spec-getByTagName.js'],
-                dest: 'spec/hs/getByTagName-spec.js'
-            },
             build : {
                 options: {
                     separator:';'
@@ -145,5 +125,12 @@ module.exports = function(grunt) {
                         'jasmine',
                         'watch']) 
     grunt.registerTask('travis', ['jshint', 'jasmine']);
-    grunt.registerTask('example', ['jshint','shell:build','shell:buildTests','concat','shell:copyDistToSpec','shell:copyDistToExample']);
+    grunt.registerTask('example',
+                       ['jshint',
+                        'shell:build',
+                        'shell:buildTests',
+                        'concat',
+                        'shell:copyDistToSpec',
+                        'shell:copyDistToExample',
+                        'jasmine']);
 }
