@@ -62,7 +62,6 @@ foreign import js "Signals.applicable(%1)"
 terminal :: SF a a 
 terminal s = pipe s (\x -> pass (stringToJSString "terminal") $! x)
 
-
 passThrough :: a -> b -> a
 passThrough x y =  y `seq` (applicable x)
 
