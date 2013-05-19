@@ -8,7 +8,7 @@ Seems to have more support for useful things, i.e. typeclasses.
 ffi is a bit stricter so you need to sort of shim in methods that
 perform assignments and stuff but should be fine.
 
-###getting it going and all the good stuff
+###getting it going and all that good stuff
 
 so to run this you basically need to get a copy of the uhc from [here](https://github.com/UU-ComputerScience/uhc)
 
