@@ -97,18 +97,9 @@ var Signals = function () {
         else return argument
     }
 
-    function signalIO(signalVal) {
-        console.log("signal io", signalVal)
-        var res = _e_(signalVal._1)
-        if(res) UHCFunction.apply(res, [])
-        console.log("doing some manual signal io", signalVal, window.sigval = res)
-        return res
-    }
-
     return {
         createEventedSignal: createEventedSignal,
         applicable:applicable,
-        signalIO:signalIO,
         Signal:Signal,
         evaluate: evaluate
     }
