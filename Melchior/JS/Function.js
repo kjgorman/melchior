@@ -11,17 +11,28 @@ var UHCFunction = function () {
         return result
     }
 
-    function apply(func, value) {
-        if(window.debug) console.log("applying", func, value)
-        if(func instanceof _F_)
+    function call(func, value) {
+        if(window.debug) console.log("calling", func, value)
+        if(func instanceof _F_) {
             return func.__evN__(value)
-        else if(func instanceof Function)
+        } else if(func instanceof Function)
             return func(value)
         else
             return applyNode(func, value)        
     }
 
+    function apply(func, value) {
+        if(window.debug) console.log("applying", func, value)
+        if(func instanceof _F_) {
+            return func.__evN__.apply(func, value)
+        } else if(func instanceof Function)
+            return func.apply(func, value)
+        else
+            return applyNode(func, value)        
+    }
+
     return {
+        call : call,
         apply: apply
     }
 }()

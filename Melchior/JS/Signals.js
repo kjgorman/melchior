@@ -13,7 +13,7 @@ var Signals = function () {
         if(window.debug) console.log("registering listener", callback, this)
         this.registeredListeners.push(function (value) {
             if(!callback) return
-            UHCFunction.apply(callback, value)
+            UHCFunction.call(callback, value)
         })
     }
 
@@ -31,7 +31,7 @@ var Signals = function () {
         if(window.debug) if(window.debug) console.log("constructing with transform", transform)
         var newSignal = new Signal(this)
         this.registeredListeners.push(function (value, event) {
-            var res = UHCFunction.apply(transform, value, event)
+            var res = UHCFunction.call(transform, value, event)
             if(window.debug) console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
             newSignal.push(res, event)       
         });
@@ -71,7 +71,7 @@ var Signals = function () {
     }
 
     function hasPrimitiveValue(val) {
-        return !(val instanceof Object)
+        return !(val instanceof Object) || (val instanceof BigInteger)
     }
 
     function createEventedSignal (elem, event, key) {
@@ -94,9 +94,10 @@ var Signals = function () {
         var newSignal = new Signal(signal)
         newSignal.accumulator = base
         signal.registerListener(function(value) {
-            newSignal.accumulator = UHCFunction.apply(func, value, newSignal.accumulator)
+            newSignal.accumulator = UHCFunction.apply(func, [value, newSignal.accumulator])
             newSignal.push(newSignal.accumulator)
         })
+        return newSignal
     }
 
     function applicable (argument) {
@@ -109,6 +110,7 @@ var Signals = function () {
 
     return {
         createEventedSignal: createEventedSignal,
+        createPastDependentSignal: createPastDependentSignal,
         applicable:applicable,
         Signal:Signal,
         evaluate: evaluate

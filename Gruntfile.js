@@ -51,6 +51,7 @@ module.exports = function(grunt) {
                     "Melchior/JS/Function.js",
                     "Melchior/JS/Dom.js",
                     "Melchior/JS/Events.js", 
+                    "Melchior/JS/Time.js",
                     "Melchior/JS/Tuple.js",
                     "Melchior/JS/XHR.js",
                     "/usr/local/lib//uhc-1.1.3/lib/js/libEH-RTS.mjs",
@@ -96,7 +97,8 @@ module.exports = function(grunt) {
                     "Melchior/Melchior_Test.mjs",
                     "Melchior/Melchior_Tuple.mjs",
                     "Melchior/Melchior_XHR.mjs",
-                    "Melchior/Melchior_Mouse.mjs"
+                    "Melchior/Melchior_Mouse.mjs",
+                    "Melchior/Melchior_Time.mjs",
                 ],
                 dest: 'dist/melchior.js'
             }

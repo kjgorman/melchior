@@ -7,6 +7,7 @@ import Melchior.Dom
 import Melchior.Dom.Events
 import Melchior.Dom.Selectors
 import Melchior.Mouse
+import Melchior.Time
 import Melchior.XHR
 
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
@@ -34,7 +35,11 @@ setupNavLinks = \html -> do
   -- xhr driven signal
   return $ map (getXHR GET "/data" >>> append >>> terminal) buttonClick
   return $ map (Melchior.Mouse.position >>> putCoords >>> terminal) mouseMove
+  return $ (putCount >>> terminal) countSeconds
   return $ toElement html
+
+countSeconds :: Signal Int
+countSeconds = (foldP (\t acc -> acc + 1) 0 (Melchior.Time.every second)) 
 
 addClassTo :: SF (IO JSString) (IO JSString)
 addClassTo s = pipe s (\x -> do
@@ -75,6 +80,8 @@ strike s = pipe s (\x -> do
                       return $! (toggle $ stringToJSString "checked") <$> elem
                   )
 
+--TODO, all the gross stuff below this line
+
 append :: Signal (JSString) -> Signal (JSString)
 append s = pipe s (\x -> Melchior.Dom.append x)
 
@@ -83,6 +90,12 @@ putCoords s = pipe s (\x -> do
                             elem <- select (byId "where-at" . children) [toElement document]
                             return $ (\y -> set y (stringToJSString "innerHTML") x) <$> elem
                      )
+
+putCount :: Signal Int -> Signal (IO (Maybe Int))
+putCount s = pipe s (\x -> do
+                        elem <- select (byId "when-at" . children) [toElement document]
+                        return $ (\y -> set y (stringToJSString "innerHTML") x) <$> elem
+                    )
 
 foreign import js "log(%2, %1)"
   pass :: JSString -> a -> a
