@@ -10,13 +10,13 @@ var Lists = function(){
     }
 
     function safeList (lst) {
-        console.log("lst", lst)
+        if(window.debug) console.log("lst", lst)
         if(lst && lst[0].length) lst = lst[0]
         return lst
     }
 
     function map(func, list) {
-        console.log("window.func", window.func = func, list)
+        if(window.debug) console.log("window.func", window.func = func, list)
         if(!func || !func.__aN__ || typeof func.__aN__ !== "function" || !list || !list.hasOwnProperty("length"))
             return undefined;
         var mapped = list.map(function (l) {
@@ -73,9 +73,9 @@ var Lists = function(){
     function head(lst) {
         if(lst === null) return null
         if(!lst) return lst
-        console.log("trying to take head of the list", lst)
+        if(window.debug) console.log("trying to take head of the list", lst)
         if(!lst._1) return undefined
-        console.log("returning", lst._1)
+        if(window.debug) console.log("returning", lst._1)
         return lst._1
     }
 

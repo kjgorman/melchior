@@ -20,7 +20,7 @@ var XHR = function () {
             }
             break
         }
-        console.log("found browser xhr:" , xmlHttpRequest)
+        if(window.debug) console.log("found browser xhr:" , xmlHttpRequest)
         return xmlHttpRequest
     }
 
@@ -38,13 +38,13 @@ var XHR = function () {
 
     XHR.prototype.createXHRSignal = function (method, resource, signal) {        
         var outSignal = new Signals.Signal(signal), thus = this
-        console.log("creating an XHR signal w/", method, resource, window.signal = signal)
+        if(window.debug) console.log("creating an XHR signal w/", method, resource, window.signal = signal)
         signal.registerListener(function(value) {
             var req = thus.getXHR(method, resource)
-            console.log("requesting", resource, method, req)
+            if(window.debug) console.log("requesting", resource, method, req)
             req.onreadystatechange = function() {
-                console.log("xhr got", req.response)
-                console.log("req.readystate", req.readystate)
+                if(window.debug) console.log("xhr got", req.response)
+                if(window.debug) console.log("req.readystate", req.readystate)
                 if(req.readyState === 4)
                     outSignal.push(req.response)
             }

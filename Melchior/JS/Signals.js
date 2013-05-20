@@ -2,14 +2,15 @@ var Signals = function () {
     "use strict";
 
     var Signal = function (source) {
-        console.log("initialising signal with source: ", source)
+        if(window.debug) console.log("initialising signal with source: ", source)
         this.registeredListeners = []
         this._source = source
+        this.accumulator = null
         this.__isSignal = true
     }
 
     Signal.prototype.registerListener = function(callback) {
-        console.log("registering listener", callback, this)
+        if(window.debug) console.log("registering listener", callback, this)
         this.registeredListeners.push(function (value) {
             if(!callback) return
             UHCFunction.apply(callback, value)
@@ -17,9 +18,9 @@ var Signals = function () {
     }
 
     Signal.prototype.push = function(value, event) {
-        console.log("received", value, event)
+        if(window.debug) console.log("received", value, event)
         if(this.registeredListeners.length === 0) {
-            console.log("evaluating", value)
+            if(window.debug) console.log("evaluating", value)
             evaluate(value)
         } else for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
             this.registeredListeners[i](value, event);
@@ -27,11 +28,11 @@ var Signals = function () {
     }
 
     Signal.prototype.pipe = function(transform) {
-        console.log("constructing with transform", transform)
+        if(window.debug) if(window.debug) console.log("constructing with transform", transform)
         var newSignal = new Signal(this)
         this.registeredListeners.push(function (value, event) {
             var res = UHCFunction.apply(transform, value, event)
-            console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
+            if(window.debug) console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
             newSignal.push(res, event)       
         });
         return newSignal
@@ -51,7 +52,7 @@ var Signals = function () {
         if(!thunk) return
         var curr = thunk
         do {                  //hmmmmmm
-            console.log("pre curr", window.curr = curr)
+            if(window.debug) console.log("pre curr", window.curr = curr)
             if(curr._1) try {
                 Lists.fromUHCList(curr).map(evaluate)
                 break
@@ -64,7 +65,7 @@ var Signals = function () {
             } catch (e) {
                 return curr
             }
-            console.log("post curr", curr)
+            if(window.debug) console.log("post curr", curr)
             if(hasPrimitiveValue(curr) || !curr) break
         } while(curr.hasOwnProperty("__eOrV__") || curr[0] || curr._1 || curr._F_)
     }
@@ -80,7 +81,7 @@ var Signals = function () {
             return undefined
         var s = new Signal(elem)
         elem.addEventListener(event, function (e) {
-            console.log("detected", event, "sending to", s)
+            if(window.debug) console.log("detected", event, "sending to", s)
             s.push({
                 __eOrV__: Dom.get(elem, key) || e,
                 __aN__: function() { return this.__eOrV__ }
@@ -89,8 +90,17 @@ var Signals = function () {
         return s
     }
 
+    function createPastDependentSignal (func, base, signal) {
+        var newSignal = new Signal(signal)
+        newSignal.accumulator = base
+        signal.registerListener(function(value) {
+            newSignal.accumulator = UHCFunction.apply(func, value, newSignal.accumulator)
+            newSignal.push(newSignal.accumulator)
+        })
+    }
+
     function applicable (argument) {
-        console.log("wrapping in applicable node", argument)
+        if(window.debug) console.log("wrapping in applicable node", argument)
         if(!(argument instanceof _F_)) return {
             __aN__ : function () { return argument }
         }
