@@ -50,6 +50,7 @@ var Dom = function() {
     }
 
     DomOperations.prototype.set = function(elem, key, value) {
+        console.log("SETTING ::: ", elem, key, value)
         if(elem.length) elem = elem[0]
         if(elem) elem[key] = value
         return elem[key]
@@ -63,7 +64,7 @@ var Dom = function() {
         if(elem.attributes && elem.attributes.getNamedItem(key)) {
             return elem.attributes.getNamedItem(key).value            
         }
-        return elem
+        return undefined
     }
 
     DomOperations.prototype.hack = function(str) {

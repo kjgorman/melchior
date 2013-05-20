@@ -83,6 +83,7 @@ module.exports = function(grunt) {
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/uhcbase-1.1.3/uhc-1.1.3/js/plain/Control/Control_Monad.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/base-3.0.0.0/uhc-1.1.3/js/plain/Prelude.mjs",
                     "/usr/local/lib//uhc-1.1.3/lib/pkg/base-3.0.0.0/uhc-1.1.3/js/plain/Control/Control_Category.mjs",
+                    "/usr/local/lib//uhc-1.1.3/lib/pkg/base-3.0.0.0/uhc-1.1.3/js/plain/Control/Control_Applicative.mjs",
                     "Language/UHC/JScript/Language_UHC_JScript_Types.mjs",
                     "Language/UHC/JScript/ECMA/Language_UHC_JScript_ECMA_String.mjs",
                     "Language/UHC/JScript/Language_UHC_JScript_Primitives.mjs",
@@ -94,7 +95,8 @@ module.exports = function(grunt) {
                     "Melchior/Dom/Melchior_Dom_Selectors.mjs",
                     "Melchior/Melchior_Test.mjs",
                     "Melchior/Melchior_Tuple.mjs",
-                    "Melchior/Melchior_XHR.mjs"
+                    "Melchior/Melchior_XHR.mjs",
+                    "Melchior/Melchior_Mouse.mjs"
                 ],
                 dest: 'dist/melchior.js'
             }

@@ -1,10 +1,12 @@
 import Control.Category hiding ((>>>), (<<<))
+import Control.Applicative
 import Data.Maybe
 import Melchior.Control
 import Melchior.Data.List
 import Melchior.Dom
 import Melchior.Dom.Events
 import Melchior.Dom.Selectors
+import Melchior.Mouse
 import Melchior.XHR
 
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
@@ -31,7 +33,7 @@ setupNavLinks = \html -> do
   return $ map (strike >>> terminal) reactiveClicks
   -- xhr driven signal
   return $ map ((getXHR GET "/data") >>> append >>> terminal) buttonClick
-  return $ map (getCoords >>> putCoords >>> terminal) mouseMove
+  return $ map (Melchior.Mouse.position >>> putCoords >>> terminal) mouseMove
   return $ toElement html
 
 addClassTo :: SF (IO JSString) (IO JSString)
@@ -54,14 +56,14 @@ hideSiblings :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 hideSiblings s = pipe s (\x -> do
                                idS <- x
                                elem <- select ((byId $ jsStringToString idS) . children) [toElement document]
-                               return $ fmap UHC.Base.head $ fmap (\y -> map (addClass $ stringToJSString "hidden") $ y) $ fmap siblings elem
+                               return $ UHC.Base.head <$> ((\y -> map (addClass $ stringToJSString "hidden") $ y) <$> (siblings <$> elem))
                         )
 
 showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent s = pipe s (\x -> do
                             idS <- x
                             elem <- select ((byId $ jsStringToString $ idS) . children) [toElement document]
-                            return $! fmap (removeClass $ stringToJSString "hidden") elem
+                            return $! (removeClass $ stringToJSString "hidden") <$> elem
                        )
 
 clickListener :: String -> Element -> Signal (JSString)
@@ -70,19 +72,16 @@ clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (
 strike :: Signal JSString -> Signal (IO (Maybe JSString))
 strike s = pipe s (\x -> do
                       elem <- select ((byId $ jsStringToString x) .children) [toElement document]
-                      return $! fmap (toggle $ stringToJSString "checked") elem
+                      return $! (toggle $ stringToJSString "checked") <$> elem
                   )
 
 append :: Signal (JSString) -> Signal (JSString)
 append s = pipe s (\x -> Melchior.Dom.append x)
 
-getCoords :: Signal MouseEvent -> Signal (Int, Int)
-getCoords s = pipe s (\x -> coords x)
-
 putCoords :: Signal (Int, Int) -> Signal (IO (Maybe (Int, Int)))
 putCoords s = pipe s (\x -> do
                             elem <- select (byId "where-at" . children) [toElement document]
-                            return $ fmap (\y -> set y (stringToJSString "innerHTML") x) elem
+                            return $ (\y -> set y (stringToJSString "innerHTML") x) <$> elem
                      )
 
 foreign import js "log(%2, %1)"
