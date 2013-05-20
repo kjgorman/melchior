@@ -37,6 +37,16 @@ var Signals = function () {
         return newSignal
     }
 
+
+    Signal.prototype.__aN__ = function () {
+        return this
+    }
+
+    Signal.prototype.source = function () {
+        return this._source instanceof Signal ? this._source.source() : this._source;
+    }
+
+
     function evaluate(thunk) {
         if(!thunk) return
         var curr = thunk
@@ -63,14 +73,6 @@ var Signals = function () {
         return !(val instanceof Object)
     }
 
-    Signal.prototype.__aN__ = function () {
-        return this
-    }
-
-    Signal.prototype.source = function () {
-        return this._source instanceof Signal ? this._source.source() : this._source;
-    }
-
     function createEventedSignal (elem, event, key) {
         if(elem && elem[0] instanceof NodeList) elem = elem[0][0]
         if(elem && elem.length) elem = elem[0]
@@ -85,19 +87,6 @@ var Signals = function () {
             }, e)
         })
         return s
-    }
-
-    function bindToSignal (signal, callback) {
-        console.log(signal, window.callback = callback)
-        if(!signal || !callback || !callback.args) return undefined
-
-        signal.registerListener(callback)
-        return {
-            _1: {
-                __aN__ : signal.__aN__
-            },
-            __aN__: signal.__aN__
-        }
     }
 
     function applicable (argument) {
@@ -118,7 +107,6 @@ var Signals = function () {
 
     return {
         createEventedSignal: createEventedSignal,
-        bindToSignal: bindToSignal,
         applicable:applicable,
         signalIO:signalIO,
         Signal:Signal,

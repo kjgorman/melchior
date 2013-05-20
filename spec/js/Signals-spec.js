@@ -8,10 +8,6 @@ describe("null/undefined checks on the namespace static", function () {
         expect(Signals.createEventedSignal(anElement, null)).toEqual(undefined);
     });
 
-    it("should return undefined rather than throw", function () {
-        expect(Signals.bindToSignal()).toEqual(undefined);
-        expect(Signals.bindToSignal(signal)).toEqual(undefined);
-    });
 });
 
 describe("the event parameter must be of type string", function () {
@@ -33,11 +29,8 @@ describe("an evented signal should push events on an element to it's listeners",
         , signal = Signals.createEventedSignal(anElement, "click")
         , global = false;
 
-        Signals.bindToSignal(signal, {
-            __aN__: function() { 
+        signal.pipe(function() { 
                 global = true;  
-            },
-            args:[undefined]
         });
 
         var event = document.createEvent("MouseEvents");
@@ -52,9 +45,8 @@ describe("an evented signal should push events on an element to it's listeners",
         var anElement = document.createElement("input")
         , signal = Signals.createEventedSignal(anElement, "click")
         , global = false;
-        Signals.bindToSignal(signal, {
-            args: [],
-            __aN__: function () { global = true }
+        signal.pipe(function () {
+            global = true
         });
         var event = document.createEvent("MouseEvents");
         event.initMouseEvent("mousedown", true, true, window,
@@ -71,16 +63,6 @@ describe("an evented signal with invalid inputs should return undefined", functi
         expect(Signals.createEventedSignal({}, "click")).toBe(undefined);
         expect(Signals.createEventedSignal(document.createElement("div"))).toBe(undefined);
         expect(Signals.createEventedSignal(document.createElement("div"), {})).toBe(undefined);
-    });
-});
-
-describe("listening for an evented signal with poorly defined callback should return undefined", function() {
-    var signal = Signals.createEventedSignal(document.createElement("div"), "click");
-
-    it("should return nulls for bad inputs", function () {
-        expect(Signals.bindToSignal()).toBe(undefined);
-        expect(Signals.bindToSignal(signal)).toBe(undefined);
-        expect(Signals.bindToSignal(signal, {})).toBe(undefined);
     });
 });
 

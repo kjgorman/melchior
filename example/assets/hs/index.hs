@@ -32,7 +32,7 @@ setupNavLinks = \html -> do
   return $ map (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal) clicks
   return $ map (strike >>> terminal) reactiveClicks
   -- xhr driven signal
-  return $ map ((getXHR GET "/data") >>> append >>> terminal) buttonClick
+  return $ map (getXHR GET "/data" >>> append >>> terminal) buttonClick
   return $ map (Melchior.Mouse.position >>> putCoords >>> terminal) mouseMove
   return $ toElement html
 

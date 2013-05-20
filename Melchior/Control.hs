@@ -5,6 +5,7 @@ module Melchior.Control
   , Of
     -- * Functions
   , runDom
+  , foldP
   , createEventedSignal
   , createEventedSignalOf
   , (>>>)
@@ -81,6 +82,12 @@ foreign import js "%1.pipe(%2)"
 
 liftSignal :: Signal a -> Signal (Dom a)
 liftSignal s = pipe s (\x -> pass (stringToJSString "lifted") $ return $! x)
+
+foldP :: (a -> b -> b) -> b -> Signal a -> Signal b
+foldP fn start signal = createPastDependentSignal fn start signal
+
+foreign import js "Signals.createPastDependentSignal(%1, %2, %3)"
+  createPastDependentSignal :: (a -> b -> b) -> b -> Signal a -> Signal b
 
 createEventedSignal :: (DomNode a) => Of c -> a -> Event b -> Signal c
 createEventedSignal o el evt = primCreateEventedSignal o el $ (stringToJSString . show) evt
