@@ -1,4 +1,12 @@
-module Melchior.XHR where
+module Melchior.XHR (
+    get
+  , remote
+    -- * Types
+  , GET
+  , POST
+  , PUT
+  , DELETE
+  ) where
 
 import Melchior.Control
 import Melchior.Dom
@@ -12,22 +20,14 @@ instance Show XHRMethod where
   show PUT = "PUT"
   show DELETE = "DELETE"
 
--- getXHRRequest GET, "/all_the_things", sourceSignal
+remote :: XHRMethod -> String -> Signal a -> Signal JSString
+remote x s source = primGetXHR (stringToJSString $ show x) (stringToJSString s) source
 
-getXHR :: XHRMethod -> String -> Signal a -> Signal JSString
-getXHR x s source = primGetXHR (stringToJSString $ show x) (stringToJSString s) source
-
-foreign import js "XHR.createXHRSignal(%1, %2, %3)"
+foreign import js "XHR.pipeXHRSignal(%1, %2, %3)"
   primGetXHR :: JSString -> JSString -> Signal a -> Signal JSString
 
-{-
-so getXHR will just be a prim function along the lines of
+get :: XHRMethod -> String -> Signal JSString
+get x s = primGet (stringToJSString $ show x) (stringToJSString s)
 
-function getXHR(resource, method) {
-   var xhr = native.getXHR(..or whatever, from browser)
-   , req = new xhr()
-   opts = {method:method, url:url}
-   req.open(opts) --this should only 'open' on eval -- does that arise naturally?
-   return Signals.createRemoteSignal(req)
-}
--}
+foreign import js "XHR.getXHRSignal(%1, %2)"
+  primGet :: JSString -> JSString -> Signal JSString

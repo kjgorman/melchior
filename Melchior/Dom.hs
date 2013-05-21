@@ -14,6 +14,7 @@ module Melchior.Dom
     , toInput
     , toDiv
     , document
+    , docRoot
     , addClass
     , removeClass
     , toggle
@@ -40,6 +41,9 @@ newtype Span = Span {unSpan :: JSPtr Node}
 foreign import js "document"
   document :: Document
 
+docRoot :: [Element]
+docRoot = [toElement document]
+
 instance Monad Dom where
   return = Dom . return
   (Dom io) >>= k = Dom $ io >>= \x -> let Dom io' = k x in io'
@@ -64,23 +68,35 @@ foreign import js "Selectors.toDiv(%2)"
 foreign import js "Selectors.toSpan(%2)"
   toSpan :: (DomNode a) => a -> Span
 
-foreign import js "Dom.addClass(%2, %1)"
-  addClass :: JSString -> Element -> JSString
-
-foreign import js "Dom.removeClass(%2, %1)"
-  removeClass :: JSString -> Element -> JSString
-
-foreign import js "Dom.toggle(%2, %1)"
-  toggle :: JSString -> Element -> JSString
-
 foreign import js "%1.parentNode"
   parentOf :: Element -> Element
 
 foreign import js "Dom.siblings(%1)"
   siblings :: Element -> [Element]
 
+addClass :: String -> Element -> JSString
+addClass s e = primAddClass (stringToJSString s) e
+
+foreign import js "Dom.addClass(%2, %1)"
+  primAddClass :: JSString -> Element -> JSString
+
+removeClass :: String -> Element -> JSString
+removeClass s e = primRemoveClass (stringToJSString s) e
+
+foreign import js "Dom.removeClass(%2, %1)"
+  primRemoveClass :: JSString -> Element -> JSString
+
+toggle :: String -> Element -> JSString
+toggle s = primToggle (stringToJSString s)
+
+foreign import js "Dom.toggle(%2, %1)"
+  primToggle :: JSString -> Element -> JSString
+
+set :: Element -> String -> a -> a
+set e s v = primSet e (stringToJSString s) v
+
 foreign import js "Dom.set(%1, %2, %3)"
-  set :: Element -> JSString -> a -> a
+  primSet :: Element -> JSString -> a -> a
 
 foreign import js "Dom.hack(%1)"
   append :: JSString -> JSString

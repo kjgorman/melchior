@@ -7,7 +7,7 @@ module Melchior.Dom.Selectors
       -- * Building selectors
     , byId
     , byClass
-    , children
+    , inChildren
     , inputs
     ) where
 
@@ -85,8 +85,8 @@ byClass ecl = Selector $ filterIO (\x -> clEq (stringToJSString ecl) $ unwrap x)
 foreign import js "Selectors.clEq(%2, %1)"
     clEq :: JSString -> JSPtr Node -> IO Bool
 
-children :: (Nodes f) => Selector (f Element) [Element]
-children = Selector $ \y -> liftM (fmap Element) $ concatMapIO (\x -> chlQ $ unwrap x) y
+inChildren :: (Nodes f) => Selector (f Element) [Element]
+inChildren = Selector $ \y -> liftM (fmap Element) $ concatMapIO (\x -> chlQ $ unwrap x) y
 
 foreign import js "Selectors.children(%1)"
     chlQ :: JSPtr Node -> IO [JSPtr Node]
