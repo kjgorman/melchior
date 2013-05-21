@@ -6,6 +6,7 @@ import Melchior.Data.List
 import Melchior.Dom
 import Melchior.Dom.Events
 import Melchior.Dom.Selectors
+import Melchior.Json
 import Melchior.Mouse
 import Melchior.Time
 import Melchior.XHR
@@ -24,18 +25,18 @@ setupNavLinks = \html -> do
   button <- Dom $ select (byClass "btn-success" . inChildren) docRoot
   container <- Dom $ select (byClass "container-narrow" . inChildren) docRoot
   --reactivity
-  clicks <- return $ map (clickListener "innerHTML") links
-  reactiveClicks <- return $ map (clickListener "data-reactive") check
-  buttonClick <- return $ map (clickListener "innerHTML") button
-  mouseMove <- return $ map (\e -> createEventedSignal (Of MouseMove) e (MouseEvt MouseMove)) container
+  clicks <- return $ clickListener "innerHTML" <$> links
+  reactiveClicks <- return $ clickListener "data-reactive" <$> check
+  buttonClick <- return $ clickListener "innerHTML" <$> button
+  mouseMove <- return $ (\e -> createEventedSignal (Of MouseMove) e (MouseEvt MouseMove)) <$> container
   --signal functions
   -- interesting-ish network
   return $ map (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal) clicks
   return $ map (strike >>> terminal) reactiveClicks
   -- xhr driven signal
   return $ map (remote GET "/data" >>> append >>> terminal) buttonClick
-  return $ map (Melchior.Mouse.position >>> put "where-at" >>> terminal) mouseMove
-  return $ (put "when-at" >>> terminal) countSeconds
+  return $ map (Melchior.Mouse.position >>> putCoords >>> terminal) mouseMove
+  return $ (putCount >>> terminal) countSeconds
   return $ toElement html
 
 countSeconds :: Signal Int
@@ -85,10 +86,14 @@ strike s = pipe s (\x -> do
 append :: Signal (JSString) -> Signal (JSString)
 append s = pipe s (\x -> Melchior.Dom.append x)
 
-put :: String -> Signal a -> Signal (IO (Maybe a))
-put str sig = pipe sig (\x -> (select (byId str . inChildren) docRoot)
-                              >>= \e -> return $ (\y -> set y "innerHTML" x) <$> e)
 
+--hmm.. you would think closing over the selector string would work okay here but frustratingly it doesnt
+--need to investigate
+putCoords :: Signal (Int, Int) -> Signal (IO (Maybe (Int, Int)))
+putCoords s = pipe s (\x -> select (byId "where-at" . inChildren) docRoot >>= \e -> return ((\y -> set y "innerHTML" x) <$> e))
+
+putCount :: Signal Int -> Signal (IO (Maybe Int))
+putCount s = pipe s (\x -> select (byId "when-at" . inChildren) docRoot >>= \e -> return ((\y -> set y "innerHTML" x) <$> e))
 
 foreign import js "log(%2, %1)"
   pass :: JSString -> a -> a
