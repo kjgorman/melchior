@@ -1,12 +1,8 @@
-module Melchior.Json (
-    parseJson
-  , JsonObject
-  , Json
-  ) where
+module Melchior.Json where
 
 import Control.Applicative
 
-data Json = JsonString String | JsBool Bool | JsNull | JsonObj JsonObject
+data Json = JsonString String | JsBool Bool | JsNull | JsonArray [Json] | JsonObj JsonObject
             deriving (Show)
 
 data JsonObject = JsonObject [(String, Json)]
@@ -40,20 +36,47 @@ parseObject Nothing  = Nothing
 parseObject (Just s) = parsePairs $ takeWhile (\x -> x /= '}') s
 
 parsePairs :: String -> Maybe JsonObject
-parsePairs s = JsonObject <$> (sequence $ map parseKeyValue $ linesWhen (== ',') s)
+parsePairs s = JsonObject <$> (sequence $ map parseKeyValue $ linesWhen (==',') s)
 
 parseKeyValue :: String -> Maybe (String, Json)
 parseKeyValue s = sequenceTuple $ (parseKey key, parseValue value)
 		  where
+		  --hmm... I think  this should be in parseK/V... 
+		  -- if there's no colon it should -> Nothing? Or I guess it will anyway
 		  key   = takeWhile (\x -> x /= ':') s
 		  value = drop 1 $ dropWhile (\x -> x /= ':') s
     
 parseKey :: String -> Maybe String
-parseKey s = Just s
+parseKey s = Just s --hmmmm
 
---TODO decide in probably a (1) lookahead a type for this
 parseValue :: String -> Maybe Json
-parseValue s = Just (JsonString s)
+parseValue s = parseValue' (head t) (tail t)
+	     where t = skip whitespace s
 
+parseValue' :: Char -> String -> Maybe Json
+parseValue' '[' s   = parseList   $ takeWhile (\x -> x /= ']') s
+parseValue' '"' s   = parseString $ takeWhile (\x -> not $ elem x whitespace) s
+parseValue' '{' s   = parseObject' s
+parseValue' c@'f' s = parseFalse  $ c: takeWhile (\x -> not $ elem x whitespace) s
+parseValue' c@'t' s = parseTrue   $ c: takeWhile (\x -> not $ elem x whitespace) s
+parseValue' c@'n' s = parseNull   $ c: takeWhile (\x -> not $ elem x whitespace) s
 
+parseList :: String -> Maybe Json
+parseList = undefined
 
+parseString :: String -> Maybe Json
+parseString = Just . JsonString . (takeWhile (\x -> x /= '"'))
+
+parseFalse :: String -> Maybe Json
+parseFalse s = if s == "false" then Just $ JsBool False else Nothing
+
+parseTrue :: String -> Maybe Json
+parseTrue s = if s == "true" then Just $ JsBool True else Nothing
+
+parseNull :: String -> Maybe Json
+parseNull s = if s == "null" then Just JsNull else Nothing
+
+parseObject' :: String -> Maybe Json
+parseObject' s = case parseObject (Just s) of
+		      Just x   -> Just . JsonObj $  x
+		      Nothing  -> Nothing
