@@ -22,6 +22,11 @@ linesWhen p s =  case dropWhile p s of
                       "" -> []
                       s' -> w : linesWhen p s''
                             where (w, s'') = break p s'
+merge :: [String] -> [String]
+merge [] = []
+merge (x:[]) = [x]
+merge (x:xs) | not $ elem ':' (head xs) = (x++',':(head xs)):merge (tail xs)
+             | otherwise = x:merge xs
 
 skip :: [Char] -> String -> String
 skip c = dropWhile (\x -> elem x c)
@@ -40,22 +45,25 @@ parseObject Nothing  = Nothing
 parseObject (Just s) = parsePairs $ takeWhile (\x -> x /= '}') s
 
 parsePairs :: String -> Maybe JsonObject
-parsePairs s = JsonObject <$> (sequence $ map parseKeyValue $ linesWhen (==',') s)
+parsePairs [] = Nothing
+parsePairs s = JsonObject <$> (sequence $ map parseKeyValue $ merge $ linesWhen (== ',')  s)
 
 parseKeyValue :: String -> Maybe (String, Json)
+parseKeyValue [] = Nothing
 parseKeyValue s = sequenceTuple $ (parseKey key, parseValue value)
 		  where
-		  --hmm... I think  this should be in parseK/V... 
-		  -- if there's no colon it should -> Nothing? Or I guess it will anyway
 		  key   = takeWhile (\x -> x /= ':') s
 		  value = drop 1 $ dropWhile (\x -> x /= ':') s
     
 parseKey :: String -> Maybe String
+parseKey [] = Nothing
 parseKey s = Just s --hmmmm
 
 parseValue :: String -> Maybe Json
 parseValue s = parseValue' (head t) (tail t)
-	     where t = skip whitespace s
+	     where t = case skip whitespace s of
+                            [] -> " "
+                            s  -> s
 
 parseValue' :: Char -> String -> Maybe Json
 parseValue' '[' s   = parseList   $ takeWhile (\x -> x /= ']') s
@@ -64,9 +72,12 @@ parseValue' '{' s   = parseObject' s
 parseValue' c@'f' s = parseFalse  $ c: takeWhile (\x -> not $ elem x whitespace) s
 parseValue' c@'t' s = parseTrue   $ c: takeWhile (\x -> not $ elem x whitespace) s
 parseValue' c@'n' s = parseNull   $ c: takeWhile (\x -> not $ elem x whitespace) s
+parseValue' _     _ = Nothing
 
 parseList :: String -> Maybe Json
-parseList = undefined
+parseList s = case sequence $ map (parseValue . skip whitespace) $ linesWhen (== ',') s of
+                   Nothing -> Nothing
+                   Just arr -> Just (JsonArray arr)
 
 parseString :: String -> Maybe Json
 parseString = Just . JsonString . (takeWhile (\x -> x /= '"'))

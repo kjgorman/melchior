@@ -98,6 +98,7 @@ module.exports = function(grunt) {
                     "Melchior/Melchior_Tuple.mjs",
                     "Melchior/Melchior_Remote_Json.mjs",
                     "Melchior/Melchior_Remote_XHR.mjs",
+                    "Melchior/Melchior_Remote_Internal_Parser.mjs",
                     "Melchior/Melchior_Mouse.mjs",
                     "Melchior/Melchior_Time.mjs",
                 ],

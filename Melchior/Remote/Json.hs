@@ -6,6 +6,9 @@ module Melchior.Remote.Json (
 
 import Melchior.Remote.Internal.Parser
 
+empty :: JsonObject
+empty = JsonObject []
+
 getJsonObj :: String -> JsonObject -> Maybe Json
 getJsonObj = undefined
 
