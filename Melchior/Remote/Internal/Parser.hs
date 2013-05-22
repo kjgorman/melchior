@@ -68,7 +68,7 @@ parseValue s = parseValue' (head t) (tail t)
 
 parseValue' :: Char -> String -> Maybe Json
 parseValue' '[' s   = parseList   $ takeWhile (\x -> x /= ']') s
-parseValue' '"' s   = parseString $ takeWhile (\x -> not $ elem x whitespace) s
+parseValue' '"' s   = parseString $ takeWhile (\x -> x /= '"') s
 parseValue' '{' s   = parseObject' s
 parseValue' c@'f' s = parseFalse  $ c: takeWhile (\x -> not $ elem x whitespace) s
 parseValue' c@'t' s = parseTrue   $ c: takeWhile (\x -> not $ elem x whitespace) s
