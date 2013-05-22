@@ -1,4 +1,4 @@
-module Melchior.Json where
+module Melchior.Remote.Json where
 
 import Control.Applicative
 

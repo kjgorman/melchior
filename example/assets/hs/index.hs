@@ -1,15 +1,16 @@
 import Control.Category hiding ((>>>), (<<<))
 import Control.Applicative
 import Data.Maybe
+--all Melchior exports
 import Melchior.Control
 import Melchior.Data.List
 import Melchior.Dom
 import Melchior.Dom.Events
 import Melchior.Dom.Selectors
-import Melchior.Json
 import Melchior.Mouse
+import Melchior.Remote.Json
+import Melchior.Remote.XHR
 import Melchior.Time
-import Melchior.XHR
 
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 import Prelude hiding ((.), id, head, map)

@@ -1,4 +1,4 @@
-module Melchior.XHR (
+module Melchior.Remote.XHR (
     get
   , remote
     -- * Types
