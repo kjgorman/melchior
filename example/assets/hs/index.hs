@@ -43,6 +43,9 @@ setupNavLinks = \html -> do
 countSeconds :: Signal Int
 countSeconds = (foldP (\t acc -> acc + 1) 0 (every second)) 
 
+clickListener :: String -> Element -> Signal (JSString)
+clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
+
 addClassTo :: SF (IO JSString) (IO JSString)
 addClassTo s = pipe s (\x -> do
                              cls <- x
@@ -57,34 +60,25 @@ rmClassFromParentSiblings s = pipe s (\x -> do
                                                $ concatMap (\x -> siblings $ parentOf x) elems
                                        return x)
 
+applyById :: (Maybe Element -> Maybe a) -> Signal (IO JSString) -> Signal (IO (Maybe a))
+applyById op s = pipe s (\x -> do
+                            idS <- x
+                            elem <- select ((byId $ jsStringToString idS) . inChildren) docRoot
+                            return $ op elem)
+
 hideSiblings :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
-hideSiblings s = pipe s (\x -> do
-                               idS <- x
-                               elem <- select ((byId $ jsStringToString idS) . inChildren) docRoot
-                               return $ UHC.Base.head <$> ((\y -> map (addClass "hidden") $ y) <$> (siblings <$> elem)))
+hideSiblings = applyById (\e -> UHC.Base.head <$> (\y -> map (addClass "hidden") y) <$> (siblings <$> e))
 
 showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
-showCurrent s = pipe s (\x -> do
-                            idS <- x
-                            elem <- select ((byId $ jsStringToString $ idS) . inChildren) docRoot
-                            return $! (removeClass "hidden") <$> elem)
-
-clickListener :: String -> Element -> Signal (JSString)
-clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
+showCurrent = applyById (\e -> removeClass "hidden" <$> e)
 
 strike :: Signal JSString -> Signal (IO (Maybe JSString))
 strike s = pipe s (\x -> do
                       elem <- select ((byId $ jsStringToString x) . inChildren) docRoot
                       return $! toggle "checked" <$> elem)
 
---TODO, all the gross stuff below this line
-
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
-append s = pipe s (\x -> do
-                      js <- x
-                      str <- fmap stringToJSString $ pass "getJsonString" $ getJsonString (stringToJSString "\"data\"") js
-                      return $ Melchior.Dom.append str
-                  )
+append s = pipe s (\x -> x >>= \js -> fmap Melchior.Dom.append $ fmap stringToJSString $ getJsonString (stringToJSString "\"data\"") js)
                       
 put :: String -> Signal a -> Signal (IO (Maybe a))
 put ids s = pipe s (\x -> select (byId ids .inChildren) docRoot >>= \e -> return ((\y -> set y "innerHTML" x) <$> e))
