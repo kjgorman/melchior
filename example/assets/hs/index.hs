@@ -25,26 +25,25 @@ setupNavLinks = \html -> do
   check <- Dom $ select (byClass "check" . inChildren) docRoot
   button <- Dom $ select (byClass "btn-success" . inChildren) docRoot
   container <- Dom $ select (byClass "container-narrow" . inChildren) docRoot
-  --reactivity
+
+--reactivity
   clicks <- return $ clickListener "innerHTML" <$> links
   reactiveClicks <- return $ clickListener "data-reactive" <$> check
-  buttonClick <- return $ clickListener "innerHTML" <$> button
-  mouseMove <- return $ (\e -> createEventedSignal (Of MouseMove) e (MouseEvt MouseMove)) <$> container
+
   --signal functions
   -- interesting-ish network
   return $ map (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal) clicks
   return $ map (strike >>> terminal) reactiveClicks
-  -- xhr driven signal
-  return $ map (remote GET "/data" >>> toJson >>> append >>> terminal) buttonClick
-  return $ map (Melchior.Mouse.position >>> put "where-at" >>> terminal) mouseMove
-  return $ (put "when-at" >>> terminal) countSeconds
-  return $ (remote GET "/the_time" >>> toJson >>> getTheTime >>> put "clock" >>> terminal) $ every second  
+  return $ (remote GET "/data" >>> toJson >>> append >>> terminal) <$> (Melchior.Mouse.click <$> button)
+  return $ (put "where-at" >>> terminal) <$> (Melchior.Mouse.position <$> container)
+  return $ put "when-at" >>> terminal $ countSeconds
+  return $ remote GET "/the_time" >>> toJson >>> getTheTime >>> put "clock" >>> terminal $ every second  
   return $ toElement html
 
 getTheTime :: SF (Maybe JsonObject) JSString
-getTheTime s = pipe s (\x -> withDefault (x >>= \js -> stringToJSString <$> getJsonString "\"time\"" js))
+getTheTime s = pipe s (\x -> stringToJSString $ withDefault (x >>= \js -> getJsonString "\"time\"" js))
                where withDefault (Just s) = s
-                     withDefault Nothing  = stringToJSString "--:--:--"
+                     withDefault Nothing  = "--:--:--"
 
 countSeconds :: Signal Int
 countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
@@ -80,7 +79,7 @@ strike s = pipe s (\x -> do
                       return $! toggle "checked" <$> elem)
 
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
-append s = pipe s (\x -> x >>= \js -> fmap Melchior.Dom.append $ fmap stringToJSString $ getJsonString "\"data\"" js)
+append s = pipe s (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js)
 
 put :: String -> Signal a -> Signal (IO (Maybe a))
 put ids s = pipe s (\x -> select (byId ids . inChildren) docRoot >>= \e -> return ((\y -> set y "innerHTML" x) <$> e))
