@@ -10,7 +10,7 @@ import Melchior.Control
 import Melchior.Remote.Internal.Parser
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 
-toJson :: Signal JSString -> Signal (Maybe JsonObject)
+toJson :: SF JSString (Maybe JsonObject)
 toJson s = pipe s (\x -> parseJson (jsStringToString $ pass "str" $  x))
 
 empty :: JsonObject
@@ -19,8 +19,8 @@ empty = JsonObject []
 getJsonObj :: String -> JsonObject -> Maybe Json
 getJsonObj = undefined
 
-getJsonString :: JSString -> JsonObject -> Maybe String
-getJsonString s (JsonObject x) = case dropWhile (\y -> fst y /= (jsStringToString s)) x of
+getJsonString :: String -> JsonObject -> Maybe String
+getJsonString s (JsonObject x) = case dropWhile (\y -> fst y /= s) x of
                                    [] -> Nothing
                                    z  -> case snd $ head x of
                                            (JsonString s) -> Just s

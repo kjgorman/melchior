@@ -63,7 +63,6 @@ var Signals = function () {
             } else try {
                 curr = _e_(curr)
             } catch (e) {
-                console.error(e.stack)
                 return curr
             }
             if(window.debug) console.log("post curr", curr)
