@@ -1,6 +1,7 @@
 module Melchior.Remote.Internal.Parser (
     parseJson
   , Json
+  , JsonString
   , JsonObject
   ) where
 
@@ -52,7 +53,7 @@ parseKeyValue :: String -> Maybe (String, Json)
 parseKeyValue [] = Nothing
 parseKeyValue s = sequenceTuple $ (parseKey key, parseValue value)
 		  where
-		  key   = takeWhile (\x -> x /= ':') s
+		  key   = takeWhile (\x -> x /= ':') (skip whitespace s)
 		  value = drop 1 $ dropWhile (\x -> x /= ':') s
     
 parseKey :: String -> Maybe String

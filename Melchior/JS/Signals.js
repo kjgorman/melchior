@@ -63,6 +63,7 @@ var Signals = function () {
             } else try {
                 curr = _e_(curr)
             } catch (e) {
+                console.error(e.stack)
                 return curr
             }
             if(window.debug) console.log("post curr", curr)
@@ -108,10 +109,18 @@ var Signals = function () {
         else return argument
     }
 
+    function ensureApplicable (argument) {
+        if(window.debug) console.log("making an applicable", argument)
+        if(argument._1) return argument._1
+        if(argument instanceof Array && argument.length == 2) return argument[1]
+        return argument
+    }
+
     return {
         createEventedSignal: createEventedSignal,
         createPastDependentSignal: createPastDependentSignal,
         applicable:applicable,
+        ensureApplicable:ensureApplicable,
         Signal:Signal,
         evaluate: evaluate
     }

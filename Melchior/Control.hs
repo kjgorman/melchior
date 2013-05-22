@@ -61,7 +61,10 @@ foreign import js "Signals.applicable(%1)"
 -- * Routing
 
 terminal :: SF a a 
-terminal s = pipe s (\x -> pass (stringToJSString "terminal") $! x)
+terminal s = pipe s (\x -> ensureApplicable $ pass (stringToJSString "terminal") $! x)
+
+foreign import js "Signals.ensureApplicable(%1)"
+  ensureApplicable :: a -> a
 
 passThrough :: a -> b -> a
 passThrough x y =  y `seq` (applicable x)
