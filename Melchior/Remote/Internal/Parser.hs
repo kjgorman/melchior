@@ -1,18 +1,25 @@
 module Melchior.Remote.Internal.Parser (
+    -- parser
     parseJson
+    -- * Types
   , Json
   , JsonString
+  , JsonBool
+  , JsonArray
+  , JsonObj
   , JsonObject
   ) where
 
 import Control.Applicative
 
-data Json = JsonString String | JsBool Bool | JsNull | JsonArray [Json] | JsonObj JsonObject
+data Json = JsonString String | JsonBool Bool | JsNull | JsonArray [Json] | JsonObj JsonObject
             deriving (Show)
 
 data JsonObject = JsonObject [(String, Json)]
                   deriving (Show)
 
+--------------------------------------------------------------------------------
+-- Utility methods
 sequenceTuple :: (Maybe a, Maybe b) -> Maybe (a,b)
 sequenceTuple (Nothing, _) = Nothing
 sequenceTuple (_,Nothing)  = Nothing
@@ -38,6 +45,9 @@ match :: Char  -> String -> Maybe String
 match c []     =  Nothing
 match c (s:ss) =  if c == s then Just ss else Nothing
 
+
+--------------------------------------------------------------------------------
+-- Parse methods proper
 parseJson :: String -> Maybe JsonObject
 parseJson = parseObject . match '{' . skip whitespace
 
@@ -84,10 +94,10 @@ parseString :: String -> Maybe Json
 parseString = Just . JsonString . (takeWhile (\x -> x /= '"'))
 
 parseFalse :: String -> Maybe Json
-parseFalse s = if s == "false" then Just $ JsBool False else Nothing
+parseFalse s = if s == "false" then Just $ JsonBool False else Nothing
 
 parseTrue :: String -> Maybe Json
-parseTrue s = if s == "true" then Just $ JsBool True else Nothing
+parseTrue s = if s == "true" then Just $ JsonBool True else Nothing
 
 parseNull :: String -> Maybe Json
 parseNull s = if s == "null" then Just JsNull else Nothing

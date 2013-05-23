@@ -6,33 +6,39 @@ module Melchior.Remote.Json (
   , JsonObject
   ) where
 
+import Control.Applicative
 import Melchior.Control
 import Melchior.Remote.Internal.Parser
 import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 
 toJson :: SF JSString (Maybe JsonObject)
-toJson s = pipe s (\x -> parseJson (jsStringToString $ pass "str" $  x))
+toJson s = pipe s (\x -> parseJson (jsStringToString x))
 
 empty :: JsonObject
 empty = JsonObject []
 
-getJsonObj :: String -> JsonObject -> Maybe Json
-getJsonObj = undefined
+getKey :: String -> JsonObject -> Maybe [(String, Json)]
+getKey s (JsonObject x) = case dropWhile (\y -> fst y /= s) x of
+                               [] -> Nothing
+                               k  -> Just k
+
+getJsonObj :: String -> JsonObject -> Maybe JsonObject
+getJsonObj s j@(JsonObject x) = head <$> (getKey s j) >>= (\x -> case snd x of
+                                                             (JsonObj s) -> Just s
+                                                             _ -> Nothing)
 
 getJsonString :: String -> JsonObject -> Maybe String
-getJsonString s (JsonObject x) = case dropWhile (\y -> fst y /= s) x of
-                                   [] -> Nothing
-                                   z  -> case snd $ head x of
-                                           (JsonString s) -> Just s
-                                           _ -> Nothing
+getJsonString s j@(JsonObject x) = head <$> (getKey s j) >>= (\x -> case snd x of
+                                                             (JsonString s) -> Just s
+                                                             _ -> Nothing)
 
+getJsonBool :: String -> JsonObject -> Maybe Bool
+getJsonBool s j@(JsonObject x) = head <$> (getKey s j) >>= (\x -> case snd x of
+                                                             (JsonBool s) -> Just s
+                                                             _ -> Nothing)
 
-getJsBool :: String -> JsonObject -> Maybe Bool
-getJsBool = undefined
+getJsonArray :: String -> JsonObject -> Maybe [Json]
+getJsonArray s j@(JsonObject x) = head <$> (getKey s j) >>= (\x -> case snd x of
+                                                             (JsonArray s) -> Just s
+                                                             _ -> Nothing)
 
-
-pass :: String -> a -> a
-pass s x = primPass (stringToJSString s) x
-
-foreign import js "log(%2, %1)"
-  primPass :: JSString -> a -> a

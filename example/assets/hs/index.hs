@@ -23,10 +23,10 @@ setupNavLinks = \html -> do
   --element selection
   links <- Dom $ select (byClass "link" . inChildren) docRoot
   check <- Dom $ select (byClass "check" . inChildren) docRoot
-  button <- Dom $ select (byClass "btn-success" . inChildren) docRoot
+  button <- Dom $ select (byClass "btn-large" . inChildren) docRoot
   container <- Dom $ select (byClass "container-narrow" . inChildren) docRoot
 
---reactivity
+  --reactivity
   clicks <- return $ clickListener "innerHTML" <$> links
   reactiveClicks <- return $ clickListener "data-reactive" <$> check
 
@@ -34,10 +34,14 @@ setupNavLinks = \html -> do
   -- interesting-ish network
   return $ map (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal) clicks
   return $ map (strike >>> terminal) reactiveClicks
-  return $ (remote GET "/data" >>> toJson >>> append >>> terminal) <$> (Melchior.Mouse.click <$> button)
+  return $ map (remote GET "/data" >>> toJson >>> append >>> terminal) (Melchior.Mouse.click <$> button)
   return $ (put "where-at" >>> terminal) <$> (Melchior.Mouse.position <$> container)
   return $ put "when-at" >>> terminal $ countSeconds
-  return $ remote GET "/the_time" >>> toJson >>> getTheTime >>> put "clock" >>> terminal $ every second  
+
+{-  clock <- select $ byId "clock"
+    bindBody clock $ every second `when` get "/the_time" <$> showTime-}
+  
+--  return $ remote GET "/the_time" >>> toJson >>> getTheTime >>> put "clock" >>> terminal $ every second  
   return $ toElement html
 
 getTheTime :: SF (Maybe JsonObject) JSString
