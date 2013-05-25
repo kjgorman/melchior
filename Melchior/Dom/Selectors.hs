@@ -17,8 +17,8 @@ import Data.List (intercalate)
 import Data.Maybe (listToMaybe, maybeToList)
 import Data.Monoid
 import Melchior.Dom
-{-import Melchior.Data.List-}
-import Language.UHC.JScript.ECMA.String
+import Melchior.Data.String
+
 import Language.UHC.JScript.Primitives
 import Prelude hiding ((.), id)
 

@@ -6,13 +6,15 @@ module Melchior.Remote.Json (
   , JsonObject
   ) where
 
+
 import Control.Applicative
 import Melchior.Control
+import Melchior.Data.String
 import Melchior.Remote.Internal.Parser
-import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
+
 
 toJson :: SF JSString (Maybe JsonObject)
-toJson s = pipe s (\x -> parseJson (jsStringToString x))
+toJson s = (\x -> parseJson (jsStringToString x)) <$> s
 
 empty :: JsonObject
 empty = JsonObject []

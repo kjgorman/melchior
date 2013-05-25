@@ -98,6 +98,7 @@ module.exports = function(grunt) {
                     "Language/UHC/JScript/ECMA/Language_UHC_JScript_ECMA_Array.mjs",
                     "Melchior/Melchior_Dom.mjs",
                     "Melchior/Data/Melchior_Data_List.mjs",
+                    "Melchior/Data/Melchior_Data_String.mjs",
                     "Melchior/Dom/Melchior_Dom_Events.mjs",
                     "Melchior/Melchior_Control.mjs",
                     "Melchior/Dom/Melchior_Dom_Selectors.mjs",

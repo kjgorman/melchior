@@ -4,6 +4,7 @@ import Data.Maybe
 --all Melchior exports
 import Melchior.Control
 import Melchior.Data.List
+import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Events
 import Melchior.Dom.Selectors
@@ -12,7 +13,6 @@ import Melchior.Remote.Json
 import Melchior.Remote.XHR
 import Melchior.Time
 
-import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
 import Prelude hiding ((.), id, head, map)
 
 main :: IO Element
@@ -32,20 +32,20 @@ setupNavLinks = \html -> do
 
   --signal functions
   -- interesting-ish network
-  return $ map (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal) clicks
-  return $ map (strike >>> terminal) reactiveClicks
-  return $ map (remote GET "/data" >>> toJson >>> append >>> terminal) (Melchior.Mouse.click <$> button)
-  return $ (put "where-at" >>> terminal) <$> (Melchior.Mouse.position <$> container)
-  return $ put "when-at" >>> terminal $ countSeconds
+  sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal)) <$> clicks
+  sequence $ (\click -> click ~> (strike >>> terminal)) <$> reactiveClicks
+  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append >>> terminal)) <$> (Melchior.Mouse.click <$> button)
+  sequence $ (\pos -> pos ~> (put "where-at" >>> terminal)) <$> (Melchior.Mouse.position <$> container)
+  
+  countSeconds ~> (put "when-at" >>> terminal)
 
 {-  clock <- select $ byId "clock"
     bindBody clock $ every second `when` get "/the_time" <$> showTime-}
-  
---  return $ remote GET "/the_time" >>> toJson >>> getTheTime >>> put "clock" >>> terminal $ every second  
+  every second ~> (remote GET "/the_time" >>> toJson >>> getTheTime >>> put "clock" >>> terminal)
   return $ toElement html
 
 getTheTime :: SF (Maybe JsonObject) JSString
-getTheTime s = pipe s (\x -> stringToJSString $ withDefault (x >>= \js -> getJsonString "\"time\"" js))
+getTheTime s = (\x -> stringToJSString $ withDefault (x >>= \js -> getJsonString "\"time\"" js)) <$> s
                where withDefault (Just s) = s
                      withDefault Nothing  = "--:--:--"
 
@@ -56,20 +56,20 @@ clickListener :: String -> Element -> Signal (JSString)
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
 
 addClassTo :: SF (IO JSString) (IO JSString)
-addClassTo s = pipe s (\x -> do
-                             cls <- x
-                             elems <- select ((byClass $ jsStringToString cls) . inChildren) docRoot
-                             return $! map (\y -> (addClass "active") $ parentOf y) elems
-                             return cls)
+addClassTo s = (\x -> do
+                         cls <- x
+                         elems <- select ((byClass $ jsStringToString cls) . inChildren) docRoot
+                         return $! map (\y -> (addClass "active") $ parentOf y) elems
+                         return cls) <$> s
 
 rmClassFromParentSiblings :: Signal (JSString) -> Signal (IO JSString)
-rmClassFromParentSiblings s = pipe s (\x -> do
-                                       elems <- select ((byClass $ jsStringToString x) . inChildren) docRoot
-                                       return $ map (\y -> (removeClass "active") y ) $ concatMap (\x -> siblings $ parentOf x) elems
-                                       return x)
+rmClassFromParentSiblings s = (\x -> do
+                                   elems <- select ((byClass $ jsStringToString x) . inChildren) docRoot
+                                   return $ map (\y -> (removeClass "active") y ) $ concatMap (\x -> siblings $ parentOf x) elems
+                                   return x) <$> s
 
 applyById :: (Maybe Element -> Maybe a) -> Signal (IO JSString) -> Signal (IO (Maybe a))
-applyById op s = pipe s (\x -> x >>= \idS -> op <$> select ((byId $ jsStringToString idS) . inChildren) docRoot)
+applyById op s = (\x -> x >>= \idS -> op <$> select ((byId $ jsStringToString idS) . inChildren) docRoot) <$> s
 
 hideSiblings :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 hideSiblings = applyById (\e -> UHC.Base.head <$> (\y -> map (addClass "hidden") y) <$> (siblings <$> e))
@@ -78,15 +78,15 @@ showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent = applyById (\e -> removeClass "hidden" <$> e)
 
 strike :: Signal JSString -> Signal (IO (Maybe JSString))
-strike s = pipe s (\x -> do
-                      elem <- select ((byId $ jsStringToString x) . inChildren) docRoot
-                      return $! toggle "checked" <$> elem)
+strike s = (\x -> do
+                  elem <- select ((byId $ jsStringToString x) . inChildren) docRoot
+                  return $! toggle "checked" <$> elem) <$> s
 
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
-append s = pipe s (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js)
+append s = (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
 
-put :: String -> Signal a -> Signal (IO (Maybe a))
-put ids s = pipe s (\x -> select (byId ids . inChildren) docRoot >>= \e -> return ((\y -> set y "innerHTML" x) <$> e))
+put :: String -> Signal a -> Signal (IO (Maybe (Dom a)))
+put ids s = (\x -> select (byId ids . inChildren) docRoot >>= \e -> return ((\y -> set y "innerHTML" x) <$> e)) <$> s
 
 pass :: String -> a -> a
 pass s x = primPass (stringToJSString s) x

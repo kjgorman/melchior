@@ -5,6 +5,7 @@ module Melchior.Control
   , Of
     -- * Functions
   , runDom
+  , (~>)
   , foldP
   , createEventedSignal
   , createEventedSignalOf
@@ -20,17 +21,25 @@ module Melchior.Control
   ) where
 
 import Language.UHC.JScript.Primitives
-import Language.UHC.JScript.ECMA.String (stringToJSString, JSString)
+import Control.Applicative
+import Control.Monad (liftM)
+import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Events
 
-data Signal a = Signal (JSPtr a)
+data Signal a = Signal a
 data Of a = Of a
 type SF a b = Signal a -> Signal b
+
+instance Functor Signal where
+  fmap = pipe
 
 runDom :: (Document -> Dom Element) -> IO Element
 runDom f = io
            where Dom io = f document
+
+(~>) :: Signal a -> SF a b -> Dom (Signal b)
+signal ~> fn = return $ fn signal
 
 (>>>) :: SF a b -> SF b c -> SF a c
 s >>> t = \x -> t $ s x
@@ -61,7 +70,7 @@ foreign import js "Signals.applicable(%1)"
 -- * Routing
 
 terminal :: SF a a 
-terminal s = pipe s (\x -> ensureApplicable $ pass (stringToJSString "terminal") $! x)
+terminal s = (\x -> ensureApplicable $ pass (stringToJSString "terminal") $! x) <$> s
 
 foreign import js "Signals.ensureApplicable(%1)"
   ensureApplicable :: a -> a
@@ -69,8 +78,8 @@ foreign import js "Signals.ensureApplicable(%1)"
 passThrough :: a -> b -> a
 passThrough x y =  y `seq` (applicable x)
 
-pipe :: Signal a -> (a -> b) -> Signal b
-pipe s f = primPipeSignal s f
+pipe :: (a -> b) -> Signal a -> Signal b
+pipe f s = primPipeSignal s f
 
 pipeWithEvent :: Signal a -> (a -> Event c -> b) -> Signal b
 pipeWithEvent s f = primPipeSignalWithEvent s f
@@ -84,7 +93,7 @@ foreign import js "%1.pipe(%2)"
 -- * Signal creation
 
 liftSignal :: Signal a -> Signal (Dom a)
-liftSignal s = pipe s (\x -> pass (stringToJSString "lifted") $ return $! x)
+liftSignal s = (\x -> pass (stringToJSString "lifted") $ return $! x) <$> s
 
 foldP :: (a -> b -> b) -> b -> Signal a -> Signal b
 foldP fn start signal = createPastDependentSignal fn start signal

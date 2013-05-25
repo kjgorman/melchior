@@ -10,7 +10,7 @@ module Melchior.Remote.XHR (
 
 import Melchior.Control
 import Melchior.Dom
-import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
+import Melchior.Data.String
 
 data XHRMethod = GET | POST | PUT | DELETE
 

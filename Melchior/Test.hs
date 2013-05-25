@@ -3,7 +3,7 @@ module Melchior.Test
          expects
        ) where
 
-import Language.UHC.JScript.ECMA.String (JSString, stringToJSString, jsStringToString)
+import Melchior.Data.String
 
 expects :: String -> a -> a
 expects s a = mexpects (stringToJSString s) a

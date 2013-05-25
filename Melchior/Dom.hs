@@ -25,9 +25,10 @@ module Melchior.Dom
     ) where
 
 --dependencies
+import Melchior.Data.String
 import Melchior.Dom.Events
 import Control.Monad (liftM)
-import Language.UHC.JScript.ECMA.String
+
 import Language.UHC.JScript.Primitives
 
 data Dom a = Dom (IO a)
@@ -92,11 +93,11 @@ toggle s = primToggle (stringToJSString s)
 foreign import js "Dom.toggle(%2, %1)"
   primToggle :: JSString -> Element -> JSString
 
-set :: Element -> String -> a -> a
+set :: Element -> String -> a -> Dom a
 set e s v = primSet e (stringToJSString s) v
 
 foreign import js "Dom.set(%1, %2, %3)"
-  primSet :: Element -> JSString -> a -> a
+  primSet :: Element -> JSString -> a -> Dom a
 
 foreign import js "Dom.hack(%1)"
   append :: JSString -> JSString

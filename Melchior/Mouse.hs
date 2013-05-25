@@ -1,13 +1,13 @@
 module Melchior.Mouse where
 
+import Control.Applicative
 import Melchior.Control
+import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Events
 
-import Language.UHC.JScript.ECMA.String (stringToJSString)
-
 position :: Element -> Signal (Int, Int)
-position el = pipe s (\x -> coords x)
+position el = (\x -> coords x) <$> s
               where s = createEventedSignal (Of MouseMove) el (MouseEvt MouseMove)
 
 click :: Element -> Signal MouseEvent

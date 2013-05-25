@@ -8,8 +8,9 @@ module Melchior.Data.List
        ) where
 
 import Melchior.Dom
+import Melchior.Data.String
+import Melchior.Data.List
 import Language.UHC.JScript.ECMA.Array (listToJSArray, indexJSArray, JSArray)
-import Language.UHC.JScript.ECMA.String (JSString, stringToJSString)
 
 import Prelude hiding (head, map)
 
