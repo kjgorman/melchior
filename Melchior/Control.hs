@@ -85,8 +85,8 @@ createEventedSignal o el evt = primCreateEventedSignal o el $ (stringToJSString 
 foreign import js "Signals.createEventedSignal(%3, %4)"
   primCreateEventedSignal :: (DomNode a) => Of c -> a -> JSString -> Signal c
 
-createEventedSignalOf :: (DomNode a) => Of c -> a -> Event b -> String -> Signal c
-createEventedSignalOf o el evt key = primCreateEventedSignalOf o el evtStr keyStr
+createEventedSignalOf :: (DomNode a) => Of c -> a -> Event b -> String -> Dom (Signal c)
+createEventedSignalOf o el evt key = return $ primCreateEventedSignalOf o el evtStr keyStr
                                       where
                                         evtStr = ((stringToJSString . show) evt)
                                         keyStr = stringToJSString key

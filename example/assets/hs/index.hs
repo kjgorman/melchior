@@ -27,12 +27,12 @@ setupNavLinks = \html -> do
   container <- Dom $ select (byClass "container-narrow" . from) html
 
   --reactivity
-  clicks <- return $ clickListener "innerHTML" <$> links
-  reactiveClicks <- return $ clickListener "data-reactive" <$> check
+  clicks <- sequence $ clickListener "innerHTML" <$> links
+  reactiveClicks <- sequence $ clickListener "data-reactive" <$> check
 
   --signal functions
   -- interesting-ish network
-  sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks
+  sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks 
   sequence $ (\click -> click ~> strike) <$> reactiveClicks
   sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.Mouse.click <$> button)
   sequence $ (\pos -> pos ~> put "where-at") <$> (Melchior.Mouse.position <$> container)
@@ -62,7 +62,7 @@ toString s = (\x -> stringToJSString $ time x) <$> s
 countSeconds :: Signal Int
 countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
 
-clickListener :: String -> Element -> Signal (JSString)
+clickListener :: String -> Element -> Dom (Signal (JSString))
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
 
 addClassTo :: SF (IO JSString) (IO JSString)
