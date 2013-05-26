@@ -10,3 +10,6 @@ minute = 1000 * 60
 
 foreign import js "Time.every(%1)"
   every :: Int -> Signal Int
+
+foreign import js "Time.after(%1)"
+  after :: Int -> Signal Int

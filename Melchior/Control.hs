@@ -18,6 +18,7 @@ module Melchior.Control
   , signalIO
   , terminal
   , liftSignal
+  , ensureApplicable
   ) where
 
 import Language.UHC.JScript.Primitives

@@ -23,7 +23,7 @@ setupNavLinks = \html -> do
   --element selection
   links <- Dom $ select (byClass "link" . inChildren) docRoot
   check <- Dom $ select (byClass "check" . inChildren) docRoot
-  button <- Dom $ select (byClass "btn-large" . inChildren) docRoot
+  button <- Dom $ select (byClass "btn-success" . inChildren) docRoot
   container <- Dom $ select (byClass "container-narrow" . inChildren) docRoot
 
   --reactivity
@@ -32,23 +32,30 @@ setupNavLinks = \html -> do
 
   --signal functions
   -- interesting-ish network
-  sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent) >>> terminal)) <$> clicks
-  sequence $ (\click -> click ~> (strike >>> terminal)) <$> reactiveClicks
-  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append >>> terminal)) <$> (Melchior.Mouse.click <$> button)
-  sequence $ (\pos -> pos ~> (put "where-at" >>> terminal)) <$> (Melchior.Mouse.position <$> container)
+  sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks
+  sequence $ (\click -> click ~> strike) <$> reactiveClicks
+  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.Mouse.click <$> button)
+  sequence $ (\pos -> pos ~> put "where-at") <$> (Melchior.Mouse.position <$> container)
   
-  countSeconds ~> (put "when-at" >>> terminal)
+--  countSeconds ~> put "when-at"
 
 {-  clock <- select $ byId "clock"
     bindBody clock $ every second `when` get "/the_time" <$> showTime-}
-  every second ~> (remote GET "/the_time" >>> toJson >>> getTheTime >>> put "clock" >>> terminal)
+  every second ~> (request GET "/the_time" >>> pipeTheTime >>> put "clock")
   return $ toElement html
 
-getTheTime :: SF (Maybe JsonObject) JSString
-getTheTime s = (\x -> stringToJSString $ withDefault (x >>= \js -> getJsonString "\"time\"" js)) <$> s
-               where withDefault (Just s) = s
-                     withDefault Nothing  = "--:--:--"
+data Time = Time String
 
+instance JsonSerialisable Time where
+  fromJson Nothing    = Time "--:--:--"
+  fromJson (Just obj) = Time (withDefault $ getJsonString "\"time\"" obj)
+                        where withDefault (Just s) = s
+                              withDefault Nothing  = "--:--:--"
+
+pipeTheTime :: SF Time JSString
+pipeTheTime s = (\x -> stringToJSString $ time x) <$> s
+                      where time (Time t) = t
+                            
 countSeconds :: Signal Int
 countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
 

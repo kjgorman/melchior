@@ -1,6 +1,7 @@
 module Melchior.Remote.XHR (
     get
   , remote
+  , request
     -- * Types
   , GET
   , POST
@@ -8,9 +9,11 @@ module Melchior.Remote.XHR (
   , DELETE
   ) where
 
+import Control.Applicative
 import Melchior.Control
 import Melchior.Dom
 import Melchior.Data.String
+import Melchior.Remote.Json
 
 data XHRMethod = GET | POST | PUT | DELETE
 
@@ -31,3 +34,7 @@ get x s = primGet (stringToJSString $ show x) (stringToJSString s)
 
 foreign import js "XHR.getXHRSignal(%1, %2)"
   primGet :: JSString -> JSString -> Signal JSString
+
+request :: (JsonSerialisable a) => XHRMethod -> String -> Signal s -> Signal a
+request  x s source = (\s -> ensureApplicable $ fromJson (parseJson $ jsStringToString s)) <$> (primGetXHR (stringToJSString $ show x) (stringToJSString s) source)
+

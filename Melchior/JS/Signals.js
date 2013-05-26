@@ -63,6 +63,7 @@ var Signals = function () {
             } else try {
                 curr = _e_(curr)
             } catch (e) {
+                throw e
                 return curr
             }
             if(window.debug) console.log("post curr", curr)
@@ -110,7 +111,11 @@ var Signals = function () {
 
     function ensureApplicable (argument) {
         if(window.debug) console.log("making an applicable", argument)
-        if(argument._1) return argument._1
+        if(argument._1) {
+            return {
+                __aN__: function() { return argument }
+            }
+        }
         if(argument instanceof Array && argument.length == 2) return argument[1]
         return argument
     }

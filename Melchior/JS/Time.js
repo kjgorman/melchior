@@ -14,6 +14,15 @@ var Time = function () {
         return signal
     }
 
+    Time.prototype.after = function(timeout) {
+        var signal = new Signals.Signal(this)
+        function push(t) {
+            signal.push(t)
+        }
+        setTimeout(push, timeout)
+        return signal
+    }
+
     return new Time()
 
 }()
