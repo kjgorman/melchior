@@ -14,7 +14,7 @@ module Melchior.Dom
     , toInput
     , toDiv
     , document
-    , docRoot
+    , root
     , addClass
     , removeClass
     , toggle
@@ -42,8 +42,8 @@ newtype Span = Span {unSpan :: JSPtr Node}
 foreign import js "document"
   document :: Document
 
-docRoot :: [Element]
-docRoot = [toElement document]
+root :: [Element]
+root = [toElement document]
 
 instance Monad Dom where
   return = Dom . return

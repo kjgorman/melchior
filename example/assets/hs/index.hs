@@ -18,13 +18,13 @@ import Prelude hiding ((.), id, head, map)
 main :: IO Element
 main = runDom setupNavLinks
 
-setupNavLinks :: Document -> Dom Element
+setupNavLinks :: [Element] -> Dom Element
 setupNavLinks = \html -> do
   --element selection
-  links <- Dom $ select (byClass "link" . inChildren) docRoot
-  check <- Dom $ select (byClass "check" . inChildren) docRoot
-  button <- Dom $ select (byClass "btn-success" . inChildren) docRoot
-  container <- Dom $ select (byClass "container-narrow" . inChildren) docRoot
+  links <- Dom $ select (byClass "link" . from) html
+  check <- Dom $ select (byClass "check" . from) html
+  button <- Dom $ select (byClass "btn-success" . from) html
+  container <- Dom $ select (byClass "container-narrow" . from) html
 
   --reactivity
   clicks <- return $ clickListener "innerHTML" <$> links
@@ -41,8 +41,8 @@ setupNavLinks = \html -> do
 
 {-  clock <- select $ byId "clock"
     bindBody clock $ every second `when` get "/the_time" <$> showTime-}
-  every second ~> (request GET "/the_time" >>> pipeTheTime >>> put "clock")
-  return $ toElement html
+  every second ~> (request GET "/the_time" >>> toString >>> put "clock")
+  return $ UHC.Base.head html
 
 data Time = Time String
 
@@ -52,8 +52,8 @@ instance JsonSerialisable Time where
                         where withDefault (Just s) = s
                               withDefault Nothing  = "--:--:--"
 
-pipeTheTime :: SF Time JSString
-pipeTheTime s = (\x -> stringToJSString $ time x) <$> s
+toString :: SF Time JSString
+toString s = (\x -> stringToJSString $ time x) <$> s
                       where time (Time t) = t
                             
 countSeconds :: Signal Int
@@ -65,18 +65,18 @@ clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (
 addClassTo :: SF (IO JSString) (IO JSString)
 addClassTo s = (\x -> do
                          cls <- x
-                         elems <- select ((byClass $ jsStringToString cls) . inChildren) docRoot
+                         elems <- select ((byClass $ jsStringToString cls) . from) root
                          return $! map (\y -> (addClass "active") $ parentOf y) elems
                          return cls) <$> s
 
 rmClassFromParentSiblings :: Signal (JSString) -> Signal (IO JSString)
 rmClassFromParentSiblings s = (\x -> do
-                                   elems <- select ((byClass $ jsStringToString x) . inChildren) docRoot
+                                   elems <- select ((byClass $ jsStringToString x) . from) root
                                    return $ map (\y -> (removeClass "active") y ) $ concatMap (\x -> siblings $ parentOf x) elems
                                    return x) <$> s
 
 applyById :: (Maybe Element -> Maybe a) -> Signal (IO JSString) -> Signal (IO (Maybe a))
-applyById op s = (\x -> x >>= \idS -> op <$> select ((byId $ jsStringToString idS) . inChildren) docRoot) <$> s
+applyById op s = (\x -> x >>= \idS -> op <$> select ((byId $ jsStringToString idS) . from) root) <$> s
 
 hideSiblings :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 hideSiblings = applyById (\e -> UHC.Base.head <$> (\y -> map (addClass "hidden") y) <$> (siblings <$> e))
@@ -86,14 +86,14 @@ showCurrent = applyById (\e -> removeClass "hidden" <$> e)
 
 strike :: Signal JSString -> Signal (IO (Maybe JSString))
 strike s = (\x -> do
-                  elem <- select ((byId $ jsStringToString x) . inChildren) docRoot
+                  elem <- select ((byId $ jsStringToString x) . from) root
                   return $! toggle "checked" <$> elem) <$> s
 
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
 append s = (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
 
 put :: String -> Signal a -> Signal (IO (Maybe (Dom a)))
-put ids s = (\x -> select (byId ids . inChildren) docRoot >>= \e -> return ((\y -> set y "innerHTML" x) <$> e)) <$> s
+put ids s = (\x -> select (byId ids . from) root >>= \e -> return ((\y -> set y "innerHTML" x) <$> e)) <$> s
 
 pass :: String -> a -> a
 pass s x = primPass (stringToJSString s) x

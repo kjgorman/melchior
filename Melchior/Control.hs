@@ -35,9 +35,9 @@ type SF a b = Signal a -> Signal b
 instance Functor Signal where
   fmap = pipe
 
-runDom :: (Document -> Dom Element) -> IO Element
+runDom :: ([Element] -> Dom Element) -> IO Element
 runDom f = io
-           where Dom io = f document
+           where Dom io = f root
 
 (~>) :: Signal a -> SF a b -> Dom (Signal b)
 signal ~> fn = return $ fn signal
