@@ -46,6 +46,9 @@ setupNavLinks = \html -> do
 
 data Time = Time String
 
+time :: Time -> String
+time (Time t) = t
+
 instance JsonSerialisable Time where
   fromJson Nothing    = Time "--:--:--"
   fromJson (Just obj) = Time (withDefault $ getJsonString "\"time\"" obj)
@@ -54,7 +57,7 @@ instance JsonSerialisable Time where
 
 toString :: SF Time JSString
 toString s = (\x -> stringToJSString $ time x) <$> s
-                      where time (Time t) = t
+                      
                             
 countSeconds :: Signal Int
 countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
