@@ -41,7 +41,7 @@ setupNavLinks html = do
 --  countSeconds ~> put "when-at"
 
   clock <- Dom $ (select (byId "clock" . from) html) >>= \m -> return $ fromJust m
-  Dom $ put clock ((request GET "/the_time" >>> isTime) $ every second)
+  Dom $ put clock (request GET "/the_time" $ every second :: Signal Time)
 
   return $ UHC.Base.head html
 
@@ -50,17 +50,12 @@ data Time = Time String
 time :: Time -> String
 time (Time t) = t
 
-isTime :: Signal Time -> Signal Time
-isTime s = id <$> s
-
 instance JsonSerialisable Time where
   fromJson Nothing    = Time "--:--:--"
   fromJson (Just obj) = Time (withDefault $ getJsonString "\"time\"" obj)
                         where withDefault (Just s) = s
                               withDefault Nothing  = "--:--:--"
 
-toString :: Signal Time -> Signal JSString
-toString s = (\x -> stringToJSString $ time x) <$> s
 
 instance Renderable Time where
   render (Time t) = stringToJSString $ "<a class='link'>"++t++"</a>"
