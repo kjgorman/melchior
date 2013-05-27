@@ -120,12 +120,20 @@ var Signals = function () {
         return argument
     }
 
+    function terminate (signal, funct) {
+        if(window.debug) console.log("terminating", signal, funct)
+        signal.registerListener(function(value) {
+            evaluate(UHCFunction.call(funct, value))
+        })
+    }
+
     return {
         createEventedSignal: createEventedSignal,
         createPastDependentSignal: createPastDependentSignal,
         applicable:applicable,
         ensureApplicable:ensureApplicable,
         Signal:Signal,
-        evaluate: evaluate
+        evaluate: evaluate,
+        terminate: terminate
     }
 }()

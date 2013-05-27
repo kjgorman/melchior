@@ -93,11 +93,11 @@ toggle s = primToggle (stringToJSString s)
 foreign import js "Dom.toggle(%2, %1)"
   primToggle :: JSString -> Element -> JSString
 
-set :: Element -> String -> a -> Dom a
+set :: Element -> String -> a -> ()
 set e s v = primSet e (stringToJSString s) v
 
 foreign import js "Dom.set(%1, %2, %3)"
-  primSet :: Element -> JSString -> a -> Dom a
+  primSet :: Element -> JSString -> a -> ()
 
 foreign import js "Dom.hack(%1)"
   append :: JSString -> JSString

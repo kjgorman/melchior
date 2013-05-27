@@ -14,6 +14,7 @@ module Melchior.Control
   , (&&&)
   , pipe
   , ensureApplicable
+  , terminate
   ) where
 
 import Language.UHC.JScript.Primitives
@@ -45,6 +46,12 @@ s <<< t = \x -> s $ t x
 
 (&&&) :: SF a b -> SF a c -> SF a (b, c)
 s &&& t = \x -> primAmpersands s t x
+
+terminate :: Signal a -> (a -> IO ()) -> IO ()
+terminate s f = primTerminate s f
+
+foreign import js "Signals.terminate(%1, %2)"
+  primTerminate :: Signal a -> (a -> IO ()) -> IO ()
 
 -- * Misc. primitive signal operations
 
