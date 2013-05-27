@@ -7,6 +7,7 @@ import Melchior.Data.List
 import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Events
+import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 import Melchior.Mouse
 import Melchior.Remote.Json
@@ -40,8 +41,7 @@ setupNavLinks html = do
 --  countSeconds ~> put "when-at"
 
   clock <- Dom $ (select (byId "clock" . from) html) >>= \m -> return $ fromJust m
-  --request (every second ~> return "/the_time") <$> toString
-  Dom $ put clock ((request GET "/the_time" >>> toString) $ every second)
+  Dom $ put clock ((request GET "/the_time" >>> isTime) $ every second)
 
   return $ UHC.Base.head html
 
@@ -49,6 +49,9 @@ data Time = Time String
 
 time :: Time -> String
 time (Time t) = t
+
+isTime :: Signal Time -> Signal Time
+isTime s = id <$> s
 
 instance JsonSerialisable Time where
   fromJson Nothing    = Time "--:--:--"
@@ -58,8 +61,10 @@ instance JsonSerialisable Time where
 
 toString :: Signal Time -> Signal JSString
 toString s = (\x -> stringToJSString $ time x) <$> s
-                      
-                            
+
+instance Renderable Time where
+  render (Time t) = stringToJSString $ "<a class='link'>"++t++"</a>"
+
 countSeconds :: Signal Int
 countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
 
@@ -96,8 +101,8 @@ strike s = (\x -> do
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
 append s = (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
 
-put :: Element -> Signal a -> IO ()
-put el s = terminate s (\x -> return ((\y -> set y "innerHTML" x) el))
+put :: (Renderable a) => Element -> Signal a -> IO ()
+put el s = terminate s (\x -> return ((\y -> set y "innerHTML" $ render x) el))
 
 pass :: String -> a -> a
 pass s x = primPass (stringToJSString s) x
