@@ -23,7 +23,7 @@ socket.on('connection', function(socket) {
     console.log("connection!")
     
     function sendHeartbeat() {
-        socket.emit('data', {heart:"beating"})
+        socket.emit('heartbeat', {heart:"heartbeat"})
         setTimeout(sendHeartbeat, 10000)
     }
     sendHeartbeat()

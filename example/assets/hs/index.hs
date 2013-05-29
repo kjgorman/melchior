@@ -41,13 +41,13 @@ setupNavLinks html = do
   sequence $ (put positionLabel) <$> (Melchior.Mouse.position <$> container)
 
   counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ fromJust m
---  put counter countSeconds
+  put counter countSeconds
 
   clock <- Dom $ (select (byId "clock" . from) html) >>= \m -> return $ fromJust m
---  put clock (request GET "/the_time" $ every second :: Signal Time)
+  put clock (request GET "/the_time" $ every second :: Signal Time)
 
   heartbeat <- Dom $ (select (byId "heartbeat" . from) html) >>= \m -> return $ fromJust m
-  put heartbeat (server :: Signal Heartbeat)
+  put heartbeat (server "heartbeat" :: Signal Heartbeat)
 
   return $ UHC.Base.head html
 

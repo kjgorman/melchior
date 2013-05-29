@@ -24,11 +24,12 @@ instance Show XHRMethod where
   show PUT = "PUT"
   show DELETE = "DELETE"
 
-server :: (JsonSerialisable a) => Signal a
-server = (\s -> ensureApplicable $ fromJson $ parseJson $ jsStringToString s) <$> primGetSocketedSignal
+--TODO - make this parameterise by a signal, with `constant` for only get-ing
+server :: (JsonSerialisable a) => String -> Signal a
+server channel = (\s -> ensureApplicable $ fromJson $ parseJson $ jsStringToString s) <$> (primGetSocketedSignal $ stringToJSString channel)
 
-foreign import js "Sockets.createSocketedSignal()"
-  primGetSocketedSignal :: Signal JSString
+foreign import js "Sockets.createSocketedSignal(%1)"
+  primGetSocketedSignal :: JSString -> Signal JSString
 
 remote :: XHRMethod -> String -> Signal a -> Signal JSString
 remote x s source = primGetXHR (stringToJSString $ show x) (stringToJSString s) source
