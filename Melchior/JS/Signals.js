@@ -27,13 +27,19 @@ var Signals = function () {
         }
     }
 
-    Signal.prototype.pipe = function(transform) {
-        if(window.debug) if(window.debug) console.log("constructing with transform", transform)
-        var newSignal = new Signal(this)
+    Signal.prototype.pipe = function(transform, base) {
+        if(window.debug) console.log("constructing with transform", transform)
+        var newSignal = new Signal(this), shouldAccumulate = base !== undefined
+        newSignal.accumulator = base
         this.registeredListeners.push(function (value, event) {
             var res = UHCFunction.call(transform, value, event)
-            if(window.debug) console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
-            newSignal.push(res, event)       
+            if(shouldAccumulate) {
+                newSignal.accumulator = UHCFunction.apply(transform, [value, newSignal.accumulator])
+                newSignal.push(newSignal.accumulator)
+            } else {
+                if(window.debug) console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
+                newSignal.push(res, event)
+            }
         });
         return newSignal
     }
@@ -58,7 +64,7 @@ var Signals = function () {
                 break
             } catch(e) { curr = curr._1}
             if(curr instanceof Array && curr.length > 0) {
-                curr.map(evaluate) 
+                curr.map(evaluate)
                 break
             } else try {
                 curr = _e_(curr)
@@ -92,13 +98,7 @@ var Signals = function () {
     }
 
     function createPastDependentSignal (func, base, signal) {
-        var newSignal = new Signal(signal)
-        newSignal.accumulator = base
-        signal.registerListener(function(value) {
-            newSignal.accumulator = UHCFunction.apply(func, [value, newSignal.accumulator])
-            newSignal.push(newSignal.accumulator)
-        })
-        return newSignal
+        return signal.pipe(func, base)
     }
 
     function applicable (argument) {
