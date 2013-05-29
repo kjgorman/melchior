@@ -4,9 +4,15 @@ module Melchior.Dom.Html (
   , render
   ) where
 
-import Melchior.Data.String (JSString)
+import Melchior.Data.String (JSString, stringToJSString)
 
 type Html = JSString
 
 class Renderable a where
   render :: a -> Html
+
+instance Renderable (Int, Int) where
+  render x = stringToJSString $ "<span>"++(show $ fst x)++","++(show $ snd x)++"</span>"
+
+instance Renderable Int where
+  render i = stringToJSString $ "<span>"++(show i)++"</span>"

@@ -36,12 +36,15 @@ setupNavLinks html = do
   sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks 
   sequence $ (\click -> click ~> strike) <$> reactiveClicks
   sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.Mouse.click <$> button)
---  sequence $ (\pos -> pos ~> put "where-at") <$> (Melchior.Mouse.position <$> container)
-  
---  countSeconds ~> put "when-at"
+
+  positionLabel <- Dom $ (select (byId "where-at" . from) html) >>= \m -> return $ fromJust m
+  sequence $ (put positionLabel) <$> (Melchior.Mouse.position <$> container)
+
+  counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ fromJust m
+  put counter countSeconds
 
   clock <- Dom $ (select (byId "clock" . from) html) >>= \m -> return $ fromJust m
-  Dom $ put clock (request GET "/the_time" $ every second :: Signal Time)
+  put clock (request GET "/the_time" $ every second :: Signal Time)
 
   return $ UHC.Base.head html
 
@@ -55,8 +58,6 @@ instance JsonSerialisable Time where
   fromJson (Just obj) = Time (withDefault $ getJsonString "\"time\"" obj)
                         where withDefault (Just s) = s
                               withDefault Nothing  = "--:--:--"
-
-
 instance Renderable Time where
   render (Time t) = stringToJSString $ "<a class='link'>"++t++"</a>"
 
@@ -96,7 +97,7 @@ strike s = (\x -> do
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
 append s = (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
 
-put :: (Renderable a) => Element -> Signal a -> IO ()
+put :: (Renderable a) => Element -> Signal a -> Dom ()
 put el s = terminate s (\x -> return ((\y -> set y "innerHTML" $ render x) el))
 
 pass :: String -> a -> a
