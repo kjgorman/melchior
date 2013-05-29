@@ -2,6 +2,7 @@ module Melchior.Remote.XHR (
     get
   , remote
   , request
+  , server
     -- * Types
   , GET
   , POST
@@ -22,6 +23,12 @@ instance Show XHRMethod where
   show POST = "POST"
   show PUT = "PUT"
   show DELETE = "DELETE"
+
+server :: Signal JSString
+server s = primGetSocketedSignal
+
+foreign import js "Sockets.createSocketedSignal()"
+  primGetSocketedSignal :: Signal JSString
 
 remote :: XHRMethod -> String -> Signal a -> Signal JSString
 remote x s source = primGetXHR (stringToJSString $ show x) (stringToJSString s) source

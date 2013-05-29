@@ -1,5 +1,8 @@
-var express = require('express'), 
-    app = express()
+var express      = require('express'), 
+    app          = express(),
+    http         = require('http'),
+    server       = http.createServer(app),
+    socket       = require('socket.io').listen(server)
 
 app.use('/assets', express.static(__dirname+"/assets"))
 
@@ -16,5 +19,9 @@ app.get("/the_time", function(req, res) {
     res.send(200, {time: new Date().toTimeString()})
 })
 
+socket.on('connection', function(socket) {
+    console.log("connection!")
+})
+
 console.log("~-~-~ server listening on 3001 ~-~-~")
-app.listen(3001)
+server.listen(3001)

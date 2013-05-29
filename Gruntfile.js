@@ -49,6 +49,7 @@ module.exports = function(grunt) {
                     "Melchior/JS/List.js",
                     "Melchior/JS/Test.js",
                     "Melchior/JS/Function.js",
+                    "Melchior/JS/Socket.js",
                     "Melchior/JS/Dom.js",
                     "Melchior/JS/Events.js", 
                     "Melchior/JS/Time.js",

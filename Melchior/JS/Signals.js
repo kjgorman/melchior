@@ -44,15 +44,9 @@ var Signals = function () {
         return newSignal
     }
 
+    Signal.prototype.__aN__ = function () { return this }
 
-    Signal.prototype.__aN__ = function () {
-        return this
-    }
-
-    Signal.prototype.source = function () {
-        return this._source instanceof Signal ? this._source.source() : this._source;
-    }
-
+    Signal.prototype.source = function () { return this._source instanceof Signal ? this._source.source() : this._source }
 
     function evaluate(thunk) {
         if(!thunk) return
@@ -97,9 +91,7 @@ var Signals = function () {
         return s
     }
 
-    function createPastDependentSignal (func, base, signal) {
-        return signal.pipe(func, base)
-    }
+    function createPastDependentSignal (func, base, signal) { return signal.pipe(func, base) }
 
     function applicable (argument) {
         if(window.debug) console.log("wrapping in applicable node", argument)
