@@ -21,6 +21,12 @@ app.get("/the_time", function(req, res) {
 
 socket.on('connection', function(socket) {
     console.log("connection!")
+    
+    function sendHeartbeat() {
+        socket.emit('data', {heart:"beating"})
+        setTimeout(sendHeartbeat, 1000)
+    }
+    sendHeartbeat()
 })
 
 console.log("~-~-~ server listening on 3001 ~-~-~")
