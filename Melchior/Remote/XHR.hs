@@ -25,10 +25,10 @@ instance Show XHRMethod where
   show DELETE = "DELETE"
 
 server :: (JsonSerialisable a) => Signal a
-server = primGetSocketedSignal
+server = (\s -> ensureApplicable $ fromJson $ parseJson $ jsStringToString s) <$> primGetSocketedSignal
 
 foreign import js "Sockets.createSocketedSignal()"
-  primGetSocketedSignal :: (JsonSerialisable a) => Signal a
+  primGetSocketedSignal :: Signal JSString
 
 remote :: XHRMethod -> String -> Signal a -> Signal JSString
 remote x s source = primGetXHR (stringToJSString $ show x) (stringToJSString s) source
