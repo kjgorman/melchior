@@ -15,7 +15,8 @@ Sockets.Socket = function Socket (signal) {
 
     if(this.connection.on)
     this.connection.on('data', function(value) {
-        thus.signal.push(value)
+        console.log("got: ", JSON.stringify(value))
+        thus.signal.push(JSON.stringify(value))
     })
     else this.connection.onmessage = function(value) {
         thus.signal.push(value)

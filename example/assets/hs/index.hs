@@ -41,18 +41,21 @@ setupNavLinks html = do
   sequence $ (put positionLabel) <$> (Melchior.Mouse.position <$> container)
 
   counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ fromJust m
-  put counter countSeconds
+--  put counter countSeconds
 
   clock <- Dom $ (select (byId "clock" . from) html) >>= \m -> return $ fromJust m
-  put clock (request GET "/the_time" $ every second :: Signal Time)
+--  put clock (request GET "/the_time" $ every second :: Signal Time)
+
+  heartbeat <- Dom $ (select (byId "heartbeat" . from) html) >>= \m -> return $ fromJust m
+  put heartbeat (server :: Signal Heartbeat)
 
   return $ UHC.Base.head html
 
+----------------------------------------------------------------------------------------------------------------
+-- Some helpful data types  
 data Time = Time String
-
 time :: Time -> String
 time (Time t) = t
-
 instance JsonSerialisable Time where
   fromJson Nothing    = Time "--:--:--"
   fromJson (Just obj) = Time (withDefault $ getJsonString "\"time\"" obj)
@@ -61,6 +64,18 @@ instance JsonSerialisable Time where
 instance Renderable Time where
   render (Time t) = stringToJSString $ "<a class='link'>"++t++"</a>"
 
+data Heartbeat = Heartbeat String
+
+instance JsonSerialisable Heartbeat where
+  fromJson Nothing = Heartbeat "Server unreachable : ("
+  fromJson (Just beat) = Heartbeat (withDefault $ getJsonString "\"heart\"" beat)
+                         where withDefault (Just s) = s
+                               withDefault Nothing = "Server response unparseable : ("
+
+instance Renderable Heartbeat where
+  render (Heartbeat h) = stringToJSString $ "<div class='muted'>"++h++"</div>"
+----------------------------------------------------------------------------------------------------------------
+-- Some helpful functions  
 countSeconds :: Signal Int
 countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
 
@@ -98,8 +113,10 @@ append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
 append s = (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
 
 put :: (Renderable a) => Element -> Signal a -> Dom ()
-put el s = terminate s (\x -> return ((\y -> set y "innerHTML" $ render x) el))
+put el s = terminate s (\x -> return $ set el "innerHTML" $ render x)
 
+----------------------------------------------------------------------------------------------------------------
+-- Some particularly unpleasant logging functions
 pass :: String -> a -> a
 pass s x = primPass (stringToJSString s) x
 

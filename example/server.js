@@ -24,7 +24,7 @@ socket.on('connection', function(socket) {
     
     function sendHeartbeat() {
         socket.emit('data', {heart:"beating"})
-        setTimeout(sendHeartbeat, 1000)
+        setTimeout(sendHeartbeat, 10000)
     }
     sendHeartbeat()
 })
