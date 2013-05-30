@@ -103,6 +103,12 @@ createEventedSignalOf o el evt key = return $ primCreateEventedSignalOf o el evt
 foreign import js "Signals.createEventedSignal(%3, %4, %5)"
   primCreateEventedSignalOf :: (DomNode a) => Of c -> a -> JSString -> JSString -> Signal c
 
-delegate :: Of c -> JSString -> Event b -> JSString -> Signal c
-delegate o query evt = undefined
+delegate :: Of c -> String -> Event b -> Dom (Signal c)
+delegate o query evt = return $ primCreateDelegatedEventListener o evtStr queryStr
+                       where
+                         evtStr   = stringToJSString $ show evt
+                         queryStr = stringToJSString query
+
+foreign import js "Signals.createDelegate(%2, %3)"
+  primCreateDelegatedEventListener :: Of c -> JSString -> JSString -> Signal c
 

@@ -32,7 +32,7 @@ foreign import js "Sockets.createSocketedSignal(%1)"
 
 -- | Represents a single xhr call, the signal has value when onreadystatechanged
 remote :: XHRMethod -> String -> Signal a -> Signal JSString
-remote x s source = primGetXHR (stringToJSString $ show x) (stringToJSString s) source
+remote x s source = primGetRemote (stringToJSString $ show x) (stringToJSString s) source
 
 -- | Return a xhr request, or signal
 request :: (JsonSerialisable a) => XHRMethod -> String -> Signal s -> Signal a

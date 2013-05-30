@@ -101,6 +101,14 @@ var Signals = function () {
         else return argument
     }
 
+    function createDelegate (event, query) {
+        var selector = Query.createSelectorOf(query), signal = new Signals.Signal(query)
+        document.addEventListener(event, function(event) {
+            
+        })
+        return signal
+    }
+
     function ensureApplicable (argument) {
         if(window.debug) console.log("making an applicable", argument)
         if(argument._1) {
@@ -126,6 +134,7 @@ var Signals = function () {
         ensureApplicable:ensureApplicable,
         Signal:Signal,
         evaluate: evaluate,
-        terminate: terminate
+        terminate: terminate,
+        createDelegate: createDelegate
     }
 }()

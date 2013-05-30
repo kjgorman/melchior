@@ -135,10 +135,5 @@ var Selectors = function () {
         return Lists.emptyUHCList();
     }
 
-    Selector.prototype.ensureList = function(lst) {
-        if(window.debug) console.log("is this a list?: ", lst)
-        return lst
-    }
-
     return new Selector()
 }()
