@@ -28,6 +28,10 @@ Sockets.Socket = function Socket (signal, namespace) {
         
 }
 
+Sockets.Socket.prototype.Signal = function () {
+    return this.signal
+}
+
 Sockets.createSocketedSignal = function(namespace) {
     var signal = new Signals.Signal()
     var socket = new Sockets.Socket(signal, namespace)

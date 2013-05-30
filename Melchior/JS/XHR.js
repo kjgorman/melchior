@@ -63,5 +63,13 @@ var XHR = function () {
         return outSignal
     }
 
+    XHR.prototype.getRemote = function(method, url, signal) {
+        try {
+            return new Sockets.Socket(signal, url).Signal()
+        } catch (e) {
+            return this.pipeXHRSignal(method, url, signal)
+        }
+    }
+
     return new XHR()
 }()

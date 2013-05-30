@@ -1,6 +1,5 @@
 module Melchior.Remote.XHR (
-    get
-  , remote
+    remote
   , request
   , server
     -- * Types
@@ -24,7 +23,6 @@ instance Show XHRMethod where
   show PUT = "PUT"
   show DELETE = "DELETE"
 
---TODO - make this parameterise by a signal, with `constant` for only get-ing
 server :: (JsonSerialisable a) => String -> Signal a
 server channel = (\s -> ensureApplicable $ fromJson $ parseJson $ jsStringToString s) <$> (primGetSocketedSignal $ stringToJSString channel)
 
@@ -37,12 +35,9 @@ remote x s source = primGetXHR (stringToJSString $ show x) (stringToJSString s) 
 foreign import js "XHR.pipeXHRSignal(%1, %2, %3)"
   primGetXHR :: JSString -> JSString -> Signal a -> Signal JSString
 
-get :: XHRMethod -> String -> Signal JSString
-get x s = primGet (stringToJSString $ show x) (stringToJSString s)
-
-foreign import js "XHR.getXHRSignal(%1, %2)"
-  primGet :: JSString -> JSString -> Signal JSString
-
 request :: (JsonSerialisable a) => XHRMethod -> String -> Signal s -> Signal a
 request  x s source = (\s -> ensureApplicable $ fromJson (parseJson $ jsStringToString s)) <$> (primGetXHR (stringToJSString $ show x) (stringToJSString s) source)
+
+foreign import js "XHR.getRemote(%1, %2, %3)"
+  primGetRemote :: JSString -> JSString -> Signal a -> Signal b
 
