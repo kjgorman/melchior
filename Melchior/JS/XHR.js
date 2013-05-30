@@ -40,7 +40,7 @@ var XHR = function () {
         var outSignal = new Signals.Signal(signal), thus = this
         if(window.debug) console.log("creating an XHR signal w/", method, resource, window.signal = signal)
         signal.registerListener(function(value) {
-            var req = thus.getXHR(method, resource)
+            var req = XHR.prototype.getXHR.call(this, method, resource)
             if(window.debug) console.log("requesting", resource, method, req)
             req.onreadystatechange = function() {
                 if(window.debug) console.log("xhr got", req.response)
@@ -64,10 +64,12 @@ var XHR = function () {
     }
 
     XHR.prototype.getRemote = function(method, url, signal) {
-        try {
+        if(method) return new this.pipeXHRSignal(method, url, signal)
+        else try {
             return new Sockets.Socket(signal, url).Signal()
         } catch (e) {
-            return this.pipeXHRSignal(method, url, signal)
+            //revert to a xhr call?
+            return new this.pipeXHRSignal("GET", url, signal)
         }
     }
 

@@ -19,8 +19,6 @@ Sockets.Socket = function Socket (signal, namespace) {
 
     if(this.connection.on)
     this.connection.on(namespace || 'data', function(value) {
-        //socket.io is too fancy for its own good and converts this
-        //to json -- need to stringify for client consistency
         thus.signal.push(JSON.stringify(value))
     })
     else this.connection.onmessage = function(value) {

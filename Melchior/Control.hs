@@ -78,13 +78,15 @@ foreign import js "%1.pipe(%2)"
 foreign import js "%1.pipe(%2)"
   primPipeSignalWithEvent :: Signal a -> (a -> Event c -> b) -> Signal b
 
--- * Signal creation
+-- * FoldP
 
 foldP :: (a -> b -> b) -> b -> Signal a -> Signal b
 foldP fn start signal = createPastDependentSignal fn start signal
 
 foreign import js "Signals.createPastDependentSignal(%1, %2, %3)"
   createPastDependentSignal :: (a -> b -> b) -> b -> Signal a -> Signal b
+
+-- * Create evented signals
 
 createEventedSignal :: (DomNode a) => Of c -> a -> Event b -> Signal c
 createEventedSignal o el evt = primCreateEventedSignal o el $ (stringToJSString . show) evt
@@ -101,6 +103,6 @@ createEventedSignalOf o el evt key = return $ primCreateEventedSignalOf o el evt
 foreign import js "Signals.createEventedSignal(%3, %4, %5)"
   primCreateEventedSignalOf :: (DomNode a) => Of c -> a -> JSString -> JSString -> Signal c
 
-foreign import js "log(%2, %1)"
-  pass :: JSString -> a -> a
+delegate :: Of c -> JSString -> Event b -> JSString -> Signal c
+delegate o query evt = undefined
 
