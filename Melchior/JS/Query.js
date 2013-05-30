@@ -29,13 +29,12 @@ var Query = function () {
     }
     
     var QueryObject = function QueryObject(type, query) {
-        Query.prototype.matches = function() { return false }
         this.type = type
         this.query = query
         this.matchById = function (elem) { return this.query && elem.id == this.query }
         this.matchByClass = function (elem) { return this.query && elem.classList.contains(this.query) }
         this.matchByTag = function (elem) { return this.query && elem.tagName == this.query.toUpperCase() }
-        Query.prototype.matches = function (elem) {
+        QueryObject.prototype.matches = function (elem) {
             switch (this.type) {
                 case 0: return this.matchById(elem)
                 case 1: return this.matchByClass(elem)
