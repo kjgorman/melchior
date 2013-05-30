@@ -26,14 +26,14 @@ setupNavLinks html = do
   check <- Dom $ select (byClass "check" . from) html
   button <- Dom $ select (byClass "btn-success" . from) html
   container <- Dom $ select (byClass "container-narrow" . from) html
-  
+
   --reactivity
   clicks <- sequence $ clickListener "innerHTML" <$> links
   reactiveClicks <- sequence $ clickListener "data-reactive" <$> check
 
   --signal functions
   -- interesting-ish network
-  sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks 
+  sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks
   sequence $ (\click -> click ~> strike) <$> reactiveClicks
   sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.Mouse.click <$> button)
 
@@ -49,10 +49,14 @@ setupNavLinks html = do
   heartbeat <- Dom $ (select (byId "heartbeat" . from) html) >>= \m -> return $ fromJust m
   put heartbeat (server "heartbeat" :: Signal Heartbeat)
 
+  anyButtonClick <- delegate (Of ClickEvt) "button" (MouseEvt ClickEvt)
+  anyButtonClickLabel <- Dom $ (select (byId "any-click" . from) html) >>= \m -> return $ fromJust m
+  put anyButtonClickLabel anyButtonClick
+
   return $ UHC.Base.head html
 
 ----------------------------------------------------------------------------------------------------------------
--- Some helpful data types  
+-- Some helpful data types
 data Time = Time String
 time :: Time -> String
 time (Time t) = t
@@ -75,7 +79,7 @@ instance JsonSerialisable Heartbeat where
 instance Renderable Heartbeat where
   render (Heartbeat h) = stringToJSString $ "<div class='muted'>"++h++"</div>"
 ----------------------------------------------------------------------------------------------------------------
--- Some helpful functions  
+-- Some helpful functions
 countSeconds :: Signal Int
 countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
 

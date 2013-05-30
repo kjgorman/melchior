@@ -3,6 +3,31 @@ var Query = function () {
 
     var Query = {}
 
+    Query.hub = new QueryMediator()
+
+    function QueryMediator() {
+        this.queries = []
+    }
+
+    QueryMediator.prototype.addPattern = function (selector) {
+        this.queries.push(selector)
+        return this
+    }
+
+    QueryMediator.prototype.mediate = function (event, signal) {
+        var thus = this
+        document.addEventListener(event, function(event) {
+            var element = event.srcElement, matches = false
+            //todo -- make queries compose
+            thus.queries.map(function (pattern) { pattern.map(function (sel) { matches |= sel.matches(element) }) })
+            if (matches) {
+                console.log("matched!")
+                signal.push(event)
+            }
+        })
+        return this
+    }
+
     Query.matchesQuerySelector = function matchesQuerySelector(query, element) {
         var queryParts = parseQuery(query)
         for(var i = 0, len = queryParts.length; i < len; i++)

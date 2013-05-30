@@ -1,5 +1,8 @@
 module Melchior.Dom.Events where
 
+import Melchior.Data.String
+import Melchior.Dom.Html
+
 data Event a = ElementEvt ElementEvent | MouseEvt MouseEvent
 
 instance Show (Event a) where
@@ -27,6 +30,9 @@ instance Show MouseEvent where
  show MouseOut = "mouseout"
  show MouseOver = "mouseover"
  show MouseMove = "mousemove"
+
+instance Renderable MouseEvent where
+  render x = stringToJSString $ show x
 
 --hmmm
 foreign import js "Events.coordinates(%1)"

@@ -9,6 +9,7 @@ module Melchior.Control
   , foldP
   , createEventedSignal
   , createEventedSignalOf
+  , delegate
   , (>>>)
   , (<<<)
   , (&&&)
