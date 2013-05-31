@@ -20,7 +20,7 @@ var Query = function () {
             Events.applyNativeMapping(event)
             var element = event.srcElement, matches = false
             //todo -- make queries compose
-            thus.queries.map(function (pattern) { pattern.map(function (sel) { matches |= sel.matches(element) }) })
+            thus.queries.map(function (query) { matches |= query.matches(element) })
             if (matches) {
                 console.log("matched!")
                 signal.push(event)
@@ -38,7 +38,7 @@ var Query = function () {
     
     Query.createSelectorOf = function createSelectorOf(queryString) {
         var separators = /([#\.]([^ #\.]+))/g,
-            parts = [],
+            parts = new QueryObject(),
             tokens = queryString.split()
         for(var i = 0, len = tokens.length; i < len; i++) {
             var match
@@ -57,16 +57,32 @@ var Query = function () {
     var QueryObject = function QueryObject(type, query) {
         this.type = type
         this.query = query
-        this.matchById = function (elem) { return this.query && elem.id == this.query }
-        this.matchByClass = function (elem) { return this.query && elem.classList.contains(this.query) }
-        this.matchByTag = function (elem) { return this.query && elem.tagName == this.query.toUpperCase() }
-        QueryObject.prototype.matches = function (elem) {
+        this.queries = []
+    
+        var matchById    = function (elem) { return this.query && elem.id == this.query },
+            matchByClass = function (elem) { return this.query && elem.classList.contains(this.query) },
+            matchByTag   = function (elem) { return this.query && elem.tagName == this.query.toUpperCase() }
+
+        var matchThis = function (elem) {
+            if(this.type !== undefined)
             switch (this.type) {
-                case 0: return this.matchById(elem)
-                case 1: return this.matchByClass(elem)
-                case 2: return this.matchByTag(elem)
-                default: false
+                case 0: return matchById.call(this, elem)
+                case 1: return matchByClass.call(this, elem)
+                case 2: return matchByTag.call(this, elem)
             }
+            else return true
+        }
+
+        QueryObject.prototype.matches = function (elem) {
+            var match = true, i = 0
+            for(var len = this.queries.length; i < len; i++) {
+                match &= this.queries[i].matches(elem)
+            }
+            return !!(matchThis.call(this, elem) & match)
+        }
+
+        QueryObject.prototype.push = function (query) {
+            this.queries.push(query)
         }
     }
 
