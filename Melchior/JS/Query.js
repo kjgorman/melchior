@@ -6,21 +6,25 @@ var Query = function () {
     Query.hub = new QueryMediator()
 
     function QueryMediator() {
-        this.queries = []
+        this.queries = {}
     }
 
-    QueryMediator.prototype.addPattern = function (selector) {
-        this.queries.push(selector)
+    QueryMediator.prototype.addPatternForEvent = function (selector, event) {
+        if(this.queries[event] !== undefined)
+            this.queries[event].push(selector)
+        else {
+            this.queries[event] = [selector]
+        }
         return this
     }
 
-    QueryMediator.prototype.mediate = function (event, signal) {
+    QueryMediator.prototype.mediate = function (eventName, signal) {
         var thus = this
-        document.addEventListener(event, function(event) {
+        document.addEventListener(eventName, function(event) {
             Events.applyNativeMapping(event)
             var element = event.srcElement, matches = false
             //todo -- make queries compose
-            thus.queries.map(function (query) { matches |= query.matches(element) })
+            thus.queries[eventName] && thus.queries[eventName].map(function (query) { matches |= query.matches(element) })
             if (matches) {
                 console.log("matched!")
                 signal.push(event)

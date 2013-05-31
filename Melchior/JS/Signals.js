@@ -104,7 +104,7 @@ var Signals = function () {
 
     function createDelegate (event, query) {
         var selector = Query.createSelectorOf(query), signal = new Signal(query)
-        Query.hub.addPattern(selector)
+        Query.hub.addPatternForEvent(selector, event)
                  .mediate(event, signal)
         return signal
     }
