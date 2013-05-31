@@ -67,6 +67,16 @@ var Dom = function() {
         return undefined
     }
 
+    DomOperations.prototype.value = function(elem) {
+        return elem.value ? elem.value : ""
+    }
+
+    DomOperations.prototype.append = function(html, elem) {
+        var doc = document.createElement("span")
+        doc.innerHTML = html
+        elem.appendChild(doc)        
+    }
+
     DomOperations.prototype.hack = function(str) {
         if(window.debug) console.log('hmmm')
         var el = document.createElement("div");

@@ -62,11 +62,14 @@ setupNavLinks html = do
 addNewTodo :: Signal a -> Dom ()
 addNewTodo s = terminate s (\x -> do
                                input <- select (byId "todo-in" . from) root
-                               --ensure input is input
-                               --write a value function to extract the value
-                               --create a new todo data type with the value string as its value param
-                               --bind that to dom
-                               return ())
+                               values <- value (fromJust input)
+                               todo <- return $ Todo $ jsStringToString values
+                               ul <- (select (byId "todos" . from) root >>= \m -> return $ fromJust m)
+                               Melchior.Dom.append (render todo) ul
+                           )
+data Todo = Todo String
+instance Renderable Todo where
+  render (Todo s) = stringToJSString $ "<li><input type='checkbox' class='check' data-reactive='four' /><span id='four'>"++s++"</span></li>"
 
 ----------------------------------------------------------------------------------------------------------------
 -- Some helpful data types
@@ -128,7 +131,7 @@ strike :: Signal JSString ->  Dom ()
 strike s = terminate s (\x -> (select (byId (jsStringToString x) . from) root >>= \el -> toggle "checked" $ fromJust el))
 
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
-append s = (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
+append s = (\x -> x >>= \js -> Melchior.Dom.hack <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
 
 put :: (Renderable a) => Element -> Signal a -> Dom ()
 put el s = terminate s (\x -> return $ set el "innerHTML" $ render x)

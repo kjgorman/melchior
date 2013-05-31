@@ -21,12 +21,15 @@ module Melchior.Dom
     , parentOf
     , siblings
     , append
+    , hack
     , set
+    , value
     ) where
 
 --dependencies
 import Melchior.Data.String
 import Melchior.Dom.Events
+import Melchior.Dom.Html
 import Control.Monad (liftM)
 
 import Language.UHC.JScript.Primitives
@@ -100,8 +103,19 @@ foreign import js "Dom.set(%1, %2, %3)"
   primSet :: Element -> JSString -> a -> ()
 
 foreign import js "Dom.hack(%1)"
-  append :: JSString -> JSString
+  hack :: JSString -> JSString
 
+value :: Element -> IO JSString
+value = primGetValue
+
+foreign import js "Dom.value(%1)"
+  primGetValue :: Element -> IO JSString
+
+append :: Html -> Element -> IO ()
+append = primAppend 
+
+foreign import js "Dom.append(%1, %2)"
+  primAppend :: Html -> Element -> IO ()
 {-
 getAttr :: String -> Element -> Dom String
 getAttr s e = Dom . liftM jsStringToString $ primGetAttr e (stringToJSString s)
