@@ -23,18 +23,17 @@ setupNavLinks :: [Element] -> Dom Element
 setupNavLinks html = do
   --element selection
   links <- Dom $ select (byClass "link" . from) html
-  check <- Dom $ select (byClass "check" . from) html
   button <- Dom $ select (byClass "btn-success" . from) html
   container <- Dom $ select (byClass "container-narrow" . from) html
 
   --reactivity
   clicks <- sequence $ clickListener "innerHTML" <$> links
-  reactiveClicks <- sequence $ clickListener "data-reactive" <$> check
+  reactiveClicks <- clickDelegate "data-reactive" ".check" (MouseEvt ClickEvt)
 
   --signal functions
   -- interesting-ish network
   sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks
-  sequence $ (\click -> click ~> strike) <$> reactiveClicks
+  strike reactiveClicks
   sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.Mouse.click <$> button)
 
   positionLabel <- Dom $ (select (byId "where-at" . from) html) >>= \m -> return $ fromJust m
@@ -86,6 +85,9 @@ countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
 clickListener :: String -> Element -> Dom (Signal (JSString))
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
 
+clickDelegate :: String -> String -> Event a -> Dom (Signal (JSString))
+clickDelegate key pattern event = delegateOf (Of $ stringToJSString "jsstring") pattern event key 
+
 addClassTo :: SF (IO JSString) (IO JSString)
 addClassTo s = (\x -> do
                          cls <- x
@@ -108,10 +110,8 @@ hideSiblings = applyById (\e -> UHC.Base.head <$> (\y -> map (addClass "hidden")
 showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent = applyById (\e -> removeClass "hidden" <$> e)
 
-strike :: Signal JSString -> Signal (IO (Maybe JSString))
-strike s = (\x -> do
-                  elem <- select ((byId $ jsStringToString x) . from) root
-                  return $! toggle "checked" <$> elem) <$> s
+strike :: Signal JSString ->  Dom ()
+strike s = terminate s (\x -> ((select (byId (jsStringToString x) . from) root) >>= \el -> toggle "checked" $ fromJust el))
 
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
 append s = (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s

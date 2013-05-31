@@ -66,6 +66,9 @@ var Signals = function () {
                 throw e
                 return curr
             }
+            if(curr instanceof _A_undersat_) { //what if its not io?
+                UHCFunction.call(curr, [])
+            }
             if(window.debug) console.log("post curr", curr)
             if(hasPrimitiveValue(curr) || !curr) break
         } while(curr.hasOwnProperty("__eOrV__") || curr[0] || curr._1 || curr._F_)
@@ -102,10 +105,10 @@ var Signals = function () {
         else return argument
     }
 
-    function createDelegate (event, query) {
+    function createDelegate (event, query, key) {
         var selector = Query.createSelectorOf(query), signal = new Signal(query)
         Query.hub.addPatternForEvent(selector, event)
-                 .mediate(event, signal)
+            .mediate(event, signal, key)
         return signal
     }
 

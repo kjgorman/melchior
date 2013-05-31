@@ -18,7 +18,7 @@ var Query = function () {
         return this
     }
 
-    QueryMediator.prototype.mediate = function (eventName, signal) {
+    QueryMediator.prototype.mediate = function (eventName, signal, key) {
         var thus = this
         document.addEventListener(eventName, function(event) {
             Events.applyNativeMapping(event)
@@ -26,8 +26,8 @@ var Query = function () {
             //todo -- make queries compose
             thus.queries[eventName] && thus.queries[eventName].map(function (query) { matches |= query.matches(element) })
             if (matches) {
-                console.log("matched!")
-                signal.push(event)
+                if(key !== undefined) signal.push(Dom.get(element, key))
+                else signal.push(event)
             }
         })
         return this

@@ -87,11 +87,11 @@ removeClass s e = primRemoveClass (stringToJSString s) e
 foreign import js "Dom.removeClass(%2, %1)"
   primRemoveClass :: JSString -> Element -> JSString
 
-toggle :: String -> Element -> JSString
+toggle :: String -> Element -> IO ()
 toggle s = primToggle (stringToJSString s)
 
 foreign import js "Dom.toggle(%2, %1)"
-  primToggle :: JSString -> Element -> JSString
+  primToggle :: JSString -> Element -> IO ()
 
 set :: Element -> String -> a -> ()
 set e s v = primSet e (stringToJSString s) v

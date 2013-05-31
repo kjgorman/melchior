@@ -10,6 +10,7 @@ module Melchior.Control
   , createEventedSignal
   , createEventedSignalOf
   , delegate
+  , delegateOf
   , (>>>)
   , (<<<)
   , (&&&)
@@ -100,7 +101,7 @@ createEventedSignalOf o el evt key = return $ primCreateEventedSignalOf o el evt
                                       where
                                         evtStr = ((stringToJSString . show) evt)
                                         keyStr = stringToJSString key
-  
+
 foreign import js "Signals.createEventedSignal(%3, %4, %5)"
   primCreateEventedSignalOf :: (DomNode a) => Of c -> a -> JSString -> JSString -> Signal c
 
@@ -112,4 +113,14 @@ delegate o query evt = return $ primCreateDelegatedEventListener o evtStr queryS
 
 foreign import js "Signals.createDelegate(%2, %3)"
   primCreateDelegatedEventListener :: Of c -> JSString -> JSString -> Signal c
+
+delegateOf :: Of c -> String -> Event b -> String -> Dom (Signal c)
+delegateOf o query evt key = return $ primCreateDelegatedEventListenerOf o evtStr queryStr keyStr
+                       where
+                         evtStr   = stringToJSString $ show evt
+                         queryStr = stringToJSString query
+                         keyStr   = stringToJSString key
+
+foreign import js "Signals.createDelegate(%2, %3, %4)"
+  primCreateDelegatedEventListenerOf :: Of c -> JSString -> JSString -> JSString -> Signal c
 
