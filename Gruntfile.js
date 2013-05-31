@@ -21,6 +21,9 @@ module.exports = function(grunt) {
             },
             copyDistToExample : {
                 command : "cp dist/melchior.js example/assets/"
+            },
+            compile : {
+                command : "find . -name '*hs' -exec uhc -tjs {} \;"
             }
         },
         jshint : {
@@ -142,6 +145,7 @@ module.exports = function(grunt) {
                         'jasmine',
                         'watch']) 
     grunt.registerTask('travis', ['jshint', 'jasmine']);
+    grunt.registerTask('compile', ['shell:compile']);
     grunt.registerTask('example',
                        ['jshint',
                         'shell:build',
