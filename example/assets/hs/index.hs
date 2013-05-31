@@ -26,14 +26,9 @@ setupNavLinks html = do
   button <- Dom $ select (byClass "btn-success" . from) html
   container <- Dom $ select (byClass "container-narrow" . from) html
 
-  --reactivity
   clicks <- sequence $ clickListener "innerHTML" <$> links
-  reactiveClicks <- clickDelegate "data-reactive" ".check" (MouseEvt ClickEvt)
 
-  --signal functions
-  -- interesting-ish network
   sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks
-  strike reactiveClicks
   sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.Mouse.click <$> button)
 
   positionLabel <- Dom $ (select (byId "where-at" . from) html) >>= \m -> return $ fromJust m
@@ -52,7 +47,26 @@ setupNavLinks html = do
   anyButtonClickLabel <- Dom $ (select (byId "any-click" . from) html) >>= \m -> return $ fromJust m
   put anyButtonClickLabel anyButtonClick
 
+-- | the todo app
+-- | We first have the click listener on check boxes that toggles strikethrough  
+  reactiveClicks <- clickDelegate "data-reactive" ".check" (MouseEvt ClickEvt)
+  strike reactiveClicks
+-- | Then we have the add button
+  maybeAddTodo <- Dom $ select (byId "add-todo" . from) html
+  let addTodo = fromJust maybeAddTodo --fail if not present
+-- | Then we bind some behaviour to the dom      
+  addNewTodo $ Melchior.Mouse.click addTodo
+  
   return $ UHC.Base.head html
+
+addNewTodo :: Signal a -> Dom ()
+addNewTodo s = terminate s (\x -> do
+                               input <- select (byId "todo-in" . from) root
+                               --ensure input is input
+                               --write a value function to extract the value
+                               --create a new todo data type with the value string as its value param
+                               --bind that to dom
+                               return ())
 
 ----------------------------------------------------------------------------------------------------------------
 -- Some helpful data types
@@ -111,7 +125,7 @@ showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent = applyById (\e -> removeClass "hidden" <$> e)
 
 strike :: Signal JSString ->  Dom ()
-strike s = terminate s (\x -> ((select (byId (jsStringToString x) . from) root) >>= \el -> toggle "checked" $ fromJust el))
+strike s = terminate s (\x -> (select (byId (jsStringToString x) . from) root >>= \el -> toggle "checked" $ fromJust el))
 
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
 append s = (\x -> x >>= \js -> Melchior.Dom.append <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
