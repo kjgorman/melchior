@@ -16,3 +16,9 @@ instance Renderable (Int, Int) where
 
 instance Renderable Int where
   render i = stringToJSString $ "<span>"++(show i)++"</span>"
+
+instance Renderable JSString where
+  render s = s
+
+instance Renderable String where
+  render = stringToJSString  

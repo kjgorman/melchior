@@ -17,6 +17,7 @@ var Query = function () {
     QueryMediator.prototype.mediate = function (event, signal) {
         var thus = this
         document.addEventListener(event, function(event) {
+            Events.applyNativeMapping(event)
             var element = event.srcElement, matches = false
             //todo -- make queries compose
             thus.queries.map(function (pattern) { pattern.map(function (sel) { matches |= sel.matches(element) }) })

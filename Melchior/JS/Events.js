@@ -12,5 +12,30 @@ var Events = function() {
         return [evt.pageX, evt.pageY]
     }
 
+    Event.prototype.applyNativeMapping = function(evt) {
+        var type = evt.type,
+            events = [[
+                "click",
+                "dblclick",
+                "mousedown",
+                "mouseup",
+                "mouseenter",
+                "mouseleave",
+                "mouseout",
+                "mouseover",
+                "mousemove"
+            ],
+            [
+                "input",
+                "change",
+                "reset",
+                "submit",
+                "invalid"
+            ]]
+        for(var i = 0, len = events.length; i < len; i++) {
+            if(!!~(evt._tag_ = events[i].indexOf(type))) return
+        }
+    }
+
     return new Event()
 }()

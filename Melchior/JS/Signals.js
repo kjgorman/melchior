@@ -82,6 +82,7 @@ var Signals = function () {
             return undefined
         var s = new Signal(elem)
         elem.addEventListener(event, function (e) {
+            Events.applyNativeMapping(e)
             if(window.debug) console.log("detected", event, "sending to", s)
             s.push({
                 __eOrV__: Dom.get(elem, key) || e,

@@ -32,7 +32,7 @@ instance Show MouseEvent where
  show MouseMove = "mousemove"
 
 instance Renderable MouseEvent where
-  render x = stringToJSString $ show x
+  render e = stringToJSString $ show e
 
 --hmmm
 foreign import js "Events.coordinates(%1)"
