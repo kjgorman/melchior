@@ -7,6 +7,7 @@ module Melchior.Dom
     , Document
     , Input
     , Div
+    , Span
       -- * Typeclasses
     , DomNode
       -- * Functions
@@ -105,11 +106,11 @@ foreign import js "Dom.set(%1, %2, %3)"
 foreign import js "Dom.hack(%1)"
   hack :: JSString -> JSString
 
-value :: Element -> IO JSString
+value :: Input -> IO JSString
 value = primGetValue
 
 foreign import js "Dom.value(%1)"
-  primGetValue :: Element -> IO JSString
+  primGetValue :: Input -> IO JSString
 
 append :: Html -> Element -> IO ()
 append = primAppend 

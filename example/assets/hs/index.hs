@@ -61,14 +61,15 @@ setupNavLinks html = do
 
 addNewTodo :: Signal a -> Dom ()
 addNewTodo s = terminate s (\x -> do
-                               input <- select (byId "todo-in" . from) root
-                               values <- value (fromJust input)
+                               input <- select (inputs . byId "todo-in" . from) root
+                               values <- value (fromJust input) --hmmmm
                                todo <- return $ Todo $ jsStringToString values
                                ul <- (select (byId "todos" . from) root >>= \m -> return $ fromJust m)
                                Melchior.Dom.append (render todo) ul
                            )
 data Todo = Todo String
 instance Renderable Todo where
+  --todo (i.e. I won't do but would be nice if i I had the time) make composition of html nicer
   render (Todo s) = stringToJSString $ "<li><input type='checkbox' class='check' data-reactive='four' /><span id='four'>"++s++"</span></li>"
 
 ----------------------------------------------------------------------------------------------------------------

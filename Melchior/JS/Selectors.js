@@ -115,7 +115,11 @@ var Selectors = function () {
     }
 
     Selector.prototype.tag = function(node, tagName) {
-        return node.tagName === tagName.toUpperCase()
+        console.log("tag check", node, tagName)
+        if(node.tagName === tagName.toUpperCase())
+            return $UHC.$Base.$True__
+        else
+            return $UHC.$Base.$False__
     }
 
     Selector.prototype.children = function(el) {
