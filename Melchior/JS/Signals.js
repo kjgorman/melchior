@@ -156,6 +156,7 @@ var Signals = function () {
         evaluate: evaluate,
         terminate: terminate,
         createDelegate: createDelegate,
-        sample: sample        
+        sample: sample,
+        constant: constant
     }
 }()

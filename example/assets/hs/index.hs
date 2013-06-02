@@ -41,7 +41,7 @@ setupNavLinks html = do
   put clock (request GET "/the_time" $ every second :: Signal Time)
 
   heartbeat <- Dom $ (select (byId "heartbeat" . from) html) >>= \m -> return $ fromJust m
-  put heartbeat (server "heartbeat" :: Signal Heartbeat)
+  put heartbeat (server (sample $ constant "heartbeat") :: Signal Heartbeat)
 
   anyButtonClick <- delegate (Of ClickEvt) "button" (MouseEvt ClickEvt)
   anyButtonClickLabel <- Dom $ (select (byId "any-click" . from) html) >>= \m -> return $ fromJust m
