@@ -42,6 +42,7 @@ var Signals = function () {
                 newSignal.push(newSignal.accumulator)
             } else {
                 if(window.debug) console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
+                newSignal.accumulator = res
                 newSignal.push(res, event)
             }
         });
