@@ -115,7 +115,6 @@ var Selectors = function () {
     }
 
     Selector.prototype.tag = function(node, tagName) {
-        console.log("tag check", node, tagName)
         if(node.tagName === tagName.toUpperCase())
             return $UHC.$Base.$True__
         else
