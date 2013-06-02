@@ -1,7 +1,13 @@
 var Time = function () {
     "use strict";
     
-    var Time = function () {}
+    var Time = function () {
+        this.current = new Signals.Signal(this)
+        //override sampling function to return time string
+        this.current.currently = function () {
+            return (new Date()).toISOString()
+        }
+    }
 
     Time.prototype.every = function(period) {
         var initial = 0, signal = new Signals.Signal(this)

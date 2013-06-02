@@ -1,6 +1,12 @@
-module Melchior.Time where
+module Melchior.Time (
+    current
+  , every
+  , minute
+  , second
+  ) where
 
 import Melchior.Control
+import Melchior.Data.String
 
 second :: Int
 second = 1000
@@ -13,3 +19,9 @@ foreign import js "Time.every(%1)"
 
 foreign import js "Time.after(%1)"
   after :: Int -> Signal Int
+
+current :: Signal JSString
+current = primCurrent
+
+foreign import js "Time.current"
+  primCurrent :: Signal JSString

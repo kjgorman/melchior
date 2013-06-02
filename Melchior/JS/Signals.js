@@ -9,6 +9,10 @@ var Signals = function () {
         this.__isSignal = true
     }
 
+    Signal.prototype.currently = function () {
+        return this.accumulator
+    }
+
     Signal.prototype.registerListener = function(callback) {
         if(window.debug) console.log("registering listener", callback, this)
         this.registeredListeners.push(function (value) {
@@ -47,6 +51,10 @@ var Signals = function () {
     Signal.prototype.__aN__ = function () { return this }
 
     Signal.prototype.source = function () { return this._source instanceof Signal ? this._source.source() : this._source }
+
+    function sample(signal) {
+        return signal.currently()
+    }
 
     function evaluate(thunk) {
         if(!thunk) return
@@ -138,6 +146,7 @@ var Signals = function () {
         Signal:Signal,
         evaluate: evaluate,
         terminate: terminate,
-        createDelegate: createDelegate
+        createDelegate: createDelegate,
+        sample: sample        
     }
 }()

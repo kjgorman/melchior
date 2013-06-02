@@ -7,6 +7,7 @@ module Melchior.Control
   , runDom
   , (~>)
   , foldP
+  , sample
   , createEventedSignal
   , createEventedSignalOf
   , delegate
@@ -87,6 +88,12 @@ foldP fn start signal = createPastDependentSignal fn start signal
 
 foreign import js "Signals.createPastDependentSignal(%1, %2, %3)"
   createPastDependentSignal :: (a -> b -> b) -> b -> Signal a -> Signal b
+
+sample :: Signal a -> a
+sample = primSample
+
+foreign import js "Signals.sample(%1)"
+  primSample :: Signal a -> a
 
 -- * Create evented signals
 

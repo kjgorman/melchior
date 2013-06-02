@@ -96,17 +96,17 @@ inputs = Selector $ \z -> liftM (fmap $ \y -> Input $ unEl y) $ filterIO (\x -> 
 
 foreign import js "Selectors.tag(%1, 'input')"
     inpF :: JSPtr Node -> IO Bool
-
+ 
 divs :: Nodes f => Selector (f Element) (f Div)
-divs = Selector $ \z -> liftM (fmap $ \y -> Input $ unEl y) $ filterIO (\x -> inpF $ unwrap x) z
+divs = Selector $ \z -> liftM (fmap $ \y -> Div $ unEl y) $ filterIO (\x -> divF $ unwrap x) z
 
 foreign import js "Selectors.tag(%1, 'divs')"
-    inpF :: JSPtr Node -> IO Bool
-
+    divF :: JSPtr Node -> IO Bool
+            
 spans :: Nodes f => Selector (f Element) (f Span)
-spans = Selector $ \z -> liftM (fmap $ \y -> Input $ unEl y) $ filterIO (\x -> inpF $ unwrap x) z
+spans = Selector $ \z -> liftM (fmap $ \y -> Span $ unEl y) $ filterIO (\x -> spanF $ unwrap x) z
 
-foreign import js "Selectors.tag(%1, 'span')"
-    inpF :: JSPtr Node -> IO Bool            
+foreign import js "Selectors.tag(%1, 'divs')"
+    spanF :: JSPtr Node -> IO Bool
 
 

@@ -70,8 +70,9 @@ addNewTodo s = terminate s (\x -> do
 data Todo = Todo String
 instance Renderable Todo where
   --todo (i.e. I won't do but would be nice if i I had the time) make composition of html nicer
-  render (Todo s) = stringToJSString $ "<li><input type='checkbox' class='check' data-reactive='four' /><span id='four'>"++s++"</span></li>"
-
+  render (Todo s) = stringToJSString $ "<li><input type='checkbox' class='check' data-reactive='"++ids++"''/><span id='"++ids++"'>"++s++"</span></li>"
+                    where ids = (foldl (++) "" $ (words $ s ++ (jsStringToString $ sample Melchior.Time.current)))
+                          
 ----------------------------------------------------------------------------------------------------------------
 -- Some helpful data types
 data Time = Time String
@@ -129,7 +130,8 @@ showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent = applyById (\e -> removeClass "hidden" <$> e)
 
 strike :: Signal JSString ->  Dom ()
-strike s = terminate s (\x -> (select (byId (jsStringToString x) . from) root >>= \el -> toggle "checked" $ fromJust el))
+strike s = terminate s (\x -> (select (byId (jsStringToString x) . from) root
+                               >>= \el -> (toggle "checked") $ fromJust el))
 
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
 append s = (\x -> x >>= \js -> Melchior.Dom.hack <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
