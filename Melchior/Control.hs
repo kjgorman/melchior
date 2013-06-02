@@ -8,6 +8,7 @@ module Melchior.Control
   , (~>)
   , foldP
   , sample
+  , constant
   , createEventedSignal
   , createEventedSignalOf
   , delegate
@@ -94,6 +95,12 @@ sample = primSample
 
 foreign import js "Signals.sample(%1)"
   primSample :: Signal a -> a
+
+constant :: a -> Signal a
+constant = primConstant
+
+foreign import js "Signals.constant(%1)"
+  primConstant :: a -> Signal a
 
 -- * Create evented signals
 

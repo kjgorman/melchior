@@ -57,6 +57,14 @@ var Signals = function () {
         return signal.currently()
     }
 
+    function constant(value) {
+        var s = new Signal()
+        s.currently = function () {
+            return value
+        }
+        return s
+    }
+    
     function evaluate(thunk) {
         if(!thunk) return
         var curr = thunk
