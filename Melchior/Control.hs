@@ -10,6 +10,7 @@ module Melchior.Control
   , sample
   , constant
   , dropRepeats
+  , dropWhen
   , createEventedSignal
   , createEventedSignalOf
   , delegate
@@ -119,6 +120,9 @@ foreign import js "Signals.emptySignal()"
 
 dropRepeats :: Eq a => Signal a -> Signal a
 dropRepeats s = (\x -> if x == (previous s) then (emptySignal x) else (ensureApplicable x)) <$> s
+
+dropWhen :: Signal a -> (a -> Bool) -> Signal a
+dropWhen s pred = (\x -> if pred x then (emptySignal x) else (ensureApplicable x)) <$> s
 
 -- * Create evented signals
 

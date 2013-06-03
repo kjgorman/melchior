@@ -36,7 +36,7 @@ setupNavLinks html = do
   sequence $ (put positionLabel) <$> (Melchior.EventSources.Mouse.position <$> container)
 
   counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ fromJust m
-  put counter countSeconds
+  put counter (dropWhen countSeconds (\x -> even x))
 
   clock <- Dom $ (select (byId "clock" . from) html) >>= \m -> return $ fromJust m
   put clock (request GET "/the_time" $ every second :: Signal Time)
