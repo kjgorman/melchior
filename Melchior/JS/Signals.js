@@ -6,11 +6,16 @@ var Signals = function () {
         this.registeredListeners = []
         this._source = source
         this.accumulator = null
+        this.previous = null
         this.__isSignal = true
     }
 
     Signal.prototype.currently = function () {
         return this.accumulator
+    }
+
+    Signal.prototype.was = function () {
+        return this.previous
     }
 
     Signal.prototype.registerListener = function(callback) {
@@ -42,6 +47,7 @@ var Signals = function () {
             if(value._tag_ && value._tag_ === -1) return //empty signal
 
             var res = UHCFunction.call(transform, value, event)
+            newSignal.previous = newSignal.accumulator
             if(shouldAccumulate) {
                 newSignal.accumulator = UHCFunction.apply(transform, [value, newSignal.accumulator])
                 newSignal.push(newSignal.accumulator)
@@ -58,8 +64,12 @@ var Signals = function () {
 
     Signal.prototype.source = function () { return this._source instanceof Signal ? this._source.source() : this._source }
 
-    function sample(signal) {
-        return signal.currently()
+    Signal.prototype.sample = function () {
+        return this.currently()
+    }
+
+    function previous (signal) {
+        return signal.was()
     }
 
     function constant(value) {
@@ -150,6 +160,7 @@ var Signals = function () {
     function terminate (signal, funct) {
         if(window.debug) console.log("terminating", signal, funct)
         signal.registerListener(function(value) {
+            if(_e_(value)._tag_ && _e_(value)._tag_ === -1) return //empty
             evaluate(UHCFunction.call(funct, value))
         })
     }
@@ -169,8 +180,8 @@ var Signals = function () {
         evaluate: evaluate,
         terminate: terminate,
         createDelegate: createDelegate,
-        sample: sample,
         constant: constant,
-        emptySignal: emptySignal
+        emptySignal: emptySignal,
+        previous: previous
     }
 }()

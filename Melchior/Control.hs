@@ -94,8 +94,14 @@ foreign import js "Signals.createPastDependentSignal(%1, %2, %3)"
 sample :: Signal a -> a
 sample = primSample
 
-foreign import js "Signals.sample(%1)"
+foreign import js "%1.sample()"
   primSample :: Signal a -> a
+
+previous :: Signal a -> a
+previous = primPrevious
+
+foreign import js "Signals.previous(%1)"
+  primPrevious :: Signal a -> a
 
 constant :: a -> Signal a
 constant = primConstant
@@ -112,7 +118,7 @@ foreign import js "Signals.emptySignal()"
 -- * Filters
 
 dropRepeats :: Eq a => Signal a -> Signal a
-dropRepeats s = (\x -> if x == (sample s) then (ensureApplicable x) else (emptySignal x)) <$> s
+dropRepeats s = (\x -> if x == (previous s) then (emptySignal x) else (ensureApplicable x)) <$> s
 
 -- * Create evented signals
 
