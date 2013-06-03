@@ -31,10 +31,19 @@ var Events = function() {
                 "reset",
                 "submit",
                 "invalid"
+            ],
+            [
+                "keydown",
+                "keypress",
+                "keyup"
             ]]
         for(var i = 0, len = events.length; i < len; i++) {
             if(!!~(evt._tag_ = events[i].indexOf(type))) return
         }
+    }
+
+    Event.prototype.keyCode = function(evt) {
+        return evt.keyCode
     }
 
     return new Event()

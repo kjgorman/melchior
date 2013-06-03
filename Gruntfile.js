@@ -1,8 +1,8 @@
 module.exports = function(grunt) {
-    
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        jasmine : {          
+        jasmine : {
             src : 'Melchior/JS/**/*.js',
             options : {
                 specs: 'spec/**/*-spec.js',
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
                 expr: true,
                 newcap : false
             }
-        }, 
+        },
         watch : {
             scripts : {
                 files: ['Melchior/JS/**/*.js'],
@@ -55,7 +55,7 @@ module.exports = function(grunt) {
                     "Melchior/JS/Function.js",
                     "Melchior/JS/Socket.js",
                     "Melchior/JS/Dom.js",
-                    "Melchior/JS/Events.js", 
+                    "Melchior/JS/Events.js",
                     "Melchior/JS/Time.js",
                     "Melchior/JS/Tuple.js",
                     "Melchior/JS/XHR.js",
@@ -113,7 +113,7 @@ module.exports = function(grunt) {
                     "Melchior/Remote/Melchior_Remote_XHR.mjs",
                     "Melchior/Remote/Internal/Melchior_Remote_Internal_Parser.mjs",
                     "Melchior/Remote/Melchior_Remote_Json.mjs",
-                    "Melchior/Melchior_Mouse.mjs",
+                    "Melchior/EventSources/Melchior_EventSources_Mouse.mjs",
                     "Melchior/Melchior_Time.mjs",
                 ],
                 dest: 'dist/melchior.js'
@@ -126,7 +126,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-shell");
-    
+
 
     grunt.registerTask('default',
                        ['jshint',
@@ -143,7 +143,7 @@ module.exports = function(grunt) {
                         'concat',
                         'shell:copyDistToSpec',
                         'jasmine',
-                        'watch']) 
+                        'watch'])
     grunt.registerTask('travis', ['jshint', 'jasmine']);
     grunt.registerTask('compile', ['shell:compile']);
     grunt.registerTask('example',

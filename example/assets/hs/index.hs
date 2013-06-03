@@ -9,7 +9,8 @@ import Melchior.Dom
 import Melchior.Dom.Events
 import Melchior.Dom.Html
 import Melchior.Dom.Selectors
-import Melchior.Mouse
+import Melchior.EventSources.Mouse
+import Melchior.EventSources.Keyboard
 import Melchior.Remote.Json
 import Melchior.Remote.XHR
 import Melchior.Time
@@ -29,10 +30,10 @@ setupNavLinks html = do
   clicks <- sequence $ clickListener "innerHTML" <$> links
 
   sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks
-  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.Mouse.click <$> button)
+  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.EventSources.Mouse.click <$> button)
 
   positionLabel <- Dom $ (select (byId "where-at" . from) html) >>= \m -> return $ fromJust m
-  sequence $ (put positionLabel) <$> (Melchior.Mouse.position <$> container)
+  sequence $ (put positionLabel) <$> (Melchior.EventSources.Mouse.position <$> container)
 
   counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ fromJust m
   put counter countSeconds
@@ -48,21 +49,21 @@ setupNavLinks html = do
   put anyButtonClickLabel anyButtonClick
 
 -- | the todo app
--- | We first have the click listener on check boxes that toggles strikethrough  
+-- | We first have the click listener on check boxes that toggles strikethrough
   reactiveClicks <- clickDelegate "data-reactive" ".check" (MouseEvt ClickEvt)
   strike reactiveClicks
 -- | Then we have the add button
   maybeAddTodo <- Dom $ select (byId "add-todo" . from) html
   let addTodo = fromJust maybeAddTodo --fail if not present
--- | Then we bind some behaviour to the dom      
-  addNewTodo $ Melchior.Mouse.click addTodo
-  
+-- | Then we bind some behaviour to the dom
+  addNewTodo $ Melchior.EventSources.Mouse.click addTodo
+
   return $ UHC.Base.head html
 
 addNewTodo :: Signal a -> Dom ()
 addNewTodo s = terminate s (\x -> do
                                input <- select (inputs . byId "todo-in" . from) root
-                               values <- value (fromJust input) 
+                               values <- value (fromJust input)
                                todo <- return $ Todo $ jsStringToString values
                                ul <- (select (byId "todos" . from) root >>= \m -> return $ fromJust m)
                                Melchior.Dom.append (render todo) ul
@@ -72,7 +73,7 @@ instance Renderable Todo where
   --todo (i.e. I won't do but would be nice if i I had the time) make composition of html nicer
   render (Todo s) = stringToJSString $ "<li><input type='checkbox' class='check' data-reactive='"++ids++"''/><span id='"++ids++"'>"++s++"</span></li>"
                     where ids = (foldl (++) "" $ (words $ s ++ (jsStringToString $ sample Melchior.Time.current)))
-                          
+
 ----------------------------------------------------------------------------------------------------------------
 -- Some helpful data types
 data Time = Time String
@@ -105,7 +106,7 @@ clickListener :: String -> Element -> Dom (Signal (JSString))
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
 
 clickDelegate :: String -> String -> Event a -> Dom (Signal (JSString))
-clickDelegate key pattern event = delegateOf (Of $ stringToJSString "jsstring") pattern event key 
+clickDelegate key pattern event = delegateOf (Of $ stringToJSString "jsstring") pattern event key
 
 addClassTo :: SF (IO JSString) (IO JSString)
 addClassTo s = (\x -> do

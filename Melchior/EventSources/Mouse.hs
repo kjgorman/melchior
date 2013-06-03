@@ -1,4 +1,4 @@
-module Melchior.Mouse where
+module Melchior.EventSources.Mouse where
 
 import Control.Applicative
 import Melchior.Control
@@ -12,3 +12,7 @@ position el = (\x -> coords x) <$> s
 
 click :: Element -> Signal MouseEvent
 click e = createEventedSignal (Of ClickEvt) e (MouseEvt ClickEvt)
+
+
+foreign import js "Events.coordinates(%1)"
+  coords :: MouseEvent -> (Int, Int)

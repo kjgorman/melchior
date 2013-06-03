@@ -33,9 +33,14 @@ var Signals = function () {
 
     Signal.prototype.pipe = function(transform, base) {
         if(window.debug) console.log("constructing with transform", transform)
+
         var newSignal = new Signal(this), shouldAccumulate = base !== undefined
         newSignal.accumulator = base
+
         this.registeredListeners.push(function (value, event) {
+
+            if(value._tag_ && value._tag_ === -1) return //empty signal
+
             var res = UHCFunction.call(transform, value, event)
             if(shouldAccumulate) {
                 newSignal.accumulator = UHCFunction.apply(transform, [value, newSignal.accumulator])
@@ -147,6 +152,10 @@ var Signals = function () {
         })
     }
 
+    function emptySignal () {
+        return { _tag_: -1 }
+    }
+
     return {
         createEventedSignal: createEventedSignal,
         createPastDependentSignal: createPastDependentSignal,
@@ -157,6 +166,7 @@ var Signals = function () {
         terminate: terminate,
         createDelegate: createDelegate,
         sample: sample,
-        constant: constant
+        constant: constant,
+        emptySignal: emptySignal
     }
 }()

@@ -82,7 +82,7 @@ foreign import js "%1.pipe(%2)"
 foreign import js "%1.pipe(%2)"
   primPipeSignalWithEvent :: Signal a -> (a -> Event c -> b) -> Signal b
 
--- * FoldP
+-- * Signal actions
 
 foldP :: (a -> b -> b) -> b -> Signal a -> Signal b
 foldP fn start signal = createPastDependentSignal fn start signal
@@ -101,6 +101,17 @@ constant = primConstant
 
 foreign import js "Signals.constant(%1)"
   primConstant :: a -> Signal a
+
+emptySignal :: a -> a
+emptySignal = primEmptySignal
+
+foreign import js "Signals.emptySignal()"
+  primEmptySignal :: a -> a
+
+-- * Filters
+
+dropRepeats :: Eq a => Signal a -> Signal a
+dropRepeats s = (\x -> if x == (sample s) then (emptySignal x) else x) <$> s
 
 -- * Create evented signals
 

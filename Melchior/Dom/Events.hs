@@ -3,7 +3,7 @@ module Melchior.Dom.Events where
 import Melchior.Data.String
 import Melchior.Dom.Html
 
-data Event a = ElementEvt ElementEvent | MouseEvt MouseEvent
+data Event a = ElementEvt ElementEvent | MouseEvt MouseEvent | KeyboardEvt KeyboardEvent
 
 instance Show (Event a) where
   show (ElementEvt a) = show a
@@ -34,6 +34,9 @@ instance Show MouseEvent where
 instance Renderable MouseEvent where
   render e = stringToJSString $ show e
 
---hmmm
-foreign import js "Events.coordinates(%1)"
-  coords :: MouseEvent -> (Int, Int)
+data KeyboardEvent = KeyDown | KeyPress | KeyUp
+
+instance Show KeyboardEvent where
+  show KeyDown = "keydown"
+  show KeyPress = "keypress"
+  show KeyUp = "keyup"
