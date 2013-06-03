@@ -1,6 +1,6 @@
 var Time = function () {
     "use strict";
-    
+
     var Time = function () {
         this.current = new Signals.Signal(this)
         //override sampling function to return time string
@@ -11,7 +11,7 @@ var Time = function () {
 
     Time.prototype.every = function(period) {
         var initial = 0, signal = new Signals.Signal(this)
-        
+
         function push(t) {
             signal.push(t)
             setTimeout(push, period, t+period)

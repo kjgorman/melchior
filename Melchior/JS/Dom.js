@@ -62,7 +62,7 @@ var Dom = function() {
 
         if(ret) return ret
         if(elem.attributes && elem.attributes.getNamedItem(key)) {
-            return elem.attributes.getNamedItem(key).value            
+            return elem.attributes.getNamedItem(key).value
         }
         return undefined
     }
@@ -74,7 +74,7 @@ var Dom = function() {
     DomOperations.prototype.append = function(html, elem) {
         var doc = document.createElement("span")
         doc.innerHTML = html
-        elem.appendChild(doc)        
+        elem.appendChild(doc)
     }
 
     DomOperations.prototype.hack = function(str) {
@@ -85,6 +85,6 @@ var Dom = function() {
                 .appendChild(el)
         return str
     }
-    
+
     return new DomOperations()
 }()

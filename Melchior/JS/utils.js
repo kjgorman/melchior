@@ -1,4 +1,4 @@
-!function() { 
+!function() {
 
     this.id = function(arg) {
         return arg

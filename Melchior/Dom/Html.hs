@@ -21,4 +21,4 @@ instance Renderable JSString where
   render s = s
 
 instance Renderable String where
-  render = stringToJSString  
+  render = stringToJSString

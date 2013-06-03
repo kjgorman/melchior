@@ -8,6 +8,7 @@ data Event a = ElementEvt ElementEvent | MouseEvt MouseEvent | KeyboardEvt Keybo
 instance Show (Event a) where
   show (ElementEvt a) = show a
   show (MouseEvt a) = show a
+  show (KeyboardEvt a) = show a
 
 data ElementEvent = InputEvt | ChangeEvt | ResetEvt | SubmitEvt | InvalidEvt
 instance Show ElementEvent where
@@ -40,3 +41,6 @@ instance Show KeyboardEvent where
   show KeyDown = "keydown"
   show KeyPress = "keypress"
   show KeyUp = "keyup"
+
+instance Renderable KeyboardEvent where
+  render e = stringToJSString $ show e

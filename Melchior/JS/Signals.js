@@ -69,7 +69,7 @@ var Signals = function () {
         }
         return s
     }
-    
+
     function evaluate(thunk) {
         if(!thunk) return
         var curr = thunk
@@ -142,7 +142,9 @@ var Signals = function () {
             }
         }
         if(argument instanceof Array && argument.length == 2) return argument[1]
-        return argument
+        return {
+            __aN__: function () { return argument }
+        }
     }
 
     function terminate (signal, funct) {
@@ -153,7 +155,9 @@ var Signals = function () {
     }
 
     function emptySignal () {
-        return { _tag_: -1 }
+        return {
+            __aN__: function() { return {_tag_: -1 } }
+        }
     }
 
     return {

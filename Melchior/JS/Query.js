@@ -39,7 +39,7 @@ var Query = function () {
         if(queryParts[i].matches(element)) return true
         return false
     }
-    
+
     Query.createSelectorOf = function createSelectorOf(queryString) {
         var separators = /([#\.]([^ #\.]+))/g,
             parts = new QueryObject(),
@@ -55,14 +55,14 @@ var Query = function () {
                 parts.push(~match[1].indexOf("#") ? new QueryObject(0, match[2]) : new QueryObject(1, match[2]))
             } while ( (match = separators.exec(tokens[i])) !== null)
         }
-        return parts   
+        return parts
     }
-    
+
     var QueryObject = function QueryObject(type, query) {
         this.type = type
         this.query = query
         this.queries = []
-    
+
         var matchById    = function (elem) { return this.query && elem.id == this.query },
             matchByClass = function (elem) { return this.query && elem.classList.contains(this.query) },
             matchByTag   = function (elem) { return this.query && elem.tagName == this.query.toUpperCase() }

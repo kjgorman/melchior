@@ -18,7 +18,7 @@ var UHCFunction = function () {
         } else if(func instanceof Function)
             return func(value)
         else
-            return applyNode(func, value)        
+            return applyNode(func, value)
     }
 
     function apply(func, value) {
@@ -28,7 +28,7 @@ var UHCFunction = function () {
         } else if(func instanceof Function)
             return func.apply(func, value)
         else
-            return applyNode(func, value)        
+            return applyNode(func, value)
     }
 
     return {

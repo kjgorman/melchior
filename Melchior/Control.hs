@@ -9,6 +9,7 @@ module Melchior.Control
   , foldP
   , sample
   , constant
+  , dropRepeats
   , createEventedSignal
   , createEventedSignalOf
   , delegate
@@ -111,7 +112,7 @@ foreign import js "Signals.emptySignal()"
 -- * Filters
 
 dropRepeats :: Eq a => Signal a -> Signal a
-dropRepeats s = (\x -> if x == (sample s) then (emptySignal x) else x) <$> s
+dropRepeats s = (\x -> if x == (sample s) then (ensureApplicable x) else (emptySignal x)) <$> s
 
 -- * Create evented signals
 

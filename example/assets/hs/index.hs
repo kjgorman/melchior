@@ -58,6 +58,10 @@ setupNavLinks html = do
 -- | Then we bind some behaviour to the dom
   addNewTodo $ Melchior.EventSources.Mouse.click addTodo
 
+  input <- Dom $ select (byId "type" . from) html >>= \m -> return $ fromJust m
+  echo <- Dom $ select (byId "echo-char" . from) html >>= \m -> return $ fromJust m
+  put echo (dropRepeats $ keyCode $ keyDownSignal input)
+
   return $ UHC.Base.head html
 
 addNewTodo :: Signal a -> Dom ()

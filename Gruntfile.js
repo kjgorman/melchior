@@ -114,6 +114,7 @@ module.exports = function(grunt) {
                     "Melchior/Remote/Internal/Melchior_Remote_Internal_Parser.mjs",
                     "Melchior/Remote/Melchior_Remote_Json.mjs",
                     "Melchior/EventSources/Melchior_EventSources_Mouse.mjs",
+                    "Melchior/EventSources/Melchior_EventSources_Keyboard.mjs",
                     "Melchior/Melchior_Time.mjs",
                 ],
                 dest: 'dist/melchior.js'
