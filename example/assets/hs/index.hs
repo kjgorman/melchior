@@ -62,7 +62,7 @@ setupNavLinks html = do
 addNewTodo :: Signal a -> Dom ()
 addNewTodo s = terminate s (\x -> do
                                input <- select (inputs . byId "todo-in" . from) root
-                               values <- value (fromJust input) --hmmmm
+                               values <- value (fromJust input) 
                                todo <- return $ Todo $ jsStringToString values
                                ul <- (select (byId "todos" . from) root >>= \m -> return $ fromJust m)
                                Melchior.Dom.append (render todo) ul

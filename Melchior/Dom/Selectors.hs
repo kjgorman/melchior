@@ -100,13 +100,19 @@ foreign import js "Selectors.tag(%1, 'input')"
 divs :: Nodes f => Selector (f Element) (f Div)
 divs = Selector $ \z -> liftM (fmap $ \y -> Div $ unEl y) $ filterIO (\x -> divF $ unwrap x) z
 
-foreign import js "Selectors.tag(%1, 'divs')"
+foreign import js "Selectors.tag(%1, 'div')"
     divF :: JSPtr Node -> IO Bool
             
 spans :: Nodes f => Selector (f Element) (f Span)
 spans = Selector $ \z -> liftM (fmap $ \y -> Span $ unEl y) $ filterIO (\x -> spanF $ unwrap x) z
 
-foreign import js "Selectors.tag(%1, 'divs')"
+foreign import js "Selectors.tag(%1, 'span')"
     spanF :: JSPtr Node -> IO Bool
+
+canvases :: Nodes f => Selector (f Element) (f Canvas)
+canvases = Selector $ \z -> liftM (fmap $ \y -> Canvas $ unEl y) $ filterIO (\x -> canvasF $ unwrap x) z
+
+foreign import js "Selectors.tag(%1, 'canvas')"
+    canvasF :: JSPtr Node -> IO Bool             
 
 

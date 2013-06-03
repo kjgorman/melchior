@@ -8,6 +8,7 @@ module Melchior.Dom
     , Input
     , Div
     , Span
+    , Canvas  
       -- * Typeclasses
     , DomNode
       -- * Functions
@@ -42,6 +43,7 @@ newtype Document = Document {unDoc ::  JSPtr Node }
 newtype Input = Input { unIn :: JSPtr Node }
 newtype Div = Div { unDiv :: JSPtr Node }
 newtype Span = Span {unSpan :: JSPtr Node}
+newtype Canvas = Canvas {unCanvas :: JSPtr Node}
 
 foreign import js "document"
   document :: Document
