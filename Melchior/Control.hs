@@ -11,6 +11,7 @@ module Melchior.Control
   , constant
   , dropRepeats
   , dropWhen
+  , keepWhen
   , merge
   , createEventedSignal
   , createEventedSignalOf
@@ -124,6 +125,9 @@ dropRepeats s = (\x -> if x == (previous s) then (emptySignal x) else (ensureApp
 
 dropWhen :: Signal a -> (a -> Bool) -> Signal a
 dropWhen s pred = (\x -> if pred x then (emptySignal x) else (ensureApplicable x)) <$> s
+
+keepWhen :: Signal a -> (a -> Bool) -> Signal a
+keepWhen s pred = (\x -> if pred x then (ensureApplicable x) else (emptySignal x)) <$> s
 
 merge :: Signal a -> Signal a -> Signal a
 merge = primMerge
