@@ -3,16 +3,12 @@ module Example.Todo where
 import Control.Category hiding ((<<<), (>>>))
 import Data.Maybe
 import Melchior.Control
-import Melchior.Data.List
 import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Events
 import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 import Melchior.EventSources.Mouse
-import Melchior.EventSources.Keyboard
-import Melchior.Remote.Json
-import Melchior.Remote.XHR
 import Melchior.Time
 
 import Prelude hiding ((.), id, head, map)
