@@ -29,6 +29,14 @@ var Time = function () {
         return signal
     }
 
+    Time.prototype.delay = function(period, signal) {
+        var s = new Signals.Signal(signal)
+        signal.registerListener(function(value) {
+            setTimeout(function() { s.push(value) }, period)
+        })
+        return s
+    }
+
     return new Time()
 
 }()

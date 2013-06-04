@@ -3,10 +3,14 @@ module Melchior.Time (
   , every
   , minute
   , second
+  , delay
   ) where
 
 import Melchior.Control
 import Melchior.Data.String
+
+millisecond :: Int
+millisecond = 1
 
 second :: Int
 second = 1000
@@ -25,3 +29,9 @@ current = primCurrent
 
 foreign import js "Time.current"
   primCurrent :: Signal JSString
+
+delay :: Int -> Signal a -> Signal a
+delay = primDelay
+
+foreign import js "Time.delay(%1, %2)"
+  primDelay :: Int -> Signal a -> Signal a
