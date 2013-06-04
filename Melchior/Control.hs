@@ -11,6 +11,7 @@ module Melchior.Control
   , constant
   , dropRepeats
   , dropWhen
+  , merge
   , createEventedSignal
   , createEventedSignalOf
   , delegate
@@ -123,6 +124,12 @@ dropRepeats s = (\x -> if x == (previous s) then (emptySignal x) else (ensureApp
 
 dropWhen :: Signal a -> (a -> Bool) -> Signal a
 dropWhen s pred = (\x -> if pred x then (emptySignal x) else (ensureApplicable x)) <$> s
+
+merge :: Signal a -> Signal a -> Signal a
+merge = primMerge
+
+foreign import js "Signals.merge(%1, %2)"
+  primMerge :: Signal a -> Signal a -> Signal a
 
 -- * Create evented signals
 

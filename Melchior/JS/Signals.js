@@ -171,6 +171,17 @@ var Signals = function () {
         }
     }
 
+    function merge(s, t) {
+        var u = new Signal()
+        s.registerListener(function(value) {
+            u.push(value)
+        })
+        t.registerListener(function(value) {
+            u.push(value)
+        })
+        return u
+    }
+
     return {
         createEventedSignal: createEventedSignal,
         createPastDependentSignal: createPastDependentSignal,
@@ -182,6 +193,7 @@ var Signals = function () {
         createDelegate: createDelegate,
         constant: constant,
         emptySignal: emptySignal,
-        previous: previous
+        previous: previous,
+        merge: merge
     }
 }()
