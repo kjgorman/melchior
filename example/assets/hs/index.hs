@@ -48,35 +48,11 @@ setupNavLinks html = do
   anyButtonClickLabel <- Dom $ (select (byId "any-click" . from) html) >>= \m -> return $ fromJust m
   put anyButtonClickLabel anyButtonClick
 
--- | the todo app
--- | We first have the click listener on check boxes that toggles strikethrough
-  reactiveClicks <- clickDelegate "data-reactive" ".check" (MouseEvt ClickEvt)
-  strike reactiveClicks
--- | Then we have the add button
-  maybeAddTodo <- Dom $ select (byId "add-todo" . from) html
-  let addTodo = fromJust maybeAddTodo --fail if not present
--- | Then we bind some behaviour to the dom
-  addNewTodo $ Melchior.EventSources.Mouse.click addTodo
-
   input <- Dom $ select (byId "type" . from) html >>= \m -> return $ fromJust m
   echo <- Dom $ select (byId "echo-char" . from) html >>= \m -> return $ fromJust m
   put echo (dropRepeats $ keyCode $ keyDownSignal input)
 
   return $ UHC.Base.head html
-
-addNewTodo :: Signal a -> Dom ()
-addNewTodo s = terminate s (\x -> do
-                               input <- select (inputs . byId "todo-in" . from) root
-                               values <- value (fromJust input)
-                               todo <- return $ Todo $ jsStringToString values
-                               ul <- (select (byId "todos" . from) root >>= \m -> return $ fromJust m)
-                               Melchior.Dom.append (render todo) ul
-                           )
-data Todo = Todo String
-instance Renderable Todo where
-  --todo (i.e. I won't do but would be nice if i I had the time) make composition of html nicer
-  render (Todo s) = stringToJSString $ "<li><input type='checkbox' class='check' data-reactive='"++ids++"''/><span id='"++ids++"'>"++s++"</span></li>"
-                    where ids = (foldl (++) "" $ (words $ s ++ (jsStringToString $ sample Melchior.Time.current)))
 
 ----------------------------------------------------------------------------------------------------------------
 -- Some helpful data types
@@ -109,9 +85,6 @@ countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
 clickListener :: String -> Element -> Dom (Signal (JSString))
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
 
-clickDelegate :: String -> String -> Event a -> Dom (Signal (JSString))
-clickDelegate key pattern event = delegateOf (Of $ stringToJSString "jsstring") pattern event key
-
 addClassTo :: SF (IO JSString) (IO JSString)
 addClassTo s = (\x -> do
                          cls <- x
@@ -133,10 +106,6 @@ hideSiblings = applyById (\e -> UHC.Base.head <$> (\y -> map (addClass "hidden")
 
 showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent = applyById (\e -> removeClass "hidden" <$> e)
-
-strike :: Signal JSString ->  Dom ()
-strike s = terminate s (\x -> (select (byId (jsStringToString x) . from) root
-                               >>= \el -> (toggle "checked") $ fromJust el))
 
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
 append s = (\x -> x >>= \js -> Melchior.Dom.hack <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s

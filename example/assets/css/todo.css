@@ -1,0 +1,8 @@
+.checked {
+  text-decoration: line-through;
+  color: grey;
+}
+
+input[type="text"] {
+  margin-bottom:0px;
+}

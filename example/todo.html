@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+    <link rel="stylesheet" href="/assets/css/todo.css" />
+    <style>
+      div.container {
+        padding-top:150px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class='container'>
+      <div class="todo">
+        <h3>Things to do today</h3>
+        <ul style="list-style: none" id='todos'>
+          <li>
+            <input type="checkbox" class="check" data-reactive="one"/>
+            <span id="one">Go to work</span>
+          </li>
+          <li>
+            <input type="checkbox" class="check" data-reactive="two"/>
+            <span id="two">Go to school</span>
+          </li>
+          <li>
+            <input type="checkbox" class="check" data-reactive="three"/>
+            <span id="three">Go to honours meeting</span>
+          </li>
+        </ul>
+        <div>
+          <input placeholder="What's next?" type='text' id='todo-in' /><a id='add-todo' class='btn btn-small btn-info'>Add</a>
+        </div>
+      </div>
+  </body>
+
+  <footer
+     <script type="text/javascript" src="/assets/jquery-1.9.1.js"></script>
+     <script type="text/javascript" src="/assets/melchior.js"></script>
+     <script type="text/javascript" src="/assets/hs/todo.js"></script>
+  </footer>
+</html>

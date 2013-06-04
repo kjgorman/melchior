@@ -1,4 +1,4 @@
-var express      = require('express'), 
+var express      = require('express'),
     app          = express(),
     http         = require('http'),
     server       = http.createServer(app),
@@ -8,6 +8,10 @@ app.use('/assets', express.static(__dirname+"/assets"))
 
 app.get('/', function(req, res) {
     res.sendfile('index.html')
+})
+
+app.get('/todo', function(req, res) {
+    res.sendfile('todo.html')
 })
 
 app.get('/data', function(req, res) {
@@ -21,7 +25,7 @@ app.get("/the_time", function(req, res) {
 
 socket.on('connection', function(socket) {
     console.log("connection!")
-    
+
     function sendHeartbeat() {
         socket.emit('heartbeat', {heart:"heartbeat"})
         setTimeout(sendHeartbeat, 10000)
