@@ -82,7 +82,7 @@ instance Renderable Heartbeat where
 ----------------------------------------------------------------------------------------------------------------
 -- Some helpful functions
 countSeconds :: Signal Int
-countSeconds = (foldP (\t acc -> acc + 1) 0 (every second))
+countSeconds = (foldp (\t acc -> acc + 1) 0 (every second))
 
 clickListener :: String -> Element -> Dom (Signal (JSString))
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s

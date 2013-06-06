@@ -6,7 +6,7 @@ module Melchior.Control
     -- * Functions
   , runDom
   , (~>)
-  , foldP
+  , foldp
   , sample
   , constant
   , dropRepeats
@@ -88,8 +88,8 @@ foreign import js "%1.pipe(%2)"
 
 -- * Signal actions
 
-foldP :: (a -> b -> b) -> b -> Signal a -> Signal b
-foldP fn start signal = createPastDependentSignal fn start signal
+foldp :: (a -> b -> b) -> b -> Signal a -> Signal b
+foldp fn start signal = createPastDependentSignal fn start signal
 
 foreign import js "Signals.createPastDependentSignal(%1, %2, %3)"
   createPastDependentSignal :: (a -> b -> b) -> b -> Signal a -> Signal b

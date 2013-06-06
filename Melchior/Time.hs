@@ -4,8 +4,10 @@ module Melchior.Time (
   , minute
   , second
   , delay
+  , debounce
   ) where
 
+import Control.Applicative
 import Melchior.Control
 import Melchior.Data.String
 
@@ -35,3 +37,6 @@ delay = primDelay
 
 foreign import js "Time.delay(%1, %2)"
   primDelay :: Int -> Signal a -> Signal a
+
+debounce :: Int -> Signal a -> Signal a
+debounce n s = delay n $ (\x -> UHC.Base.head x) <$> (foldp (\x acc -> x:acc) [] s)
