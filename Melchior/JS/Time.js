@@ -9,6 +9,14 @@ var Time = function () {
         }
     }
 
+    Time.prototype.currentI = function () {
+        var s = new Signal(this)
+        s.currently = function () {
+            return (new Date()).getTime()
+        }
+        return s
+    }
+
     Time.prototype.every = function(period) {
         var initial = 0, signal = new Signals.Signal(this)
 
