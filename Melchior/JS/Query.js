@@ -18,9 +18,9 @@ var Query = function () {
         return this
     }
 
-    QueryMediator.prototype.mediate = function (eventName, signal, key) {
-        var thus = this
-        document.addEventListener(eventName, function(event) {
+    QueryMediator.prototype.mediate = function (eventName, signal, key, element) {
+        var thus = this, elem = element || document
+        elem.addEventListener(eventName, function(event) {
             Events.applyNativeMapping(event)
             var element = event.srcElement, matches = false
             //todo -- make queries compose

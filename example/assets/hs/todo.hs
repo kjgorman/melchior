@@ -20,7 +20,7 @@ setupTodo :: [Element] -> Dom Element
 setupTodo html = do
    -- | the todo app
   --  | We first have the click listener on check boxes that toggles strikethrough
-  reactiveClicks <- clickDelegate "data-reactive" ".check" (MouseEvt ClickEvt)
+  reactiveClicks <- clickDelegate "data-reactive" ".check" (MouseEvt ClickEvt) 
   strike reactiveClicks
   -- | Then we have the add button
   maybeAddTodo <- Dom $ select (byId "add-todo" . from) html
@@ -40,7 +40,6 @@ addNewTodo s = terminate s (\x -> do
 
 data Todo = Todo String
 instance Renderable Todo where
-  --todo (i.e. I won't do but would be nice if i I had the time) make composition of html nicer
   render (Todo s) = stringToJSString $ "<li><input type='checkbox' class='check' data-reactive='"++ids++"''/><span id='"++ids++"'>"++s++"</span></li>"
                     where ids = (foldl (++) "" $ (words $ s ++ (jsStringToString $ sample Melchior.Time.current)))
 
@@ -49,4 +48,4 @@ strike s = terminate s (\x -> (select (byId (jsStringToString x) . from) root
                                >>= \el -> (toggle "checked") $ fromJust el))
 
 clickDelegate :: String -> String -> Event a -> Dom (Signal (JSString))
-clickDelegate key pattern event = delegateOf (Of $ stringToJSString "jsstring") pattern event key
+clickDelegate key pattern event = delegateOf (Of $ stringToJSString "jsstring") pattern event key (toElement document)

@@ -137,10 +137,11 @@ var Signals = function () {
         else return argument
     }
 
-    function createDelegate (event, query, key) {
+    function createDelegate (event, query, key, element) {
+        console.log(event, query, key, element)
         var selector = Query.createSelectorOf(query), signal = new Signal(query)
         Query.hub.addPatternForEvent(selector, event)
-            .mediate(event, signal, key)
+            .mediate(event, signal, key, element)
         return signal
     }
 

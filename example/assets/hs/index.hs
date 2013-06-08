@@ -46,7 +46,7 @@ setupNavLinks html = do
   heartbeat <- Dom $ (select (byId "heartbeat" . from) html) >>= \m -> return $ fromJust m
   put heartbeat (server (sample $ constant "heartbeat") :: Signal Heartbeat)
 
-  anyButtonClick <- delegate (Of ClickEvt) "button" (MouseEvt ClickEvt)
+  anyButtonClick <- delegate (Of ClickEvt) "button" (MouseEvt ClickEvt) (toElement document)
   anyButtonClickLabel <- Dom $ (select (byId "any-click" . from) html) >>= \m -> return $ fromJust m
   put anyButtonClickLabel anyButtonClick
 

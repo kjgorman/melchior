@@ -8,7 +8,7 @@ module Melchior.Dom
     , Input
     , Div
     , Span
-    , Canvas  
+    , Canvas
       -- * Typeclasses
     , DomNode
       -- * Functions
@@ -115,7 +115,7 @@ foreign import js "Dom.value(%1)"
   primGetValue :: Input -> IO JSString
 
 append :: Html -> Element -> IO ()
-append = primAppend 
+append = primAppend
 
 foreign import js "Dom.append(%1, %2)"
   primAppend :: Html -> Element -> IO ()

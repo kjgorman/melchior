@@ -5,6 +5,7 @@ module Melchior.Time (
   , second
   , delay
   , debounce
+  , throttle
   ) where
 
 import Control.Applicative
@@ -45,4 +46,7 @@ foreign import js "Time.delay(%1, %2)"
   primDelay :: Int -> Signal a -> Signal a
 
 debounce :: Int -> Signal a -> Signal a
-debounce n s = delay n ((\x -> UHC.Base.head x) <$> (foldp (\x acc -> x:acc) [] s))
+debounce n s = undefined
+
+throttle :: Int -> Signal a -> Signal a
+throttle n s = (\_ -> sample s) <$> every n
