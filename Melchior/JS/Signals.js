@@ -65,7 +65,7 @@ var Signals = function () {
     Signal.prototype.source = function () { return this._source instanceof Signal ? this._source.source() : this._source }
 
     Signal.prototype.sample = function () {
-        console.log("sampling ", this.currently())
+        if(window.debug) console.log("sampling ", this.currently())
         var sample = null
         if((sample = this.currently()) === undefined) {
             return emptySignal()
