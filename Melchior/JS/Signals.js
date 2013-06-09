@@ -65,11 +65,14 @@ var Signals = function () {
     Signal.prototype.source = function () { return this._source instanceof Signal ? this._source.source() : this._source }
 
     Signal.prototype.sample = function () {
+        console.log("sampling ", this.currently())
         var sample = null
-        if((sample = this.currently())) {
-            return { __aN__: function () { return sample }}
-        } else {
+        if((sample = this.currently()) === undefined) {
             return emptySignal()
+        } else if(sample.hasOwnProperty("_tag_")) {
+            return sample
+        } else {
+            return { __aN__: function () { return sample }}
         }
     }
 
