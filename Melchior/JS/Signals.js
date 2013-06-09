@@ -104,7 +104,6 @@ var Signals = function () {
                 curr = _e_(curr)
             } catch (e) {
                 throw e
-                return curr
             }
             if(curr instanceof _A_undersat_) { //what if its not io?
                 UHCFunction.call(curr, [])
