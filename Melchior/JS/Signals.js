@@ -65,7 +65,12 @@ var Signals = function () {
     Signal.prototype.source = function () { return this._source instanceof Signal ? this._source.source() : this._source }
 
     Signal.prototype.sample = function () {
-        return this.currently()
+        var sample = null
+        if((sample = this.currently())) {
+            return { __aN__: function () { return sample }}
+        } else {
+            return emptySignal()
+        }
     }
 
     function previous (signal) {
