@@ -33,7 +33,7 @@ setupNavLinks html = do
   sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.EventSources.Mouse.click <$> button)
 
   positionLabel <- Dom $ (select (byId "where-at" . from) html) >>= \m -> return $ fromJust m
-  sequence $ (put positionLabel) <$> (Melchior.EventSources.Mouse.position <$> container)
+  sequence $ (put positionLabel) <$> (throttle 500 <$> position <$> container)
 
   counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ fromJust m
   evenCount <- return $ keepWhen countSeconds (\x -> even x)
