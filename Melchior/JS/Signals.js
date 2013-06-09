@@ -67,7 +67,7 @@ var Signals = function () {
         var sample = null
         if((sample = this.currently()) === undefined) {
             return emptySignal()
-        } else if(sample.hasOwnProperty("_tag_")) {
+        } else if(sample.hasOwnProperty("_tag_") || typeof sample === "string") {
             return sample
         } else {
             return { __aN__: function () { return sample }}

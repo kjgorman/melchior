@@ -20,7 +20,7 @@ setupTodo :: [Element] -> Dom Element
 setupTodo html = do
    -- | the todo app
   --  | We first have the click listener on check boxes that toggles strikethrough
-  reactiveClicks <- clickDelegate "data-reactive" ".check" (MouseEvt ClickEvt) 
+  reactiveClicks <- clickDelegate "data-reactive" ".check" (MouseEvt ClickEvt)
   strike reactiveClicks
   -- | Then we have the add button
   maybeAddTodo <- Dom $ select (byId "add-todo" . from) html
