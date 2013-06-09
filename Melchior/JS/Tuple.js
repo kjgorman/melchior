@@ -3,13 +3,9 @@ var Tuples = function () {
 
     var Tuple = function () { }
 
-    //TODO --- implement ampersand properly
-    // inpSignal --> signal a
-    // s -> \signal a -> \signal b
-    // t -> \signal a -> \signal c
     Tuple.prototype.pair = function (s, t, inpSignal) {
         if(window.debug) console.log("tuple: ", s, t, inpSignal)
-        var newSignal = new Signals.Signal(inpSignal),
+        var newSignal = new Signals.Signal(),
             withS = _e_(UHCFunction.call(s, inpSignal)),
             withT = _e_(UHCFunction.call(t, inpSignal))
         if(window.debug) console.log("&&&: ", withS, withT)

@@ -1,12 +1,12 @@
 var Signals = function () {
     "use strict";
 
-    var Signal = function (source) {
-        if(window.debug) console.log("initialising signal with source: ", source)
+    var Signal = function () {
+
         this.registeredListeners = []
-        this._source = source
         this.accumulator = null
         this.previous = null
+
         this.__isSignal = true
     }
 
@@ -39,7 +39,7 @@ var Signals = function () {
     Signal.prototype.pipe = function(transform, base) {
         if(window.debug) console.log("constructing with transform", transform)
 
-        var newSignal = new Signal(this), shouldAccumulate = base !== undefined
+        var newSignal = new Signal(), shouldAccumulate = base !== undefined
         newSignal.accumulator = base
 
         this.registeredListeners.push(function (value, event) {
@@ -61,8 +61,6 @@ var Signals = function () {
     }
 
     Signal.prototype.__aN__ = function () { return this }
-
-    Signal.prototype.source = function () { return this._source instanceof Signal ? this._source.source() : this._source }
 
     Signal.prototype.sample = function () {
         if(window.debug) console.log("sampling ", this.currently())
@@ -122,7 +120,7 @@ var Signals = function () {
         if(elem && elem.length) elem = elem[0]
         if(!elem || !elem.addEventListener || !event || typeof event !== "string")
             return undefined
-        var s = new Signal(elem)
+        var s = new Signal()
         elem.addEventListener(event, function (e) {
             Events.applyNativeMapping(e)
             if(window.debug) console.log("detected", event, "sending to", s)
@@ -146,7 +144,7 @@ var Signals = function () {
 
     function createDelegate (event, query, key, element) {
         console.log(event, query, key, element)
-        var selector = Query.createSelectorOf(query), signal = new Signal(query)
+        var selector = Query.createSelectorOf(query), signal = new Signal()
         Query.hub.addPatternForEvent(selector, event)
             .mediate(event, signal, key, element)
         return signal

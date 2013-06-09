@@ -2,7 +2,7 @@ var Time = function () {
     "use strict";
 
     var Time = function () {
-        this.current = new Signals.Signal(this)
+        this.current = new Signals.Signal()
         //override sampling function to return time string
         this.current.currently = function () {
             return (new Date()).toISOString()
@@ -10,7 +10,7 @@ var Time = function () {
     }
 
     Time.prototype.currentI = function () {
-        var s = new Signal(this)
+        var s = new Signal()
         s.currently = function () {
             return (new Date()).getTime()
         }
@@ -18,7 +18,7 @@ var Time = function () {
     }
 
     Time.prototype.every = function(period) {
-        var initial = 0, signal = new Signals.Signal(this)
+        var initial = 0, signal = new Signals.Signal()
 
         function push(t) {
             signal.push(t)
@@ -29,7 +29,7 @@ var Time = function () {
     }
 
     Time.prototype.after = function(timeout) {
-        var signal = new Signals.Signal(this)
+        var signal = new Signals.Signal()
         function push(t) {
             signal.push(t)
         }
@@ -38,7 +38,7 @@ var Time = function () {
     }
 
     Time.prototype.delay = function(period, signal) {
-        var s = new Signals.Signal(signal)
+        var s = new Signals.Signal()
         signal.registerListener(function(value) {
             setTimeout(function() { s.push(value) }, period)
         })

@@ -69,7 +69,7 @@ describe("an evented signal with invalid inputs should return undefined", functi
 describe("piping a signal should produce a new signal that will react to the old one", function () {
     var element = document.createElement("div")
     , originalSignal = Signals.createEventedSignal(element, "click");
-    
+
     it("should produce a new signal", function () {
         expect(originalSignal.pipe({args:[], __aN__:function() {}}).__isSignal).toBe(true);
     });
@@ -83,20 +83,6 @@ describe("piping a signal should produce a new signal that will react to the old
         element.dispatchEvent(event);
         expect(global).toBe(true);
     });
-});
-
-describe("binding and piping signals should continue to track their source", function () {
-    var element = document.createElement("div")
-      , signal = Signals.createEventedSignal(element, "click");
-
-    it("should have a reference to it's source", function () {
-        expect(signal.source()).toBe(element)
-    })
-
-    var pipedSignal = signal.pipe()
-    it("should persist reference to piped signals", function () {
-        expect(pipedSignal.source()).toBe(element)
-    })
 });
 
 describe("signals require applicable node elements pushed into them", function () {
