@@ -80,16 +80,14 @@ var Signals = function () {
 
     function constant(value) {
         var s = new Signal()
-        s.currently = function () {
-            return value
-        }
+        s.currently = function () { return value }
         return s
     }
 
     function evaluate(thunk) {
         if(!thunk) return
         var curr = thunk
-        do {                  //hmmmmmm
+        do {
             if(window.debug) console.log("pre curr", window.curr = curr)
             if(curr._1) try {
                 Lists.fromUHCList(curr).map(evaluate)

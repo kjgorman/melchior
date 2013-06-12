@@ -2,7 +2,7 @@ var Sockets = {}
 
 Sockets.Socket = function Socket (signal, namespace) {
     "use strict";
-    //TODO -- revert to long poll on false?
+    
     if(!('WebSocket' in window)) throw new Error("Websockets not supported in this browser")
 
     var thus = this
