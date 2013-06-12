@@ -2,7 +2,7 @@ var Sockets = {}
 
 Sockets.Socket = function Socket (signal, namespace) {
     "use strict";
-    
+
     if(!('WebSocket' in window)) throw new Error("Websockets not supported in this browser")
 
     var thus = this
@@ -13,7 +13,6 @@ Sockets.Socket = function Socket (signal, namespace) {
     this.send = this.connection.emit ? function (value) {
         thus.connection.emit(namespace || 'data', value)
     } : function (value) {
-        //stringify?
         thus.connection.send(value)
     }
 

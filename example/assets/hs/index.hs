@@ -1,6 +1,6 @@
 import Control.Category hiding ((>>>), (<<<))
 import Control.Applicative
-import Data.Maybe
+
 --all Melchior exports
 import Melchior.Control
 import Melchior.Data.List
@@ -32,26 +32,26 @@ setupNavLinks html = do
   sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks
   sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.EventSources.Mouse.click <$> button)
 
-  positionLabel <- Dom $ (select (byId "where-at" . from) html) >>= \m -> return $ fromJust m
+  positionLabel <- Dom $ (select (byId "where-at" . from) html) >>= \m -> return $ ensures m
   sequence $ (put positionLabel) <$> (throttle 500 <$> position <$> container)
 
-  counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ fromJust m
+  counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ ensures m
   evenCount <- return $ keepWhen countSeconds (\x -> even x)
   oddCount <- return $ delay (2 * second) $ keepWhen countSeconds (\x -> odd x)
   put counter (merge evenCount oddCount)
 
-  clock <- Dom $ (select (byId "clock" . from) html) >>= \m -> return $ fromJust m
+  clock <- Dom $ (select (byId "clock" . from) html) >>= \m -> return $ ensures m
   put clock (request GET "/the_time" $ every second :: Signal Time)
 
-  heartbeat <- Dom $ (select (byId "heartbeat" . from) html) >>= \m -> return $ fromJust m
+  heartbeat <- Dom $ (select (byId "heartbeat" . from) html) >>= \m -> return $ ensures m
   put heartbeat (server (sample $ constant "heartbeat") :: Signal Heartbeat)
 
   anyButtonClick <- delegate (Of ClickEvt) "button" (MouseEvt ClickEvt) (toElement document)
-  anyButtonClickLabel <- Dom $ (select (byId "any-click" . from) html) >>= \m -> return $ fromJust m
+  anyButtonClickLabel <- Dom $ (select (byId "any-click" . from) html) >>= \m -> return $ ensures m
   put anyButtonClickLabel anyButtonClick
 
-  input <- Dom $ select (byId "type" . from) html >>= \m -> return $ fromJust m
-  echo <- Dom $ select (byId "echo-char" . from) html >>= \m -> return $ fromJust m
+  input <- Dom $ select (byId "type" . from) html >>= \m -> return $ ensures m
+  echo <- Dom $ select (byId "echo-char" . from) html >>= \m -> return $ ensures m
   put echo (dropRepeats $ keyCode $ keyDownSignal input)
 
   return $ UHC.Base.head html

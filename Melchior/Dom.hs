@@ -9,6 +9,7 @@ module Melchior.Dom
     , Div
     , Span
     , Canvas
+    , ensures
       -- * Typeclasses
     , DomNode
       -- * Functions
@@ -45,6 +46,11 @@ newtype Div = Div { unDiv :: JSPtr Node }
 newtype Span = Span {unSpan :: JSPtr Node}
 newtype Canvas = Canvas {unCanvas :: JSPtr Node}
 
+ensures :: DomNode a => Maybe a -> a
+ensures e = case e of
+  Nothing -> error "Assertion Error -- Missing DOM Node"
+  Just x  -> x
+
 foreign import js "document"
   document :: Document
 
@@ -59,6 +65,9 @@ class DomNode a where
 instance DomNode Element where
 instance DomNode Input where
 instance DomNode Document where
+instance DomNode Div where
+instance DomNode Span where
+instance DomNode Canvas where
 
 foreign import js "id(%2)"
   toElement :: (DomNode a) => a -> Element

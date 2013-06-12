@@ -1,7 +1,6 @@
 module Example.Todo where
 
 import Control.Category hiding ((<<<), (>>>))
-import Data.Maybe
 import Melchior.Control
 import Melchior.Data.String
 import Melchior.Dom
@@ -24,7 +23,7 @@ setupTodo html = do
   strike reactiveClicks
   -- | Then we have the add button
   maybeAddTodo <- Dom $ select (byId "add-todo" . from) html
-  let addTodo = fromJust maybeAddTodo --fail if not present
+  let addTodo = ensures maybeAddTodo --fail if not present
   -- | Then we bind some behaviour to the dom
   addNewTodo $ Melchior.EventSources.Mouse.click addTodo
   return $ UHC.Base.head html
@@ -32,9 +31,9 @@ setupTodo html = do
 addNewTodo :: Signal a -> Dom ()
 addNewTodo s = terminate s (\x -> do
                                input <- select (inputs . byId "todo-in" . from) root
-                               values <- value (fromJust input)
+                               values <- value (ensures input)
                                todo <- return $ Todo $ jsStringToString values
-                               ul <- (select (byId "todos" . from) root >>= \m -> return $ fromJust m)
+                               ul <- (select (byId "todos" . from) root >>= \m -> return $ ensures m)
                                Melchior.Dom.append (render todo) ul
                            )
 
@@ -45,7 +44,7 @@ instance Renderable Todo where
 
 strike :: Signal JSString ->  Dom ()
 strike s = terminate s (\x -> (select (byId (jsStringToString x) . from) root
-                               >>= \el -> (toggle "checked") $ fromJust el))
+                               >>= \el -> (toggle "checked") $ ensures el))
 
 clickDelegate :: String -> String -> Event a -> Dom (Signal (JSString))
 clickDelegate key pattern event = delegateOf (Of $ stringToJSString "jsstring") pattern event key (toElement document)
