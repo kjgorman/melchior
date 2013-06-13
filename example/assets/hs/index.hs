@@ -30,10 +30,10 @@ setupNavLinks html = do
   clicks <- sequence $ clickListener "innerHTML" <$> links
 
   sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks
-  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> (Melchior.EventSources.Mouse.click <$> button)
+  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> Melchior.EventSources.Mouse.click <$> button
 
-  positionLabel <- Dom $ (select (byId "where-at" . from) html) >>= \m -> return $ ensures m
-  sequence $ (put positionLabel) <$> (throttle 500 <$> position <$> container)
+  positionLabel <- Dom $ select (byId "where-at" . from) html >>= \m -> return $ ensures m
+  sequence $ put positionLabel <$> throttle 500 <$> position <$> container
 
   counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ ensures m
   evenCount <- return $ keepWhen countSeconds (\x -> even x)
@@ -91,7 +91,7 @@ addClassTo :: SF (IO JSString) (IO JSString)
 addClassTo s = (\x -> do
                          cls <- x
                          elems <- select ((byClass $ jsStringToString cls) . from) root
-                         return $! map (\y -> (addClass "active") $ parentOf y) elems
+                         return $! map (\y -> addClass "active" $ parentOf y) elems
                          return cls) <$> s
 
 rmClassFromParentSiblings :: Signal (JSString) -> Signal (IO JSString)

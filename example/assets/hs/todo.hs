@@ -23,7 +23,7 @@ setupTodo html = do
   strike reactiveClicks
   -- | Then we have the add button
   maybeAddTodo <- Dom $ select (byId "add-todo" . from) html
-  let addTodo = ensures maybeAddTodo --fail if not present
+  let addTodo = ensures maybeAddTodo --fails if not present
   -- | Then we bind some behaviour to the dom
   addNewTodo $ Melchior.EventSources.Mouse.click addTodo
   return $ UHC.Base.head html
@@ -31,7 +31,7 @@ setupTodo html = do
 addNewTodo :: Signal a -> Dom ()
 addNewTodo s = terminate s (\x -> do
                                input <- select (inputs . byId "todo-in" . from) root
-                               values <- value (ensures input)
+                               values <- value $ ensures input
                                todo <- return $ Todo $ jsStringToString values
                                ul <- (select (byId "todos" . from) root >>= \m -> return $ ensures m)
                                Melchior.Dom.append (render todo) ul
