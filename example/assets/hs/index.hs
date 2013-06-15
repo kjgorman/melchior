@@ -33,7 +33,7 @@ setupNavLinks html = do
   sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> Melchior.EventSources.Mouse.click <$> button
 
   positionLabel <- Dom $ select (byId "where-at" . from) html >>= \m -> return $ ensures m
-  sequence $ put positionLabel <$> throttle 500 <$> position <$> container
+  sequence $ put positionLabel <$> position <$> container
 
   counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ ensures m
   evenCount <- return $ keepWhen countSeconds (\x -> even x)
@@ -82,7 +82,7 @@ instance Renderable Heartbeat where
 ----------------------------------------------------------------------------------------------------------------
 -- Some helpful functions
 countSeconds :: Signal Int
-countSeconds = (foldp (\t acc -> acc + 1) 0 (every second))
+countSeconds = foldp (\t acc -> acc + 1) 0 (every second)
 
 clickListener :: String -> Element -> Dom (Signal (JSString))
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s

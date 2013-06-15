@@ -14,6 +14,10 @@ app.get('/todo', function(req, res) {
     res.sendfile('todo.html')
 })
 
+app.get('/sorting', function(req, res) {
+    res.sendfile('sorting.html')
+})
+
 app.get('/data', function(req, res) {
     var d = {data: "hello from node"}
     res.send(200, d)

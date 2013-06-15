@@ -46,7 +46,11 @@ foreign import js "Time.delay(%1, %2)"
   primDelay :: Int -> Signal a -> Signal a
 
 debounce :: Int -> Signal a -> Signal a
-debounce n s = undefined
+debounce n s = (\(x, y) -> y) <$> debounce' n s
+
+debounce' n s = foldp (\t (thn, u) -> if ((sample currentI) - thn) > n then (sample currentI, t) else emptySignal (thn, u))
+                (sample currentI, sample s)
+                s
 
 throttle :: Int -> Signal a -> Signal a
 throttle n s = (\_ -> sample s) <$> every n

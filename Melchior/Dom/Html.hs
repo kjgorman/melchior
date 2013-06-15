@@ -17,8 +17,14 @@ instance Renderable (Int, Int) where
 instance Renderable Int where
   render i = stringToJSString $ "<span>"++(show i)++"</span>"
 
+instance Renderable Integer where
+  render i = stringToJSString $ "<span>"++(show i)++"</span>"
+
 instance Renderable JSString where
   render s = s
 
 instance Renderable String where
   render = stringToJSString
+
+instance (Renderable a, Show a) => Renderable [a] where
+  render xs = stringToJSString $ foldl (\x y -> x++","++y) "" $ map show xs

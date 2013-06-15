@@ -23,6 +23,7 @@ module Melchior.Control
   , pipe
   , ensureApplicable
   , terminate
+  , emptySignal
   ) where
 
 import Language.UHC.JScript.Primitives
