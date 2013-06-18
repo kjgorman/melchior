@@ -23,28 +23,24 @@ toJson s = (\x -> parseJson (jsStringToString x)) <$> s
 empty :: JsonObject
 empty = JsonObject []
 
-getKey :: String -> JsonObject -> Maybe [(String, Json)]
-getKey s (JsonObject x) = case dropWhile (\y -> fst y /= s) x of
-                               [] -> Nothing
-                               k  -> Just k
+getKey :: String -> JsonObject -> Maybe Json
+getKey s (JsonObject x) = case filter (\x -> matchJson s x) x of
+  [] -> Nothing
+  x  -> Just $ head x
 
-getJsonObj :: String -> JsonObject -> Maybe JsonObject
-getJsonObj s j@(JsonObject x) = head <$> (getKey s j) >>= (\x -> case snd x of
-                                                             (JsonObj s) -> Just s
-                                                             _ -> Nothing)
+matchJson :: String -> Json -> Bool
+matchJson s (JsonPair j) = matchPair s j
+matchJson _ _ = False
+
+matchPair :: String -> (Json, Json) -> Bool
+matchPair s (JsonString t, _) = s == t
+matchPair _ _ = False
 
 getJsonString :: String -> JsonObject -> Maybe String
-getJsonString s j@(JsonObject x) = head <$> (getKey s j) >>= (\x -> case snd x of
-                                                             (JsonString s) -> Just s
-                                                             _ -> Nothing)
+getJsonString s j@(JsonObject x) = case getKey s j of
+  Nothing -> Nothing
+  (Just j) -> stringFrom j
 
-getJsonBool :: String -> JsonObject -> Maybe Bool
-getJsonBool s j@(JsonObject x) = head <$> (getKey s j) >>= (\x -> case snd x of
-                                                             (JsonBool s) -> Just s
-                                                             _ -> Nothing)
-
-getJsonArray :: String -> JsonObject -> Maybe [Json]
-getJsonArray s j@(JsonObject x) = head <$> (getKey s j) >>= (\x -> case snd x of
-                                                             (JsonArray s) -> Just s
-                                                             _ -> Nothing)
-
+stringFrom :: Json -> Maybe String
+stringFrom (JsonPair (x, JsonString y)) = Just y
+stringFrom _ = Nothing

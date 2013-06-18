@@ -1,108 +1,133 @@
 module Melchior.Remote.Internal.Parser (
-    -- parser
-    parseJson
-    -- * Types
-  , Json
+    Json
   , JsonString
-  , JsonBool
+  , JsBool
+  , JsNull
   , JsonArray
   , JsonObj
+  , JsonNumber
+  , JsonPair
   , JsonObject
+  , parseJson
   ) where
 
-import Control.Applicative
+import Control.Monad
+import Data.Char
 
-data Json = JsonString String | JsonBool Bool | JsNull | JsonArray [Json] | JsonObj JsonObject
+data Json = JsonString String | JsBool String | JsNull | JsonArray [Json] | JsonObj JsonObject | JsonNumber String
+          | JsonPair (Json, Json)
             deriving (Show)
 
-data JsonObject = JsonObject [(String, Json)]
+data JsonObject = JsonObject [Json]
                   deriving (Show)
 
---------------------------------------------------------------------------------
--- Utility methods
-sequenceTuple :: (Maybe a, Maybe b) -> Maybe (a,b)
-sequenceTuple (Nothing, _) = Nothing
-sequenceTuple (_,Nothing)  = Nothing
-sequenceTuple (Just x, Just y) = Just (x, y)
+{-
+backus nauer form of json(ish)
+JsonObject ::= { stmt }
+stmt       ::= pair delim
+delim      ::= , stmt | ε
+pair       ::= key : value
+key        ::= String
+value      ::= String | Bool | Number | List | JsonObject
+List       ::= [ stmt* ]
+String     ::= "[a-zA-Z0-9]"
+Bool       ::= False | True
+Number     ::= -?[0-9]+
+-}
 
-linesWhen     :: (Char -> Bool) -> String -> [String]
-linesWhen p s =  case dropWhile p s of
-                      "" -> []
-                      s' -> w : linesWhen p s''
-                            where (w, s'') = break p s'
-merge :: [String] -> [String]
-merge [] = []
-merge (x:[]) = [x]
-merge (x:xs) | not $ elem ':' (head xs) = (x++',':(head xs)):merge (tail xs)
-             | otherwise = x:merge xs
+number = do { m <- many1 digit; n <- return $ JsonNumber m; return n}
+bool = do { m <- mplus (string "False") (string "True"); n <- return $ JsBool m; return n }
+str = do { symb "\""; s <- notSpaceAlpha; symb "\""; n <- return $ JsonString s; return n }
 
-skip :: [Char] -> String -> String
-skip c = dropWhile (\x -> elem x c)
+delim = do mplus (do {symb ""; return [JsNull]}) (do {space; symb ","; space; s <- stmt; return s })
 
-whitespace = [' ', '\n', '\t', '\r']
+stmt = do { p <- pair; d <- delim; return (p:d) }
+list = do { symb "["; m <- many stmt; symb "]"; return $ JsonArray $ concat m}
+key = str
+value = str +++ bool +++ number +++ list +++ jsonObj
+pair = do { k <- key; space; symb ":"; space; v <- value; return $ JsonPair (k, v) }
+jsonObj = do { symb "{" ; s <- stmt; symb "}"; return $ JsonObj $ JsonObject s }
 
-match :: Char  -> String -> Maybe String
-match c []     =  Nothing
-match c (s:ss) =  if c == s then Just ss else Nothing
+leng :: Json -> Int
+leng (JsonObj (JsonObject j)) = length j
 
-
---------------------------------------------------------------------------------
--- Parse methods proper
 parseJson :: String -> Maybe JsonObject
-parseJson = parseObject . match '{' . skip whitespace
+parseJson s = case parseJson' s of
+  Nothing -> Nothing
+  Just (JsonObj j) -> Just j
+  Just _ -> Nothing
 
-parseObject :: Maybe String -> Maybe JsonObject
-parseObject Nothing  = Nothing
-parseObject (Just s) = parsePairs $ takeWhile (\x -> x /= '}') s
+parseJson' :: String -> Maybe Json
+parseJson' s = maybeParse $ parse jsonObj s
+              where
+                maybeParse [] = Nothing
+                maybeParse x  = Just $ parse' x
+                parse' x = head $ qsort (leng) $ map (\x -> fst x) x
 
-parsePairs :: String -> Maybe JsonObject
-parsePairs [] = Nothing
-parsePairs s = JsonObject <$> (sequence $ map parseKeyValue $ merge $ linesWhen (== ',')  s)
+qsort :: (a -> Int) -> [a] -> [a]
+qsort _  [] =[]
+qsort c (p:rest) = (qsort c lesser) ++ [p] ++ (qsort c greater)
+                 where
+                   lesser = filter (\x -> (c x) < (c p)) rest
+                   greater = filter (\x -> (c x) >= (c p)) rest
 
-parseKeyValue :: String -> Maybe (String, Json)
-parseKeyValue [] = Nothing
-parseKeyValue s = sequenceTuple $ (parseKey key, parseValue value)
-		  where
-		  key   = takeWhile (\x -> x /= ':') (skip whitespace s)
-		  value = drop 1 $ dropWhile (\x -> x /= ':') s
-    
-parseKey :: String -> Maybe String
-parseKey [] = Nothing
-parseKey s = Just s --hmmmm
+------------------------------------------------------------------------------------------------------------------------
+-- The actual parsing stuff is here
+------------------------------------------------------------------------------------------------------------------------
 
-parseValue :: String -> Maybe Json
-parseValue s = parseValue' (head t) (tail t)
-	     where t = case skip whitespace s of
-                            [] -> " "
-                            s  -> s
+newtype Parser a = Parser (String -> [(a, String)])
 
-parseValue' :: Char -> String -> Maybe Json
-parseValue' '[' s   = parseList   $ takeWhile (\x -> x /= ']') s
-parseValue' '"' s   = parseString $ takeWhile (\x -> x /= '"') s
-parseValue' '{' s   = parseObject' s
-parseValue' c@'f' s = parseFalse  $ c: takeWhile (\x -> not $ elem x whitespace) s
-parseValue' c@'t' s = parseTrue   $ c: takeWhile (\x -> not $ elem x whitespace) s
-parseValue' c@'n' s = parseNull   $ c: takeWhile (\x -> not $ elem x whitespace) s
-parseValue' _     _ = Nothing
+parse :: Parser a -> (String -> [(a, String)])
+parse (Parser p) = p
 
-parseList :: String -> Maybe Json
-parseList s = case sequence $ map (parseValue . skip whitespace) $ linesWhen (== ',') s of
-                   Nothing -> Nothing
-                   Just arr -> Just (JsonArray arr)
+instance Monad Parser where
+  return a = Parser (\cs -> [(a, cs)])
+  p >>= f  = Parser (\cs -> concat [parse (f a) cs' | (a, cs') <- parse p cs])
 
-parseString :: String -> Maybe Json
-parseString = Just . JsonString . (takeWhile (\x -> x /= '"'))
+instance MonadPlus Parser where
+  mzero = Parser (\cs -> [])
+  mplus p q = Parser (\cs -> parse p cs ++ parse q cs)
 
-parseFalse :: String -> Maybe Json
-parseFalse s = if s == "false" then Just $ JsonBool False else Nothing
+(+++) :: Parser a -> Parser a -> Parser a
+p +++ q = Parser (\cs -> case parse (mplus p q) cs of
+	                   []     -> []
+                           (x:xs) -> [x])
 
-parseTrue :: String -> Maybe Json
-parseTrue s = if s == "true" then Just $ JsonBool True else Nothing
+item :: Parser Char
+item = Parser (\cs -> case cs of
+	                ""     -> []
+	                (c:cs) -> [(c, cs)])
 
-parseNull :: String -> Maybe Json
-parseNull s = if s == "null" then Just JsNull else Nothing
+sat :: (Char -> Bool) -> Parser Char
+sat p = do { c <- item; if p c then return c else mzero }
 
-parseObject' :: String -> Maybe Json
-parseObject' s = case parseObject (Just s) of
-		      Just x   -> Just . JsonObj $  x
-		      Nothing  -> Nothing
+char :: Char -> Parser Char
+char c = sat (c ==)
+
+string :: String -> Parser String
+string "" = return ""
+string (c:cs) = do { char c; string cs; return (c: cs) }
+
+many :: Parser a -> Parser [a]
+many p = many1 p +++ return []
+
+many1 :: Parser a -> Parser [a]
+many1 p = do { a <- p; as <- many p; return (a:as) }
+
+space :: Parser String
+space = many (sat (\x -> any (== x) [' ', '\n', '\r', '\t']))
+
+notSpaceAlpha :: Parser String
+notSpaceAlpha = many (sat (\x -> isLetter x && any(/= x) [' ', '\n', '\r', '\t']))
+
+isLetter :: Char -> Bool
+isLetter c = ord c <= 122 && ord c >= 65
+
+digit = do {x <- token (sat isDigit); return x }
+
+token :: Parser a -> Parser a
+token p = do { a <- p; space; return a }
+
+symb :: String -> Parser String
+symb cs = token (string cs)
+
