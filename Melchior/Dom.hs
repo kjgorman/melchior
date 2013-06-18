@@ -117,11 +117,11 @@ foreign import js "Dom.set(%1, %2, %3)"
 foreign import js "Dom.hack(%1)"
   hack :: JSString -> JSString
 
-value :: Input -> IO JSString
+value :: Input -> JSString
 value = primGetValue
 
 foreign import js "Dom.value(%1)"
-  primGetValue :: Input -> IO JSString
+  primGetValue :: Input -> JSString
 
 append :: Html -> Element -> IO ()
 append = primAppend
