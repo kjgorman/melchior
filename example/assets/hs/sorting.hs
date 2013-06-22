@@ -22,7 +22,7 @@ setupSorting html = do
   inp <- Dom $ select (byId "inp" . from) html >>= \m -> return $ ensures m
   ordering <- Dom $ select (byId "numbers" . from) html >>= \m -> return $ ensures m
   input <- return $ createEventedSignal (Of "string") inp (ElementEvt InputEvt)
-  put ordering ((\_ -> ensureApplicable $ qsort $ parseToNumbers $ value $ toInput inp) <$> input)
+  put ordering ((\_ -> qsort $ parseToNumbers $ value $ toInput inp) <$> input)
   return $ UHC.Base.head html
 
 stringListToNumbers :: String -> [Int]

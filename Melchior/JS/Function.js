@@ -1,6 +1,8 @@
 var UHCFunction = function () {
     "use strict";
 
+    Object.prototype.__aN__ = function () { return this }
+
     function applyNode(func, value) {
         if(window.debug) console.log("applying node", window.func = func, window.val = value)
         var argCopy, result

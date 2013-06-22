@@ -17,8 +17,10 @@ var Lists = function(){
 
     function map(func, list) {
         if(window.debug) console.log("window.func", window.func = func, list)
-        if(!func || !func.__aN__ || typeof func.__aN__ !== "function" || !list || !list.hasOwnProperty("length"))
-            return undefined;
+        if(!func || !func.__aN__ || typeof func.__aN__ !== "function" || func instanceof Array)
+            return undefined
+        if(!(list instanceof Array))
+            return undefined
         var mapped = list.map(function (l) {
             var argsCopy = func.args.slice(), returnVal
             func.args = func.args.concat([l])
