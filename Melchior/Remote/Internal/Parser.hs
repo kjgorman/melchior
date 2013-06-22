@@ -1,16 +1,12 @@
 module Melchior.Remote.Internal.Parser (
     Json
-  , JsonString
-  , JsBool
-  , JsNull
-  , JsonArray
-  , JsonObj
-  , JsonNumber
   , JsonPair
+  , JsonString
   , JsonObject
   , parseJson
   ) where
 
+import Control.Monad
 import Melchior.Remote.Internal.ParserUtils
 
 data Json = JsonString String | JsBool String | JsNull | JsonArray [Json] | JsonObj JsonObject | JsonNumber String
@@ -21,7 +17,7 @@ data JsonObject = JsonObject [Json]
                   deriving (Show)
 
 {-
-backus nauer form of json(ish)
+backus naur form of json(ish)
 JsonObject ::= { stmt }
 stmt       ::= pair delim
 delim      ::= , stmt | ε
@@ -34,16 +30,16 @@ Bool       ::= False | True
 Number     ::= -?[0-9]+
 -}
 
-number = do { m <- many1 digit; n <- return $ JsonNumber m; return n}
+jnumber = do { m <- many1 digit; n <- return $ JsonNumber m; return n}
 bool = do { m <- mplus (string "False") (string "True"); n <- return $ JsBool m; return n }
-str = do { symb "\""; s <- notSpaceAlpha; symb "\""; n <- return $ JsonString s; return n }
+str = do { symb "\""; s <- notCloseQuote; symb "\""; n <- return $ JsonString s; return n }
 
 delim = do mplus (do {symb ""; return [JsNull]}) (do {space; symb ","; space; s <- stmt; return s })
 
 stmt = do { p <- pair; d <- delim; return (p:d) }
 list = do { symb "["; m <- many stmt; symb "]"; return $ JsonArray $ concat m}
 key = str
-value = str +++ bool +++ number +++ list +++ jsonObj
+value = str +++ bool +++ jnumber +++ list +++ jsonObj
 pair = do { k <- key; space; symb ":"; space; v <- value; return $ JsonPair (k, v) }
 jsonObj = do { symb "{" ; s <- stmt; symb "}"; return $ JsonObj $ JsonObject s }
 

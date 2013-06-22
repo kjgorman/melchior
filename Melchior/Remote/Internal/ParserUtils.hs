@@ -54,6 +54,9 @@ space = many (sat (\x -> any (== x) [' ', '\n', '\r', '\t']))
 notSpaceAlpha :: Parser String
 notSpaceAlpha = many (sat (\x -> isLetter x && any(/= x) [' ', '\n', '\r', '\t']))
 
+notCloseQuote :: Parser String
+notCloseQuote = many (sat (\x -> x /= '"'))
+
 isLetter :: Char -> Bool
 isLetter c = ord c <= 122 && ord c >= 65
 

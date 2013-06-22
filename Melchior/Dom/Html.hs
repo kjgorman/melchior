@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances, TypeSynonymInstances #-}
 module Melchior.Dom.Html (
     Renderable
   , Html

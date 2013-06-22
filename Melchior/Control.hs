@@ -26,7 +26,6 @@ module Melchior.Control
   , emptySignal
   ) where
 
-import Language.UHC.JScript.Primitives
 import Control.Applicative
 import Control.Monad (liftM)
 import Melchior.Data.String

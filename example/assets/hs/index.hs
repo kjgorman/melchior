@@ -33,7 +33,7 @@ setupNavLinks html = do
   sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> Melchior.EventSources.Mouse.click <$> button
 
   positionLabel <- Dom $ select (byId "where-at" . from) html >>= \m -> return $ ensures m
-  sequence $ put positionLabel <$> position <$> container
+  sequence $ put positionLabel <$> (\x -> throttle 1000 $ position x) <$> container
 
   counter <- Dom $ (select (byId "when-at" . from) html) >>= \m -> return $ ensures m
   evenCount <- return $ keepWhen countSeconds (\x -> even x)
@@ -63,9 +63,10 @@ time :: Time -> String
 time (Time t) = t
 instance JsonSerialisable Time where
   fromJson Nothing    = Time "--:--:--"
-  fromJson (Just obj) = Time (withDefault $ getJsonString "\"time\"" obj)
+  fromJson (Just obj) = Time (withDefault $ getJsonString "time" obj)
                         where withDefault (Just s) = s
                               withDefault Nothing  = "--:--:--"
+
 instance Renderable Time where
   render (Time t) = stringToJSString $ "<a class='link'>"++t++"</a>"
 
@@ -73,7 +74,7 @@ data Heartbeat = Heartbeat String
 
 instance JsonSerialisable Heartbeat where
   fromJson Nothing = Heartbeat "Server unreachable : ("
-  fromJson (Just beat) = Heartbeat (withDefault $ getJsonString "\"heart\"" beat)
+  fromJson (Just beat) = Heartbeat (withDefault $ getJsonString "heart" beat)
                          where withDefault (Just s) = s
                                withDefault Nothing = "Server response unparseable : ("
 
@@ -110,7 +111,7 @@ showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent = applyById (\e -> removeClass "hidden" <$> e)
 
 append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
-append s = (\x -> x >>= \js -> Melchior.Dom.hack <$> stringToJSString <$> getJsonString "\"data\"" js) <$> s
+append s = (\x -> x >>= \js -> Melchior.Dom.hack <$> stringToJSString <$> getJsonString "data" js) <$> s
 
 put :: (Renderable a) => Element -> Signal a -> Dom ()
 put el s = terminate s (\x -> return $ set el "innerHTML" $ render x)

@@ -37,7 +37,7 @@ matchPair s (JsonString t, _) = s == t
 matchPair _ _ = False
 
 getJsonString :: String -> JsonObject -> Maybe String
-getJsonString s j@(JsonObject x) = case getKey s j of
+getJsonString s j = case getKey s j of
   Nothing -> Nothing
   (Just j) -> stringFrom j
 

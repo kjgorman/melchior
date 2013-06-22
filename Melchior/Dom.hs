@@ -1,4 +1,4 @@
-{-# LANGUAGE EmptyDataDecls #-}
+{-# LANGUAGE CPP, EmptyDataDecls #-}
 module Melchior.Dom
     ( -- * Types
       Dom
@@ -29,13 +29,16 @@ module Melchior.Dom
     , value
     ) where
 
---dependencies
 import Melchior.Data.String
 import Melchior.Dom.Events
 import Melchior.Dom.Html
 import Control.Monad (liftM)
 
+#ifdef __UHC_TARGET_JS__
 import Language.UHC.JScript.Primitives
+#else
+data JSPtr a = JSPtr a
+#endif
 
 data Dom a = Dom (IO a)
 data Node
