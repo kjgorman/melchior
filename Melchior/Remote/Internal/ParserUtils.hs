@@ -1,7 +1,13 @@
+{-#LANGUAGE CPP #-}
 module Melchior.Remote.Internal.ParserUtils where
 
 import Control.Monad
+
+#ifdef __UHC_TARGET_JS__
 import Data.Char
+#else
+import Data.Char hiding (isLetter)
+#endif
 
 newtype Parser a = Parser (String -> [(a, String)])
 

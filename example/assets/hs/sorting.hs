@@ -2,7 +2,7 @@ module Example.Sorting where
 
 import Control.Category hiding ((>>>),(<<<))
 import Control.Applicative
-import Prelude hiding ((.), id, head, map)
+import Prelude hiding ((.), id)
 
 import Melchior.Control
 import Melchior.Data.String
@@ -11,7 +11,7 @@ import Melchior.Dom.Events
 import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 import Melchior.EventSources.Mouse
-import Melchior.Remote.Internal.ParserUtils
+import Melchior.Remote.Internal.ParserUtils --maybe more useful than an internal
 import Melchior.Time
 
 main :: IO Element
@@ -22,14 +22,19 @@ setupSorting html = do
   inp <- Dom $ select (byId "inp" . from) html >>= \m -> return $ ensures m
   ordering <- Dom $ select (byId "numbers" . from) html >>= \m -> return $ ensures m
   input <- return $ createEventedSignal (Of "string") inp (ElementEvt InputEvt)
-  put ordering ((\_ -> ensureApplicable $ qsort $ parse $ value $ toInput inp) <$> input)
+  put ordering ((\_ -> ensureApplicable $ qsort $ parseToNumbers $ value $ toInput inp) <$> input)
   return $ UHC.Base.head html
 
 stringListToNumbers :: String -> [Int]
-stringListToNumbers s = [2,3,1]
+stringListToNumbers s = case parse numbers s of
+  [] -> []
+  (x:xs) -> map (\x -> (read x :: Int)) (fst x)
 
-parse :: JSString -> [Int]
-parse s = stringListToNumbers $ jsStringToString s
+numbers = many1 numberAndDelim
+numberAndDelim = do { n <- many1 digit; space; symb "," +++ return []; return n }
+
+parseToNumbers :: JSString -> [Int]
+parseToNumbers s = stringListToNumbers $ jsStringToString s
 
 qsort :: Ord a => [a] -> [a]
 qsort [] = []
