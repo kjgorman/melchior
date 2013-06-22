@@ -28,4 +28,8 @@ instance Renderable String where
   render = stringToJSString
 
 instance (Renderable a, Show a) => Renderable [a] where
-  render xs = stringToJSString $ foldl (\x y -> x++","++y) "" $ map show xs
+  render xs = stringToJSString $ join $ map show xs
+
+join []     = ""
+join (x:[]) = x
+join (x:xs) = x++","++(join xs)
