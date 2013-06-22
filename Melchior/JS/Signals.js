@@ -44,11 +44,12 @@ var Signals = function () {
 
         this.registeredListeners.push(function (value, event) {
 
-            if(value._tag_ && value._tag_ === -1) return //empty signal
+            if(_e_(value)._tag_ && _e_(value)._tag_ === -1) return //empty signal
 
             var res = UHCFunction.call(transform, value, event)
             newSignal.previous = newSignal.accumulator
             if(shouldAccumulate) {
+                if(window.debug) console.log("Accumulating", value, newSignal.accumulator)
                 newSignal.accumulator = UHCFunction.apply(transform, [value, newSignal.accumulator])
                 newSignal.push(newSignal.accumulator)
             } else {
