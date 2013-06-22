@@ -6,6 +6,7 @@ module Melchior.Time (
   , delay
   , debounce
   , throttle
+  , count
   ) where
 
 import Control.Applicative
@@ -54,3 +55,6 @@ debounce' n s = foldp (\t (thn, u) -> if ((sample currentI) - thn) > n then (sam
 
 throttle :: Int -> Signal a -> Signal a
 throttle n s = (\_ -> sample s) <$> every n
+
+count :: Signal a -> Signal Int
+count s = foldp (\t acc -> acc+1) 0 s

@@ -52,7 +52,9 @@ setupNavLinks html = do
 
   input <- Dom $ select (byId "type" . from) html >>= \m -> return $ ensures m
   echo <- Dom $ select (byId "echo-char" . from) html >>= \m -> return $ ensures m
+  countUniq <- Dom $ select (byId "count-char" . from) html >>= \m -> return $ ensures m
   put echo (dropRepeats $ keyCode $ keyDownSignal input)
+  put countUniq (count $ dropRepeats $ keyCode $ keyDownSignal input)
 
   return $ UHC.Base.head html
 
