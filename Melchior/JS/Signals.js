@@ -147,19 +147,6 @@ var Signals = function () {
         return signal
     }
 
-    function ensureApplicable (argument) {
-        if(window.debug) console.log("making an applicable", argument)
-        if(argument._1) {
-            return {
-                __aN__: function() { return argument }
-            }
-        }
-        if(argument instanceof Array && argument.length == 2) return argument[1]
-        return {
-            __aN__: function () { return argument }
-        }
-    }
-
     function terminate (signal, funct) {
         if(window.debug) console.log("terminating", signal, funct)
         signal.registerListener(function(value) {
@@ -189,7 +176,6 @@ var Signals = function () {
         createEventedSignal: createEventedSignal,
         createPastDependentSignal: createPastDependentSignal,
         applicable:applicable,
-        ensureApplicable:ensureApplicable,
         Signal:Signal,
         evaluate: evaluate,
         terminate: terminate,

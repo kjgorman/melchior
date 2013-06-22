@@ -21,7 +21,6 @@ module Melchior.Control
   , (<<<)
   , (&&&)
   , pipe
-  , ensureApplicable
   , terminate
   , emptySignal
   ) where
@@ -71,9 +70,6 @@ foreign import js "Signals.applicable(%1)"
 
 -- * Routing
 
-foreign import js "Signals.ensureApplicable(%1)"
-  ensureApplicable :: a -> a
-
 pipe :: (a -> b) -> Signal a -> Signal b
 pipe f s = primPipeSignal s f
 
@@ -121,13 +117,13 @@ foreign import js "Signals.emptySignal()"
 -- * Filters
 
 dropRepeats :: Eq a => Signal a -> Signal a
-dropRepeats s = (\x -> if x == (previous s) then (emptySignal x) else (ensureApplicable x)) <$> s
+dropRepeats s = (\x -> if x == (previous s) then (emptySignal x) else x) <$> s
 
 dropWhen :: Signal a -> (a -> Bool) -> Signal a
-dropWhen s pred = (\x -> if pred x then (emptySignal x) else (ensureApplicable x)) <$> s
+dropWhen s pred = (\x -> if pred x then (emptySignal x) else x) <$> s
 
 keepWhen :: Signal a -> (a -> Bool) -> Signal a
-keepWhen s pred = (\x -> if pred x then (ensureApplicable x) else (emptySignal x)) <$> s
+keepWhen s pred = (\x -> if pred x then x else (emptySignal x)) <$> s
 
 merge :: Signal a -> Signal a -> Signal a
 merge = primMerge
