@@ -49,7 +49,7 @@ $Comparisons.$Fauxter.$_24okUNQ92=
          {var $__=
            new _A_($UHC.$Base.$return,[$UHC.$Base.$Monad__DCT73__341__0,$_24x]);
           var $__4=
-           new _A_($Melchior.$Data.$List.$map,[$Comparisons.$Fauxter.$__23__47__0,$_24x2]);
+           new _A_($UHC.$Base.$map,[$Comparisons.$Fauxter.$__23__47__0,$_24x2]);
           var $__5=
            new _A_($UHC.$Base.$return,[$UHC.$Base.$Monad__DCT73__341__0]);
           var $__6=
@@ -132,7 +132,7 @@ $Comparisons.$Fauxter.$_24okUNQ60=
           var $__6=
            new _A_($Melchior.$Dom.$removeClass,[$__5]);
           var $__7=
-           new _A_($Melchior.$Data.$List.$map,[$__6]);
+           new _A_($UHC.$Base.$map,[$__6]);
           var $__8=
            new _A_($UHC.$Base.$_24,[$__7,$__4]);
           var $__9=
@@ -157,7 +157,7 @@ $Comparisons.$Fauxter.$__23__158__0=
           var $__4=
            new _A_($Melchior.$Dom.$addClass,[$__3]);
           var $__5=
-           new _A_($Melchior.$Data.$List.$map,[$__4]);
+           new _A_($UHC.$Base.$map,[$__4]);
           var $__6=
            new _A_($Control.$Applicative.$_3c_24_3e,[$Control.$Monad.$Instances.$Functor__DCT43__0__0,$UHC.$Base.$head,$__5]);
           return new _A_($Control.$Applicative.$_3c_24_3e,[$UHC.$Base.$Functor__DCT73__406__0,$__6,$__]);});
