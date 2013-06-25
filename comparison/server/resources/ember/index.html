@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+
+<html>
+
+  <head>
+    <title>Example app index template</title>
+
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 700px;
+      }
+      .container-narrow > hr {
+        margin: 30px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 60px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 72px;
+        line-height: 1;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
+    </style>
+    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.css" />
+  </head>
+
+ <body>
+      <script type="text/x-handlebars">
+       <div class="container-narrow">
+
+        <div class="masthead">
+          <ul class="nav nav-pills pull-right">
+            <li>{{#linkTo 'home'}}Home{{/linkTo}}</li>
+            <li>{{#linkTo 'about'}}About{{/linkTo}}</li>
+            <li>{{#linkTo 'contact'}}Contact{{/linkTo}}</li>
+          </ul>
+          <h3 class="muted">An Ember.js Example</h3>
+        </div>
+          {{outlet}}
+        <div class="footer">
+          <p>&copy; Kieran Gorman 2013</p>
+        </div>
+
+      </script>
+
+      <script type="text/x-handlebars" id="home">
+        <hr>
+
+        <div class="jumbotron">
+          <h1>Hello World!</h1>
+          <p class="lead">This is a simple application rendered and running in Ember.js!</p>
+        </div>
+
+        <hr>
+        {{#each model}}
+        <div class="row-fluid marketing">
+          <div class="span12">
+            <h4>{{author}}</h4>
+            <p>{{body}}
+          </div>
+        </div>
+        {{/each}}
+        <hr>
+      </script>
+
+      <script type="text/x-handlebars" id="about">
+        <div class="row-fluid marketing">
+          <div class="span12">
+            <p>When in doubt, rip off twitter</p>
+          </div>
+        </div>
+      </script>
+
+      <script type="text/x-handlebars" id="contact">
+        <div class="row-fluid marketing">
+          <div class="span12">
+            <p>kieran.gorman@ecs.vuw.ac.nz</p>
+          </div>
+        </div>
+      </script>
+
+    </div> <!-- /container -->
+ </body>
+
+ <footer>
+   <script type="text/javascript" src="resources/ember/handlebars.js"></script>
+   <script type="text/javascript" src="resources/jquery-1.9.1.js"></script>
+   <script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
+   <script type="text/javascript" src="resources/ember/ember-1.0.0-rc.2.js"></script>
+   <script type="text/javascript" src="resources/ember/ember-data.js"></script>
+   <script type="text/javascript" src="resources/ember/application.js"></script>
+ </footer>
+
+</html>
