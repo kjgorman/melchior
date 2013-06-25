@@ -14,6 +14,10 @@ app.get("/homes", function(req, res) {
     }]});
 });
 
+app.get("/next", function(req, res) {
+    res.send(200, {author: faker.Name.findName(), body: faker.Lorem.words(10).join(" ")})
+});
+
 app.get("/", function(req, res) {
     res.sendfile("index.html");
 });
@@ -32,6 +36,10 @@ app.get("/flight", function(req, res) {
 
 app.get("/knockout", function(req, res) {
     res.sendfile("resources/knockout/index.html");
+});
+
+app.get("/melchior", function(req, res) {
+    res.sendfile("resources/melchior/index.html");
 });
 
 app.listen(3002);

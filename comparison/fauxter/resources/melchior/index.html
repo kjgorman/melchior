@@ -41,8 +41,9 @@
       .marketing p + h4 {
         margin-top: 28px;
       }
+      .hidden { display: none }
     </style>
-    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.css" />
   </head>
 
  <body>
@@ -50,33 +51,28 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a id="test" class='link Home' href="#">Home</a></li>
+          <li><a class='link About' href="#">About</a></li>
+          <li><a class='link Contact' href="#">Contact</a></li>
         </ul>
         <h3 class="muted">Example template</h3>
       </div>
 
       <hr>
-
-      <div class="jumbotron">
-        <h1>Super awesome demo!</h1>
-        <p class="lead">We all love bootstrap for the templating</p>
-      </div>
-
-      <hr>
-
-      <div class="row-fluid marketing">
-        <div class="span6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+      <div id="main-content">
+        <div id='page-content'>
+          <div id='About' class='hidden'><div>When in doubt, rip off twitter!</div></div>
+          <div id='Contact' class='hidden'><div>kieran.gorman@ecs.vuw.ac.nz</div></div>
+          <div id='Home' class="jumbotron">
+            <h1>Melchior &mdash; FRP for the web!</h1>
+          </div>
         </div>
 
-        <div class="span6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-      </div>
+        <hr>
+        <div id='container'>
 
+        </div>
+      </div>
       <hr>
 
       <div class="footer">
@@ -87,7 +83,8 @@
  </body>
 
  <footer>
-   <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+   <script type="text/javascript" src="resources/melchior/melchior.js"></script>
+   <script type="text/javascript" src="resources/melchior/application.js"></script>
  </footer>
 
 </html>

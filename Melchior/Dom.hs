@@ -23,7 +23,7 @@ module Melchior.Dom
     , toggle
     , parentOf
     , siblings
-    , append
+    , appendHtml
     , hack
     , set
     , value
@@ -126,11 +126,12 @@ value = primGetValue
 foreign import js "Dom.value(%1)"
   primGetValue :: Input -> JSString
 
-append :: Html -> Element -> IO ()
-append = primAppend
+appendHtml :: Element -> Html -> IO ()
+appendHtml = primAppend
 
 foreign import js "Dom.append(%1, %2)"
-  primAppend :: Html -> Element -> IO ()
+  primAppend :: Element -> Html -> IO ()
+
 {-
 getAttr :: String -> Element -> Dom String
 getAttr s e = Dom . liftM jsStringToString $ primGetAttr e (stringToJSString s)

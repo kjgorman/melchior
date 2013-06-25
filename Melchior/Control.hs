@@ -22,6 +22,8 @@ module Melchior.Control
   , (&&&)
   , pipe
   , terminate
+  , put
+  , append
   , emptySignal
   ) where
 
@@ -30,6 +32,7 @@ import Control.Monad (liftM)
 import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Events
+import Melchior.Dom.Html
 
 data Signal a = Signal a
 data Of a = Of a
@@ -59,6 +62,12 @@ terminate s f = Dom $ primTerminate s f
 
 foreign import js "Signals.terminate(%1, %2)"
   primTerminate :: Signal a -> (a -> IO ()) -> IO ()
+
+put :: (Renderable a) => Element -> Signal a -> Dom ()
+put el s = terminate s (\x -> return $ set el "innerHTML" $ render x)
+
+append :: (Renderable a) => Element -> Signal a -> Dom ()
+append el s = terminate s (\x -> appendHtml el $ render x)
 
 -- * Misc. primitive signal operations
 

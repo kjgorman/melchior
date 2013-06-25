@@ -23,7 +23,7 @@ module.exports = function(grunt) {
                 command : "cp dist/melchior.js example/assets/"
             },
             copyDistToComparison : {
-                command : "cp dist/melchior.js comparison/server/resources"
+                command : "cp dist/melchior.js comparison/fauxter/resources/melchior/"
             },
             compile : {
                 command : "find . -name '*hs' -exec uhc -tjs {} \;"

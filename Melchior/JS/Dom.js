@@ -71,7 +71,7 @@ var Dom = function() {
         return elem.value ? elem.value : ""
     }
 
-    DomOperations.prototype.append = function(html, elem) {
+    DomOperations.prototype.append = function(elem, html) {
         var doc = document.createElement("span")
         doc.innerHTML = html
         elem.appendChild(doc)

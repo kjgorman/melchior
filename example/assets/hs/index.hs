@@ -29,8 +29,7 @@ setupNavLinks html = do
 
   clicks <- sequence $ clickListener "innerHTML" <$> links
 
-  sequence $ (\click -> click ~> (rmClassFromParentSiblings >>> addClassTo >>> (hideSiblings &&& showCurrent))) <$> clicks
-  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> append)) <$> Melchior.EventSources.Mouse.click <$> button
+  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> hack)) <$> Melchior.EventSources.Mouse.click <$> button
 
   positionLabel <- Dom $ select (byId "where-at" . from) html >>= \m -> return $ ensures m
   sequence $ put positionLabel <$> (\x -> throttle 1000 $ position x) <$> container
@@ -112,11 +111,8 @@ hideSiblings = applyById (\e -> UHC.Base.head <$> (\y -> map (addClass "hidden")
 showCurrent :: Signal (IO JSString) -> Signal (IO (Maybe JSString))
 showCurrent = applyById (\e -> removeClass "hidden" <$> e)
 
-append :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
-append s = (\x -> x >>= \js -> Melchior.Dom.hack <$> stringToJSString <$> getJsonString "data" js) <$> s
-
-put :: (Renderable a) => Element -> Signal a -> Dom ()
-put el s = terminate s (\x -> return $ set el "innerHTML" $ render x)
+hack :: Signal (Maybe JsonObject) -> Signal (Maybe JSString)
+hack s = (\x -> x >>= \js -> Melchior.Dom.hack <$> stringToJSString <$> getJsonString "data" js) <$> s
 
 ----------------------------------------------------------------------------------------------------------------
 -- Some particularly unpleasant logging functions
