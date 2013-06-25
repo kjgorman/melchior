@@ -22,6 +22,9 @@ module.exports = function(grunt) {
             copyDistToExample : {
                 command : "cp dist/melchior.js example/assets/"
             },
+            copyDistToComparison : {
+                command : "cp dist/melchior.js comparison/server/resources"
+            },
             compile : {
                 command : "find . -name '*hs' -exec uhc -tjs {} \;"
             }
@@ -135,6 +138,7 @@ module.exports = function(grunt) {
                         'shell:buildTests',
                         'concat',
                         'shell:copyDistToSpec',
+                        'shell:copyDistToComparison',
                         'jasmine',
                        ]);
     grunt.registerTask('dev',
@@ -154,5 +158,6 @@ module.exports = function(grunt) {
                         'concat',
                         'shell:copyDistToSpec',
                         'shell:copyDistToExample',
+                        'shell:copyDistToComparison',
                         'jasmine']);
 }
