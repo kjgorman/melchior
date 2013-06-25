@@ -2,7 +2,7 @@ var FakeTweetModel = function() {
     var currentTab = ko.observable("Home")
     , contents = {
         Home: $("#main-container").html(),
-        About: "When in doubt, rip off twitter!", 
+        About: "When in doubt, rip off twitter!",
         Contact: "kieran.gorman@ecs.vuw.ac.nz"
     };
 
@@ -11,7 +11,7 @@ var FakeTweetModel = function() {
     this.tabSwitcher = function(tab, event) {
         $(".active").removeClass("active");
         $(event.target).parent().addClass("active");
-        
+
         $("#main-container").html(contents[$(event.target).html()]);
     }
 

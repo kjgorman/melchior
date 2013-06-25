@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+
     function getNext () {
         console.log("trying to retrieve new data");
         $.get("/homes", function(data) {
@@ -43,7 +43,7 @@ $(document).ready(function () {
             if($(this).find("a").html() == 'Home') {
                 startFindLoop();
             }
-        });        
+        });
     });
 
     startFindLoop();

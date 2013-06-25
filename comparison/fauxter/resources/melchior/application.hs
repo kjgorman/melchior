@@ -4,7 +4,6 @@ import Control.Category hiding ((>>>), (<<<))
 import Control.Applicative
 import Prelude hiding ((.), id)
 
---all Melchior exports
 import Melchior.Control
 import Melchior.Data.String
 import Melchior.Dom
