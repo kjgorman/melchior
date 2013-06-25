@@ -50,6 +50,6 @@ rmClassFromParentSiblings s = rmSingle <$> s
                                return $ map (\y -> (removeClass "active") y ) $ concatMap (\x -> siblings $ parentOf x) elems; return x })
 
 clickListener s e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) s
-applyById op s = (\x -> x >>= \idS -> op <$> select ((byId $ jsStringToString idS) . from) root) <$> s
-hideSiblings = applyById (\e -> UHC.Base.head <$> (\y -> map (addClass "hidden") y) <$> (siblings <$> e))
-showCurrent = applyById (\e -> removeClass "hidden" <$> e)
+applyById op s    = (\x -> x >>= \idS -> op <$> select ((byId $ jsStringToString idS) . from) root) <$> s
+hideSiblings      = applyById (\e -> UHC.Base.head <$> (\y -> map (addClass "hidden") y) <$> (siblings <$> e))
+showCurrent       = applyById (\e -> removeClass "hidden" <$> e)
