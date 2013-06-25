@@ -1,4 +1,4 @@
-module Comparisons.Fauxter where
+module Comparisons.Sussed where
 
 import Control.Category hiding ((>>>), (<<<))
 import Control.Applicative
@@ -8,11 +8,8 @@ import Melchior.Control
 import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Events
-import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 import Melchior.Remote.Internal.ParserUtils
-
-
 
 main :: IO Element
 main = runDom setupSorting
@@ -25,7 +22,7 @@ setupSorting html = do
 
 manualSorting html = do
   inp <- Dom $ select (byId "inp" . from) html >>= \m -> return $ ensures m
-  out <- Dom $ select (byId "merge" . from) html >>= \m -> return $ ensures m
+  out <- Dom $ select (byId "quick" . from) html >>= \m -> return $ ensures m
   input <- return $ createEventedSignal (Of "string") inp (ElementEvt InputEvt)
   put out ((\_ -> qsort $ parseToNumbers $ value $ toInput inp) <$> input)
 
