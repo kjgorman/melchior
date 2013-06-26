@@ -27,6 +27,7 @@ module Melchior.Dom
     , hack
     , set
     , value
+    , setV
     ) where
 
 import Melchior.Data.String
@@ -132,6 +133,11 @@ appendHtml = primAppend
 foreign import js "Dom.append(%1, %2)"
   primAppend :: Element -> Html -> IO ()
 
+setV :: Input -> String -> IO ()
+setV i s = primSetValue i (stringToJSString s)
+
+foreign import js "Dom.value(%1, %2)"
+  primSetValue :: Input -> JSString -> IO ()
 {-
 getAttr :: String -> Element -> Dom String
 getAttr s e = Dom . liftM jsStringToString $ primGetAttr e (stringToJSString s)

@@ -67,8 +67,9 @@ var Dom = function() {
         return undefined
     }
 
-    DomOperations.prototype.value = function(elem) {
-        return elem.value ? elem.value : ""
+    DomOperations.prototype.value = function(elem, value) {
+        if(value) elem.value = value
+        else return elem.value ? elem.value : ""
     }
 
     DomOperations.prototype.append = function(elem, html) {

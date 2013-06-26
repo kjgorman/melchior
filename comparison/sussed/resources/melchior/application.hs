@@ -8,20 +8,27 @@ import Melchior.Control
 import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Events
+import Melchior.EventSources.Mouse
 import Melchior.Dom.Selectors
+import Melchior.Remote.XHR
 import Melchior.Remote.Internal.ParserUtils
+import Melchior.Time
 
 main :: IO Element
 main = runDom setupSorting
 
 setupSorting :: [Element] -> Dom Element
 setupSorting html = do
-  manualSorting html
+  inp <- Dom $ select (byId "inp" . from) html >>= \m -> return $ ensures m
+  manualSorting html inp
+  fetch <- Dom $ select (byId "remote" . from) html >>= \m -> return $ ensures m
+  setValue (toInput inp) $ stringify (remote GET "/numbers" (click fetch))
   return $ UHC.Base.head html
 
+stringify :: Signal JSString -> Signal String
+stringify s = (\x -> jsStringToString x) <$> s
 
-manualSorting html = do
-  inp <- Dom $ select (byId "inp" . from) html >>= \m -> return $ ensures m
+manualSorting html inp = do
   out <- Dom $ select (byId "quick" . from) html >>= \m -> return $ ensures m
   input <- return $ createEventedSignal (Of "string") inp (ElementEvt InputEvt)
   put out ((\_ -> qsort $ parseToNumbers $ value $ toInput inp) <$> input)

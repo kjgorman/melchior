@@ -24,6 +24,7 @@ module Melchior.Control
   , terminate
   , put
   , append
+  , setValue
   , emptySignal
   ) where
 
@@ -62,6 +63,9 @@ terminate s f = Dom $ primTerminate s f
 
 foreign import js "Signals.terminate(%1, %2)"
   primTerminate :: Signal a -> (a -> IO ()) -> IO ()
+
+setValue :: (Show a) => Input -> Signal a -> Dom ()
+setValue i s = terminate s (\x -> setV i (show x))
 
 put :: (Renderable a) => Element -> Signal a -> Dom ()
 put el s = terminate s (\x -> return $ set el "innerHTML" $ render x)
