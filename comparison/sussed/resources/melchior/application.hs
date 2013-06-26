@@ -29,9 +29,11 @@ stringify :: Signal JSString -> Signal String
 stringify s = (\x -> jsStringToString x) <$> s
 
 manualSorting html inp = do
-  out <- Dom $ select (byId "quick" . from) html >>= \m -> return $ ensures m
+  qout <- Dom $ select (byId "quick" . from) html >>= \m -> return $ ensures m
+  mout <- Dom $ select (byId "merge" . from) html >>= \m -> return $ ensures m
   input <- return $ createEventedSignal (Of "string") inp (ElementEvt InputEvt)
-  put out ((\_ -> qsort $ parseToNumbers $ value $ toInput inp) <$> input)
+  put qout ((\_ -> qsort $ parseToNumbers $ value $ toInput inp) <$> input)
+  put mout ((\_ -> msort $ parseToNumbers $ value $ toInput inp) <$> input)
 
 stringListToNumbers :: String -> [Int]
 stringListToNumbers s = case parse numbers s of
@@ -50,3 +52,20 @@ qsort (pivot:rest) = (qsort lesser) ++ [pivot] ++ (qsort greater)
   where
     lesser = filter (< pivot) rest
     greater = filter (>= pivot) rest
+
+msort :: Ord a => [a] -> [a]
+msort []  = []
+msort [x] = [x]
+msort x   = merge (msort one) (msort two)
+            where
+              one = take half x
+              two = drop half x
+              half = div (length x) 2
+
+merge :: Ord a => [a] -> [a] -> [a]
+merge [] x = x
+merge y [] = y
+merge (x:xs) (y:ys) = case x < y of
+  True -> x : merge xs (y:ys)
+  False -> y : merge ys (x:xs)
+
