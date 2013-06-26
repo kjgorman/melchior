@@ -14,7 +14,7 @@ app.get("/numbers", function (req, res) {
 
 function generateNumbers () {
     var result = [], i = 0
-    for(;i<100;i++) {
+    for(;i<250;i++) {
         result.push(Math.floor(Math.random()*1000))
     }
     return result

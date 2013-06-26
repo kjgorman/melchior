@@ -31,9 +31,11 @@ stringify s = (\x -> jsStringToString x) <$> s
 manualSorting html inp = do
   qout <- Dom $ select (byId "quick" . from) html >>= \m -> return $ ensures m
   mout <- Dom $ select (byId "merge" . from) html >>= \m -> return $ ensures m
+  hout <- Dom $ select (byId "heap" . from) html >>= \m -> return $ ensures m
   input <- return $ createEventedSignal (Of "string") inp (ElementEvt InputEvt)
   put qout ((\_ -> qsort $ parseToNumbers $ value $ toInput inp) <$> input)
   put mout ((\_ -> msort $ parseToNumbers $ value $ toInput inp) <$> input)
+  put hout ((\_ -> hsort $ parseToNumbers $ value $ toInput inp) <$> input)
 
 stringListToNumbers :: String -> [Int]
 stringListToNumbers s = case parse numbers s of
@@ -69,3 +71,23 @@ merge (x:xs) (y:ys) = case x < y of
   True -> x : merge xs (y:ys)
   False -> y : merge ys (x:xs)
 
+data Heap a = Nil | Node a [Heap a]
+heapify x = Node x []
+
+hsort :: Ord a =>  [a] -> [a]
+hsort h = flattenHeap $ mergeHeaps $ map heapify h
+          where
+            mergeHeaps = treeFold mergeHeap Nil
+            flattenHeap Nil = []
+            flattenHeap (Node x heaps) = x:flattenHeap (mergeHeaps heaps)
+            mergeHeap h Nil = h
+            mergeHeap a@(Node x heaps) b@(Node y heapd)
+              | x < y = Node x (b:heaps)
+              | otherwise = Node y (a:heapd)
+
+treeFold _ x [] = x
+treeFold _ _ [x] = x
+treeFold f x (a:b:c) = treeFold f x (f a b : pairFold c)
+                       where
+                         pairFold (x:y:rest) = f x y : pairFold rest
+                         pairFold a = a
