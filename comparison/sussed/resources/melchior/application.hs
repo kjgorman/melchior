@@ -19,7 +19,7 @@ main = runDom setupSorting
 
 setupSorting :: [Element] -> Dom Element
 setupSorting html = do
-  inp <- Dom $ select (byId "inp" . from) html >>= \m -> return $ ensures m
+  inp <- Dom $ select (inputs . byId "inp" . from) html >>= \m -> return $ ensures m
   manualSorting html inp
   fetch <- Dom $ select (byId "remote" . from) html >>= \m -> return $ ensures m
   setValue (toInput inp) $ stringify (remote GET "/numbers" (click fetch))
@@ -33,9 +33,9 @@ manualSorting html inp = do
   mout <- Dom $ select (byId "merge" . from) html >>= \m -> return $ ensures m
   hout <- Dom $ select (byId "heap" . from) html >>= \m -> return $ ensures m
   input <- return $ createEventedSignal (Of "string") inp (ElementEvt InputEvt)
-  put qout ((\_ -> qsort $ parseToNumbers $ value $ toInput inp) <$> input)
-  put mout ((\_ -> msort $ parseToNumbers $ value $ toInput inp) <$> input)
-  put hout ((\_ -> hsort $ parseToNumbers $ value $ toInput inp) <$> input)
+  put qout ((\_ -> qsort $ parseToNumbers $ value $ inp) <$> input)
+  put mout ((\_ -> msort $ parseToNumbers $ value $ inp) <$> input)
+  put hout ((\_ -> hsort $ parseToNumbers $ value $ inp) <$> input)
 
 stringListToNumbers :: String -> [Int]
 stringListToNumbers s = case parse numbers s of
