@@ -84,7 +84,7 @@ var Dom = function() {
     }
 
     DomOperations.prototype.append = function(elem, html) {
-        elem.appendChild(tryParseHtml(html()))
+        elem.appendChild(tryParseHtml(html))
     }
 
     DomOperations.prototype.prepend = function(elem, html) {

@@ -67,7 +67,7 @@ describe("removing a class should remove, and be idempotent", function () {
 describe("siblings should return siblings", function () {
     var someElements = document.createElement("div");
     [1,2,3,4].map(function() { someElements.appendChild(document.createElement("div")) });
-    
+
     it("should return null for null", function () {
         expect(Dom.siblings(null)).toBe(null)
     });
@@ -99,3 +99,45 @@ describe("getters and setters should perfom sanely", function () {
     })
 
 });
+
+describe("append and prepend should order correctly", function () {
+    var anElement = document.createElement("div")
+      , aChild = document.createElement("div");
+    anElement.appendChild(aChild)
+
+    it("should append after a child", function () {
+        Dom.append(anElement, "foo")
+        expect(anElement.children.length).toBe(2)
+        expect(anElement.children[1].tagName).toBe("SPAN")
+        anElement.removeChild(anElement.children[1])
+        expect(anElement.children.length).toBe(1)
+    })
+
+    it("should prepend before child", function () {
+        Dom.prepend(anElement, "foo")
+        expect(anElement.children.length).toBe(2)
+        expect(anElement.children[0].tagName).toBe("SPAN")
+        anElement.removeChild(anElement.children[0])
+        expect(anElement.children.length).toBe(1)
+    })
+})
+
+describe("append and prepend should parse html", function () {
+    var anElement = document.createElement("div")
+      , aChild = document.createElement("div");
+    anElement.appendChild(aChild)
+
+    it("should parse a tag when appending", function () {
+        Dom.append(anElement, "<div>foo</div>")
+        var numChildren = anElement.children.length
+        expect(numChildren).toBe(2)
+        expect(anElement.children[numChildren-1].tagName).toBe("div")
+    })
+
+    it("should parse a tag when prepending", function () {
+        Dom.prepend(anElement, "<input type='text' />")
+        var numChildren = anElement.children.length
+        expect(numChildren).toBe(3)
+        expect(anElement.children[0].tagName).toBe("input")
+    })
+})
