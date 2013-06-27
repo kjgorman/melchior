@@ -3,6 +3,7 @@ module Melchior.Dom.Html (
     Renderable
   , Html
   , render
+  , (<+>)
   ) where
 
 import Melchior.Data.String (JSString, stringToJSString)
@@ -29,6 +30,12 @@ instance Renderable String where
 
 instance (Renderable a, Show a) => Renderable [a] where
   render xs = stringToJSString $ join $ map show xs
+
+(<+>) :: Html -> Html -> Html
+a <+> b = primAppendStrings a b
+
+foreign import js "Html.append(%1, %2)"
+  primAppendStrings :: Html -> Html -> Html
 
 join []     = ""
 join (x:[]) = x

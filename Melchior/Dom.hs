@@ -9,6 +9,7 @@ module Melchior.Dom
     , Div
     , Span
     , Canvas
+    , ListItem
     , ensures
       -- * Typeclasses
     , DomNode
@@ -50,6 +51,7 @@ newtype Input = Input { unIn :: JSPtr Node }
 newtype Div = Div { unDiv :: JSPtr Node }
 newtype Span = Span {unSpan :: JSPtr Node}
 newtype Canvas = Canvas {unCanvas :: JSPtr Node}
+newtype ListItem = ListItem {unListItem :: JSPtr Node}
 
 ensures :: DomNode a => Maybe a -> a
 ensures e = case e of
@@ -73,6 +75,7 @@ instance DomNode Document where
 instance DomNode Div where
 instance DomNode Span where
 instance DomNode Canvas where
+instance DomNode ListItem where
 
 foreign import js "id(%2)"
   toElement :: (DomNode a) => a -> Element
