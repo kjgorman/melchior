@@ -42,7 +42,8 @@
         margin-top: 28px;
       }
       .hidden { display: none }
-      .outbox * { float: right }
+      .outbox > ol { float: right }
+      .outbox > h3 { float: right }
     </style>
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.css" />
   </head>
@@ -85,7 +86,7 @@
               </ol>
             </div>
             <div class="span4 outbox">
-              <ol>
+              <ol id="outbox">
                 <li>Test out item</li>
               </ol>
             </div>
