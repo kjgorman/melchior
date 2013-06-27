@@ -25,7 +25,7 @@ setupPostOffice html = do
 placeInOutbox :: Signal String -> [Element] -> Dom ()
 placeInOutbox s html = do
   outbox <- Dom $ select (byId "outbox" . from) html >>= \m -> return $ ensures m
-  prepend outbox s
+  prepend outbox $ (\s -> "<li>"++s++"</li>") <$> s
 
 listenForComposition :: [Element] -> Dom (Signal String)
 listenForComposition html = do

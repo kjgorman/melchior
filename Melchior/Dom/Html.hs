@@ -32,10 +32,10 @@ instance (Renderable a, Show a) => Renderable [a] where
   render xs = stringToJSString $ join $ map show xs
 
 (<+>) :: Html -> Html -> Html
-a <+> b = primAppendStrings a b
+a <+> b = primAppendHtml a b
 
 foreign import js "Html.append(%1, %2)"
-  primAppendStrings :: Html -> Html -> Html
+  primAppendHtml :: Html -> Html -> Html
 
 join []     = ""
 join (x:[]) = x

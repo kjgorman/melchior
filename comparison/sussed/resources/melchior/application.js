@@ -241,7 +241,7 @@ $Comparisons.$Sussed.$msort=
           return $__swJSW10__0;});
 $Comparisons.$Sussed.$stringify=
  new _A_(new _F_(function()
-                 {return new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT25__0__0,$Language.$UHC.$JScript.$ECMA.$String.$jsStringToString]);}),[]);
+                 {return new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$Language.$UHC.$JScript.$ECMA.$String.$jsStringToString]);}),[]);
 $Comparisons.$Sussed.$_24okUNQ315=
  new _F_(function($_24x)
          {var $__=
@@ -576,9 +576,9 @@ $Comparisons.$Sussed.$_24okUNQ341=
           var $__6=
            new _A_($UHC.$Base.$packedStringToString,["merge"]);
           var $__7=
-           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT43__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT43__7__0,$__6]);
+           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT55__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT55__7__0,$__6]);
           var $__8=
-           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT43__11__0,$__7,$__5]);
+           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT55__11__0,$__7,$__5]);
           var $__9=
            new _A_($Melchior.$Dom.$Selectors.$select,[$__8,$html]);
           var $__10=
@@ -587,7 +587,7 @@ $Comparisons.$Sussed.$_24okUNQ341=
            new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__10]);
           var $__12=
            new _A_($Comparisons.$Sussed.$_24okUNQ353,[$__,$html,$inp,$_24x]);
-          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT19__1__0,$__11,$__12]);});
+          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__11,$__12]);});
 $Comparisons.$Sussed.$_24okUNQ353=
  new _F_(function($__,$html,$inp,$_24x,$_24x5)
          {var $__6=
@@ -595,9 +595,9 @@ $Comparisons.$Sussed.$_24okUNQ353=
           var $__7=
            new _A_($UHC.$Base.$packedStringToString,["heap"]);
           var $__8=
-           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT43__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT43__7__0,$__7]);
+           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT55__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT55__7__0,$__7]);
           var $__9=
-           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT43__11__0,$__8,$__6]);
+           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT55__11__0,$__8,$__6]);
           var $__10=
            new _A_($Melchior.$Dom.$Selectors.$select,[$__9,$html]);
           var $__11=
@@ -606,11 +606,11 @@ $Comparisons.$Sussed.$_24okUNQ353=
            new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__11]);
           var $__13=
            new _A_($Comparisons.$Sussed.$_24okUNQ361,[$inp,$_24x,$_24x5]);
-          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT19__1__0,$__12,$__13]);});
+          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__12,$__13]);});
 $Comparisons.$Sussed.$_24okUNQ361=
  new _F_(function($inp,$_24x,$_24x3,$_24x4)
          {var $__=
-           new _A_($Melchior.$Dom.$Html.$Renderable__DCT13__7__0,[$Melchior.$Dom.$Html.$Renderable__DCT13__2__0,$UHC.$Base.$Show__DCT73__128__0]);
+           new _A_($Melchior.$Dom.$Html.$Renderable__DCT19__7__0,[$Melchior.$Dom.$Html.$Renderable__DCT19__2__0,$UHC.$Base.$Show__DCT73__128__0]);
           var $__6=
            new _A_($Melchior.$Dom.$Events.$ElementEvt__,[$Melchior.$Dom.$Events.$InputEvt__]);
           var $__7=
@@ -618,37 +618,37 @@ $Comparisons.$Sussed.$_24okUNQ361=
           var $__8=
            new _A_($Melchior.$Control.$Of__,[$__7]);
           var $__9=
-           new _A_($Melchior.$Control.$createEventedSignal,[$Melchior.$Dom.$DomNode__DCT19__6__0,$__8,$inp,$__6]);
+           new _A_($Melchior.$Control.$createEventedSignal,[$Melchior.$Dom.$DomNode__DCT31__6__0,$__8,$inp,$__6]);
           var $__10=
-           new _A_($UHC.$Base.$return,[$Melchior.$Dom.$Monad__DCT19__1__0]);
+           new _A_($UHC.$Base.$return,[$Melchior.$Dom.$Monad__DCT31__1__0]);
           var $__11=
            new _A_($UHC.$Base.$_24,[$__10,$__9]);
           var $__12=
            new _A_($Comparisons.$Sussed.$_24okUNQ383,[$inp,$_24x,$_24x3,$_24x4,$__]);
-          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT19__1__0,$__11,$__12]);});
+          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__11,$__12]);});
 $Comparisons.$Sussed.$_24okUNQ383=
  new _F_(function($inp,$_24x,$_24x3,$_24x4,$__,$_24x6)
          {var $__7=
            new _A_($Comparisons.$Sussed.$__20__387__0,[$inp]);
           var $__8=
-           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT25__0__0,$__7,$_24x6]);
+           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$__7,$_24x6]);
           var $__9=
            new _A_($Melchior.$Control.$put,[$__,$_24x4,$__8]);
           var $__10=
            new _A_($Comparisons.$Sussed.$__20__372__0,[$inp]);
           var $__11=
-           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT25__0__0,$__10,$_24x6]);
+           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$__10,$_24x6]);
           var $__12=
            new _A_($Melchior.$Control.$put,[$__,$_24x3,$__11]);
           var $__13=
-           new _A_($UHC.$Base.$_3e_3e,[$Melchior.$Dom.$Monad__DCT19__1__0,$__12,$__9]);
+           new _A_($UHC.$Base.$_3e_3e,[$Melchior.$Dom.$Monad__DCT31__1__0,$__12,$__9]);
           var $__14=
            new _A_($Comparisons.$Sussed.$__20__354__0,[$inp]);
           var $__15=
-           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT25__0__0,$__14,$_24x6]);
+           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$__14,$_24x6]);
           var $__16=
            new _A_($Melchior.$Control.$put,[$__,$_24x,$__15]);
-          return new _A_($UHC.$Base.$_3e_3e,[$Melchior.$Dom.$Monad__DCT19__1__0,$__16,$__13]);});
+          return new _A_($UHC.$Base.$_3e_3e,[$Melchior.$Dom.$Monad__DCT31__1__0,$__16,$__13]);});
 $Comparisons.$Sussed.$__20__387__0=
  new _F_(function($inp,$__)
          {var $__3=
@@ -679,21 +679,21 @@ $Comparisons.$Sussed.$__20__354__0=
 $Comparisons.$Sussed.$__20__427__0=
  new _F_(function($m)
          {var $__=
-           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT19__5__0,$m]);
+           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT31__5__0,$m]);
           var $__3=
            new _A_($UHC.$Base.$return,[$UHC.$Base.$Monad__DCT73__341__0]);
           return new _A_($UHC.$Base.$_24,[$__3,$__]);});
 $Comparisons.$Sussed.$__20__452__0=
  new _F_(function($m)
          {var $__=
-           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT19__5__0,$m]);
+           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT31__5__0,$m]);
           var $__3=
            new _A_($UHC.$Base.$return,[$UHC.$Base.$Monad__DCT73__341__0]);
           return new _A_($UHC.$Base.$_24,[$__3,$__]);});
 $Comparisons.$Sussed.$__20__477__0=
  new _F_(function($m)
          {var $__=
-           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT19__5__0,$m]);
+           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT31__5__0,$m]);
           var $__3=
            new _A_($UHC.$Base.$return,[$UHC.$Base.$Monad__DCT73__341__0]);
           return new _A_($UHC.$Base.$_24,[$__3,$__]);});
@@ -704,9 +704,9 @@ $Comparisons.$Sussed.$manualSorting=
           var $__5=
            new _A_($UHC.$Base.$packedStringToString,["quick"]);
           var $__6=
-           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT43__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT43__7__0,$__5]);
+           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT55__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT55__7__0,$__5]);
           var $__7=
-           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT43__11__0,$__6,$__4]);
+           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT55__11__0,$__6,$__4]);
           var $__8=
            new _A_($Melchior.$Dom.$Selectors.$select,[$__7,$html]);
           var $__9=
@@ -715,26 +715,26 @@ $Comparisons.$Sussed.$manualSorting=
            new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__9]);
           var $__11=
            new _A_($Comparisons.$Sussed.$_24okUNQ341,[$__,$html,$inp]);
-          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT19__1__0,$__10,$__11]);});
+          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__10,$__11]);});
 $Comparisons.$Sussed.$_24okUNQ405=
  new _F_(function($html,$_24x)
          {var $__=
            new _A_($Comparisons.$Sussed.$__20__496NEW218,[$html,$_24x]);
           var $__4=
-           new _A_($Comparisons.$Sussed.$manualSorting,[$Melchior.$Dom.$Selectors.$Nodes__DCT43__7__0,$html,$_24x]);
-          return new _A_($UHC.$Base.$_3e_3e,[$Melchior.$Dom.$Monad__DCT19__1__0,$__4,$__]);});
+           new _A_($Comparisons.$Sussed.$manualSorting,[$Melchior.$Dom.$Selectors.$Nodes__DCT55__7__0,$html,$_24x]);
+          return new _A_($UHC.$Base.$_3e_3e,[$Melchior.$Dom.$Monad__DCT31__1__0,$__4,$__]);});
 $Comparisons.$Sussed.$__20__496NEW218=
  new _F_(function($html,$_24x)
          {var $__=
            new _A_($UHC.$Base.$Show__DCT73__87__0,[$UHC.$Base.$Show__DCT73__65__0]);
           var $__4=
-           new _A_($Melchior.$Dom.$Selectors.$from,[$Melchior.$Dom.$Selectors.$Nodes__DCT43__7__0]);
+           new _A_($Melchior.$Dom.$Selectors.$from,[$Melchior.$Dom.$Selectors.$Nodes__DCT55__7__0]);
           var $__5=
            new _A_($UHC.$Base.$packedStringToString,["remote"]);
           var $__6=
-           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT43__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT43__7__0,$__5]);
+           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT55__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT55__7__0,$__5]);
           var $__7=
-           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT43__11__0,$__6,$__4]);
+           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT55__11__0,$__6,$__4]);
           var $__8=
            new _A_($Melchior.$Dom.$Selectors.$select,[$__7,$html]);
           var $__9=
@@ -743,13 +743,13 @@ $Comparisons.$Sussed.$__20__496NEW218=
            new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__9]);
           var $__11=
            new _A_($Comparisons.$Sussed.$_24okUNQ415,[$html,$_24x,$__]);
-          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT19__1__0,$__10,$__11]);});
+          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__10,$__11]);});
 $Comparisons.$Sussed.$_24okUNQ415=
  new _F_(function($html,$_24x,$__,$_24x4)
          {var $__5=
            new _A_($UHC.$Base.$head,[$html]);
           var $__6=
-           new _A_($UHC.$Base.$return,[$Melchior.$Dom.$Monad__DCT19__1__0]);
+           new _A_($UHC.$Base.$return,[$Melchior.$Dom.$Monad__DCT31__1__0]);
           var $__7=
            new _A_($UHC.$Base.$_24,[$__6,$__5]);
           var $__8=
@@ -761,40 +761,40 @@ $Comparisons.$Sussed.$_24okUNQ415=
           var $__11=
            new _A_($Comparisons.$Sussed.$stringify,[$__10]);
           var $__12=
-           new _A_($Melchior.$Dom.$toInput,[$Melchior.$Dom.$DomNode__DCT19__6__0,$_24x]);
+           new _A_($Melchior.$Dom.$toInput,[$Melchior.$Dom.$DomNode__DCT31__6__0,$_24x]);
           var $__13=
            new _A_($Melchior.$Control.$setValue,[$__,$__12]);
           var $__14=
            new _A_($UHC.$Base.$_24,[$__13,$__11]);
-          return new _A_($UHC.$Base.$_3e_3e,[$Melchior.$Dom.$Monad__DCT19__1__0,$__14,$__7]);});
+          return new _A_($UHC.$Base.$_3e_3e,[$Melchior.$Dom.$Monad__DCT31__1__0,$__14,$__7]);});
 $Comparisons.$Sussed.$__20__538__0=
  new _F_(function($m)
          {var $__=
-           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT19__5__0,$m]);
+           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT31__5__0,$m]);
           var $__3=
            new _A_($UHC.$Base.$return,[$UHC.$Base.$Monad__DCT73__341__0]);
           return new _A_($UHC.$Base.$_24,[$__3,$__]);});
 $Comparisons.$Sussed.$__20__567__0=
  new _F_(function($m)
          {var $__=
-           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT19__6__0,$m]);
+           new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT31__6__0,$m]);
           var $__3=
            new _A_($UHC.$Base.$return,[$UHC.$Base.$Monad__DCT73__341__0]);
           return new _A_($UHC.$Base.$_24,[$__3,$__]);});
 $Comparisons.$Sussed.$setupSorting=
  new _F_(function($html)
          {var $__=
-           new _A_($Melchior.$Dom.$Selectors.$from,[$Melchior.$Dom.$Selectors.$Nodes__DCT43__7__0]);
+           new _A_($Melchior.$Dom.$Selectors.$from,[$Melchior.$Dom.$Selectors.$Nodes__DCT55__7__0]);
           var $__3=
            new _A_($UHC.$Base.$packedStringToString,["inp"]);
           var $__4=
-           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT43__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT43__7__0,$__3]);
+           new _A_($Melchior.$Dom.$Selectors.$byId,[$Melchior.$Dom.$Selectors.$Node__DCT55__1__0,$Melchior.$Dom.$Selectors.$Nodes__DCT55__7__0,$__3]);
           var $__5=
-           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT43__11__0,$__4,$__]);
+           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT55__11__0,$__4,$__]);
           var $__6=
-           new _A_($Melchior.$Dom.$Selectors.$inputs,[$Melchior.$Dom.$Selectors.$Nodes__DCT43__4__0]);
+           new _A_($Melchior.$Dom.$Selectors.$inputs,[$Melchior.$Dom.$Selectors.$Nodes__DCT55__4__0]);
           var $__7=
-           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT43__11__0,$__6,$__5]);
+           new _A_($Control.$Category.$_2e,[$Melchior.$Dom.$Selectors.$Category__DCT55__11__0,$__6,$__5]);
           var $__8=
            new _A_($Melchior.$Dom.$Selectors.$select,[$__7,$html]);
           var $__9=
@@ -803,7 +803,7 @@ $Comparisons.$Sussed.$setupSorting=
            new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__9]);
           var $__11=
            new _A_($Comparisons.$Sussed.$_24okUNQ405,[$html]);
-          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT19__1__0,$__10,$__11]);});
+          return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__10,$__11]);});
 $Comparisons.$Sussed.$main=
  new _A_(new _F_(function()
                  {return new _A_($Melchior.$Control.$runDom,[$Comparisons.$Sussed.$setupSorting]);}),[]);

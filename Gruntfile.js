@@ -56,6 +56,7 @@ module.exports = function(grunt) {
                     "Melchior/JS/Test.js",
                     "Melchior/JS/Query.js",
                     "Melchior/JS/Function.js",
+                    "Melchior/JS/Html.js",
                     "Melchior/JS/Socket.js",
                     "Melchior/JS/Dom.js",
                     "Melchior/JS/Events.js",

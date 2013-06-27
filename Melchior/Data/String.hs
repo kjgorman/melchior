@@ -3,8 +3,6 @@ module Melchior.Data.String (
     JSString
   , jsStringToString
   , stringToJSString
-  , jsToS
-  , sToJs
  ) where
 
 #ifdef __UHC_TARGET_JS__
@@ -15,5 +13,5 @@ stringToJSString = undefined
 jsStringToString = undefined
 #endif
 
-jsToS = jsStringToString
-sToJs = stringToJSString
+
+
