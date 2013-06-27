@@ -24,6 +24,7 @@ module Melchior.Control
   , terminate
   , put
   , append
+  , prepend
   , setValue
   , emptySignal
   ) where
@@ -72,6 +73,9 @@ put el s = terminate s (\x -> return $ set el "innerHTML" $ render x)
 
 append :: (Renderable a) => Element -> Signal a -> Dom ()
 append el s = terminate s (\x -> appendHtml el $ render x)
+
+prepend :: (Renderable a) => Element -> Signal a -> Dom ()
+prepend el s = terminate s (\x -> prependHtml el $ render x)
 
 -- * Misc. primitive signal operations
 

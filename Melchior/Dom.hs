@@ -24,6 +24,7 @@ module Melchior.Dom
     , parentOf
     , siblings
     , appendHtml
+    , prependHtml
     , hack
     , set
     , value
@@ -132,6 +133,12 @@ appendHtml = primAppend
 
 foreign import js "Dom.append(%1, %2)"
   primAppend :: Element -> Html -> IO ()
+
+prependHtml :: Element -> Html -> IO ()
+prependHtml = primPrepend
+
+foreign import js "Dom.prepend(%1, %2)"
+  primPrepend :: Element -> Html -> IO ()
 
 setV :: Input -> String -> IO ()
 setV i s = primSetValue i (stringToJSString s)

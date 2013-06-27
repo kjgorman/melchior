@@ -72,10 +72,23 @@ var Dom = function() {
         else return elem.value ? elem.value : ""
     }
 
+    function tryParseHtml(html) {
+        var parser = new DOMParser()
+        var fragment = parser.parseFromString(html, "text/xml")
+        var doc /* ;_; jshint...*/
+        if(fragment.body && /parsererror/.test(fragment.body.innerHTML)) {
+            doc = document.createElement("span")
+            doc.innerHTML = html
+        } else doc = fragment.firstChild
+        return doc
+    }
+
     DomOperations.prototype.append = function(elem, html) {
-        var doc = document.createElement("span")
-        doc.innerHTML = html
-        elem.appendChild(doc)
+        elem.appendChild(tryParseHtml(html()))
+    }
+
+    DomOperations.prototype.prepend = function(elem, html) {
+        elem.insertBefore(tryParseHtml(html), elem.firstChild)
     }
 
     DomOperations.prototype.hack = function(str) {
