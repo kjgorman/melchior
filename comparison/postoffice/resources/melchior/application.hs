@@ -34,7 +34,7 @@ def Nothing = "error"
 def (Just s) = s
 
 sendMessages :: Signal String -> Signal Status
-sendMessages s = request POST "/send" $ (\x -> stringToJSString x) <$> s
+sendMessages s = request POST "/send" $ (\x -> stringToJSString x) <$> (dropWhen s (\x -> x == ""))
 
 placeInOutbox :: Signal String -> [Element] -> Dom ()
 placeInOutbox s html = do

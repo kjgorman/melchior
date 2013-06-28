@@ -20,7 +20,10 @@ $Comparisons.$PostOffice.$def=
               $__4;
              break;}
           return $__swJSW0__0;});
-$Comparisons.$PostOffice.$_24okUNQ59=
+$Comparisons.$PostOffice.$__17__919__2__0=
+ new _A_(new _F_(function()
+                 {return new _A_($UHC.$Base.$Eq__DCT73__396__0,[$UHC.$Base.$Eq__DCT73__56__0]);}),[]);
+$Comparisons.$PostOffice.$_24okUNQ61=
  new _F_(function($html,$_24x)
          {var $__=
            new _A_($Melchior.$Dom.$Selectors.$from,[$Melchior.$Dom.$Selectors.$Nodes__DCT55__7__0]);
@@ -33,36 +36,36 @@ $Comparisons.$PostOffice.$_24okUNQ59=
           var $__7=
            new _A_($Melchior.$Dom.$Selectors.$select,[$__6,$html]);
           var $__8=
-           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__7,$Comparisons.$PostOffice.$__19__45__0]);
+           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__7,$Comparisons.$PostOffice.$__19__47__0]);
           var $__9=
            new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__8]);
           var $__10=
-           new _A_($Comparisons.$PostOffice.$_24okUNQ64,[$_24x]);
+           new _A_($Comparisons.$PostOffice.$_24okUNQ66,[$_24x]);
           return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__9,$__10]);});
-$Comparisons.$PostOffice.$_24okUNQ64=
+$Comparisons.$PostOffice.$_24okUNQ66=
  new _F_(function($_24x,$_24x2)
          {var $__=
            new _A_($Melchior.$EventSources.$Mouse.$click,[$_24x2]);
           var $__4=
-           new _A_($Comparisons.$PostOffice.$__19__21__0,[$_24x]);
+           new _A_($Comparisons.$PostOffice.$__19__23__0,[$_24x]);
           var $__5=
            new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$__4,$__]);
           var $__6=
            new _A_($UHC.$Base.$return,[$Melchior.$Dom.$Monad__DCT31__1__0]);
           return new _A_($UHC.$Base.$_24,[$__6,$__5]);});
-$Comparisons.$PostOffice.$__19__21__0=
+$Comparisons.$PostOffice.$__19__23__0=
  new _F_(function($_24x,$__)
          {var $__3=
            new _A_($Melchior.$Dom.$value,[$_24x]);
           return new _A_($UHC.$Base.$_24,[$Language.$UHC.$JScript.$ECMA.$String.$jsStringToString,$__3]);});
-$Comparisons.$PostOffice.$__19__45__0=
+$Comparisons.$PostOffice.$__19__47__0=
  new _F_(function($m)
          {var $__=
            new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT31__5__0,$m]);
           var $__3=
            new _A_($UHC.$Base.$return,[$UHC.$Base.$Monad__DCT73__341__0]);
           return new _A_($UHC.$Base.$_24,[$__3,$__]);});
-$Comparisons.$PostOffice.$__19__74__0=
+$Comparisons.$PostOffice.$__19__76__0=
  new _F_(function($m)
          {var $__=
            new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT31__6__0,$m]);
@@ -86,20 +89,20 @@ $Comparisons.$PostOffice.$listenForComposition=
           var $__8=
            new _A_($Melchior.$Dom.$Selectors.$select,[$__7,$html]);
           var $__9=
-           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__8,$Comparisons.$PostOffice.$__19__74__0]);
+           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__8,$Comparisons.$PostOffice.$__19__76__0]);
           var $__10=
            new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__9]);
           var $__11=
-           new _A_($Comparisons.$PostOffice.$_24okUNQ59,[$html]);
+           new _A_($Comparisons.$PostOffice.$_24okUNQ61,[$html]);
           return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__10,$__11]);});
-$Comparisons.$PostOffice.$_24okUNQ41=
+$Comparisons.$PostOffice.$_24okUNQ43=
  new _F_(function($s,$_24x)
          {var $__=
-           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$Comparisons.$PostOffice.$__19__96__0,$s]);
+           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$Comparisons.$PostOffice.$__19__98__0,$s]);
           var $__4=
            new _A_($Melchior.$Control.$prepend,[$Melchior.$Dom.$Html.$Renderable__DCT19__5__0,$_24x]);
           return new _A_($UHC.$Base.$_24,[$__4,$__]);});
-$Comparisons.$PostOffice.$__19__96__0=
+$Comparisons.$PostOffice.$__19__98__0=
  new _F_(function($s)
          {var $__=
            new _A_($UHC.$Base.$packedStringToString,["</li>"]);
@@ -108,7 +111,7 @@ $Comparisons.$PostOffice.$__19__96__0=
           var $__4=
            new _A_($UHC.$Base.$packedStringToString,["<li>"]);
           return new _A_($UHC.$Base.$_2b_2b,[$__4,$__3]);});
-$Comparisons.$PostOffice.$__19__122__0=
+$Comparisons.$PostOffice.$__19__124__0=
  new _F_(function($m)
          {var $__=
            new _A_($Melchior.$Dom.$ensures,[$Melchior.$Dom.$DomNode__DCT31__5__0,$m]);
@@ -128,11 +131,11 @@ $Comparisons.$PostOffice.$placeInOutbox=
           var $__7=
            new _A_($Melchior.$Dom.$Selectors.$select,[$__6,$html]);
           var $__8=
-           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__7,$Comparisons.$PostOffice.$__19__122__0]);
+           new _A_($UHC.$Base.$_3e_3e_3d,[$UHC.$Base.$Monad__DCT73__341__0,$__7,$Comparisons.$PostOffice.$__19__124__0]);
           var $__9=
            new _A_($UHC.$Base.$_24,[$Melchior.$Dom.$Dom__,$__8]);
           var $__10=
-           new _A_($Comparisons.$PostOffice.$_24okUNQ41,[$s]);
+           new _A_($Comparisons.$PostOffice.$_24okUNQ43,[$s]);
           return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__9,$__10]);});
 $Comparisons.$PostOffice.$Ok__=
  new _A_(new _F_(function()
@@ -349,34 +352,41 @@ $Comparisons.$PostOffice.$JsonSerialisable__DCT15__1__0DFLMelchior_2eRemote_2eJs
               $__41;
              break;}
           return $__swJSW1__0;});
-$Comparisons.$PostOffice.$JsonSerialisable__NEW78UNQ134DCT15__1__0RDC=
+$Comparisons.$PostOffice.$JsonSerialisable__NEW79UNQ137DCT15__1__0RDC=
  new _F_(function($JsonSerialisable__)
          {var $JsonSerialisable__2=
-           new _A_($Comparisons.$PostOffice.$JsonSerialisable__NEW80UNQ142EVLDCT15__1__0RDC,[$JsonSerialisable__]);
+           new _A_($Comparisons.$PostOffice.$JsonSerialisable__NEW81UNQ145EVLDCT15__1__0RDC,[$JsonSerialisable__]);
           return $JsonSerialisable__2;});
-$Comparisons.$PostOffice.$JsonSerialisable__NEW80UNQ142EVLDCT15__1__0RDC=
+$Comparisons.$PostOffice.$JsonSerialisable__NEW81UNQ145EVLDCT15__1__0RDC=
  new _F_(function($JsonSerialisable__)
          {var $JsonSerialisable__2=
            _e_(new _A_($Melchior.$Remote.$Json.$JsonSerialisable__CLS19__0__0,[$JsonSerialisable__]));
           var $__4=
            {_tag_:0,_1:$Comparisons.$PostOffice.$JsonSerialisable__DCT15__1__0DFLMelchior_2eRemote_2eJson_2efromJson};
           return $__4;});
-$Comparisons.$PostOffice.$JsonSerialisable__UNQ134DCT15__1__0RDC=
+$Comparisons.$PostOffice.$JsonSerialisable__UNQ137DCT15__1__0RDC=
  new _A_(new _F_(function()
-                 {return new _A_($Comparisons.$PostOffice.$JsonSerialisable__NEW78UNQ134DCT15__1__0RDC,[$Comparisons.$PostOffice.$JsonSerialisable__UNQ134DCT15__1__0RDC]);}),[]);
+                 {return new _A_($Comparisons.$PostOffice.$JsonSerialisable__NEW79UNQ137DCT15__1__0RDC,[$Comparisons.$PostOffice.$JsonSerialisable__UNQ137DCT15__1__0RDC]);}),[]);
 $Comparisons.$PostOffice.$JsonSerialisable__DCT15__1__0=
  new _A_(new _F_(function()
-                 {return $Comparisons.$PostOffice.$JsonSerialisable__UNQ134DCT15__1__0RDC;}),[]);
+                 {return $Comparisons.$PostOffice.$JsonSerialisable__UNQ137DCT15__1__0RDC;}),[]);
+$Comparisons.$PostOffice.$__19__223__0=
+ new _F_(function($x)
+         {var $__=
+           new _A_($UHC.$Base.$packedStringToString,[""]);
+          return new _A_($UHC.$Base.$_3d_3d,[$Comparisons.$PostOffice.$__17__919__2__0,$x,$__]);});
 $Comparisons.$PostOffice.$sendMessages=
  new _F_(function($s)
          {var $__=
-           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$Language.$UHC.$JScript.$ECMA.$String.$stringToJSString,$s]);
+           new _A_($Melchior.$Control.$dropWhen,[$s,$Comparisons.$PostOffice.$__19__223__0]);
           var $__3=
-           new _A_($UHC.$Base.$packedStringToString,["/send"]);
+           new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$Language.$UHC.$JScript.$ECMA.$String.$stringToJSString,$__]);
           var $__4=
-           new _A_($Melchior.$Remote.$XHR.$request,[$Comparisons.$PostOffice.$JsonSerialisable__DCT15__1__0,$Melchior.$Remote.$XHR.$POST__,$__3]);
-          return new _A_($UHC.$Base.$_24,[$__4,$__]);});
-$Comparisons.$PostOffice.$_24okUNQ130=
+           new _A_($UHC.$Base.$packedStringToString,["/send"]);
+          var $__5=
+           new _A_($Melchior.$Remote.$XHR.$request,[$Comparisons.$PostOffice.$JsonSerialisable__DCT15__1__0,$Melchior.$Remote.$XHR.$POST__,$__4]);
+          return new _A_($UHC.$Base.$_24,[$__5,$__3]);});
+$Comparisons.$PostOffice.$_24okUNQ133=
  new _F_(function($html,$_24x)
          {var $__=
            new _A_($UHC.$Base.$head,[$html]);
@@ -400,7 +410,7 @@ $Comparisons.$PostOffice.$setupPostOffice=
          {var $__=
            new _A_($Comparisons.$PostOffice.$listenForComposition,[$html]);
           var $__3=
-           new _A_($Comparisons.$PostOffice.$_24okUNQ130,[$html]);
+           new _A_($Comparisons.$PostOffice.$_24okUNQ133,[$html]);
           return new _A_($UHC.$Base.$_3e_3e_3d,[$Melchior.$Dom.$Monad__DCT31__1__0,$__,$__3]);});
 $Comparisons.$PostOffice.$main=
  new _A_(new _F_(function()
@@ -455,90 +465,90 @@ $Comparisons.$PostOffice.$__Rep0StatusDFLUHC_2eBase_2efrom0GENRepresentable0=
               $__11;
              break;}
           return $__swJSW20__0;});
-$Comparisons.$PostOffice.$__Rep0StatusNEW115UNQ77SDCGENRepresentable0=
+$Comparisons.$PostOffice.$__Rep0StatusNEW119UNQ79SDCGENRepresentable0=
  new _F_(function($__)
          {var $__2=
-           new _A_($Comparisons.$PostOffice.$__Rep0StatusNEW117UNQ78EVLSDCGENRepresentable0,[$__]);
+           new _A_($Comparisons.$PostOffice.$__Rep0StatusNEW121UNQ80EVLSDCGENRepresentable0,[$__]);
           return $__2;});
-$Comparisons.$PostOffice.$__Rep0StatusNEW117UNQ78EVLSDCGENRepresentable0=
+$Comparisons.$PostOffice.$__Rep0StatusNEW121UNQ80EVLSDCGENRepresentable0=
  new _F_(function($__)
          {var $Representable0__=
            _e_(new _A_($UHC.$Base.$Representable0__CLS73__371__0,[$__]));
           var $__5=
            {_tag_:0,_1:$Comparisons.$PostOffice.$__Rep0StatusDFLUHC_2eBase_2efrom0GENRepresentable0,_2:$Comparisons.$PostOffice.$__Rep0StatusDFLUHC_2eBase_2eto0GENRepresentable0};
           return $__5;});
-$Comparisons.$PostOffice.$__Rep0StatusUNQ77SDCGENRepresentable0=
+$Comparisons.$PostOffice.$__Rep0StatusUNQ79SDCGENRepresentable0=
  new _A_(new _F_(function()
-                 {return new _A_($Comparisons.$PostOffice.$__Rep0StatusNEW115UNQ77SDCGENRepresentable0,[$Comparisons.$PostOffice.$__Rep0StatusUNQ77SDCGENRepresentable0]);}),[]);
+                 {return new _A_($Comparisons.$PostOffice.$__Rep0StatusNEW119UNQ79SDCGENRepresentable0,[$Comparisons.$PostOffice.$__Rep0StatusUNQ79SDCGENRepresentable0]);}),[]);
 $Comparisons.$PostOffice.$__Rep0StatusGENRepresentable0=
  new _A_(new _F_(function()
-                 {return $Comparisons.$PostOffice.$__Rep0StatusUNQ77SDCGENRepresentable0;}),[]);
+                 {return $Comparisons.$PostOffice.$__Rep0StatusUNQ79SDCGENRepresentable0;}),[]);
 $Comparisons.$PostOffice.$_24D__StatusDFLUHC_2eBase_2emoduleNameGENDatatype=
  new _F_(function($x)
          {return new _A_($UHC.$Base.$packedStringToString,["Comparisons.PostOffice"]);});
 $Comparisons.$PostOffice.$_24D__StatusDFLUHC_2eBase_2edatatypeNameGENDatatype=
  new _F_(function($x)
          {return new _A_($UHC.$Base.$packedStringToString,["Status"]);});
-$Comparisons.$PostOffice.$_24D__StatusNEW124UNQ100SDCGENDatatype=
+$Comparisons.$PostOffice.$_24D__StatusNEW128UNQ102SDCGENDatatype=
  new _F_(function($_24D__Status)
          {var $_24D__Status2=
-           new _A_($Comparisons.$PostOffice.$_24D__StatusNEW126UNQ101EVLSDCGENDatatype,[$_24D__Status]);
+           new _A_($Comparisons.$PostOffice.$_24D__StatusNEW130UNQ103EVLSDCGENDatatype,[$_24D__Status]);
           return $_24D__Status2;});
-$Comparisons.$PostOffice.$_24D__StatusNEW126UNQ101EVLSDCGENDatatype=
+$Comparisons.$PostOffice.$_24D__StatusNEW130UNQ103EVLSDCGENDatatype=
  new _F_(function($_24D__Status)
          {var $Datatype__=
            _e_(new _A_($UHC.$Base.$Datatype__CLS73__352__0,[$_24D__Status]));
           var $__5=
            {_tag_:0,_1:$Comparisons.$PostOffice.$_24D__StatusDFLUHC_2eBase_2edatatypeNameGENDatatype,_2:$Comparisons.$PostOffice.$_24D__StatusDFLUHC_2eBase_2emoduleNameGENDatatype};
           return $__5;});
-$Comparisons.$PostOffice.$_24D__StatusUNQ100SDCGENDatatype=
+$Comparisons.$PostOffice.$_24D__StatusUNQ102SDCGENDatatype=
  new _A_(new _F_(function()
-                 {return new _A_($Comparisons.$PostOffice.$_24D__StatusNEW124UNQ100SDCGENDatatype,[$Comparisons.$PostOffice.$_24D__StatusUNQ100SDCGENDatatype]);}),[]);
+                 {return new _A_($Comparisons.$PostOffice.$_24D__StatusNEW128UNQ102SDCGENDatatype,[$Comparisons.$PostOffice.$_24D__StatusUNQ102SDCGENDatatype]);}),[]);
 $Comparisons.$PostOffice.$_24D__StatusGENDatatype=
  new _A_(new _F_(function()
-                 {return $Comparisons.$PostOffice.$_24D__StatusUNQ100SDCGENDatatype;}),[]);
+                 {return $Comparisons.$PostOffice.$_24D__StatusUNQ102SDCGENDatatype;}),[]);
 $Comparisons.$PostOffice.$_24C__OkDFLUHC_2eBase_2econNameGENConstructor=
  new _F_(function($x)
          {return new _A_($UHC.$Base.$packedStringToString,["Ok"]);});
-$Comparisons.$PostOffice.$_24C__OkNEW132UNQ107SDCGENConstructor=
+$Comparisons.$PostOffice.$_24C__OkNEW136UNQ109SDCGENConstructor=
  new _F_(function($_24C__Ok)
          {var $_24C__Ok2=
-           new _A_($Comparisons.$PostOffice.$_24C__OkNEW134UNQ108EVLSDCGENConstructor,[$_24C__Ok]);
+           new _A_($Comparisons.$PostOffice.$_24C__OkNEW138UNQ110EVLSDCGENConstructor,[$_24C__Ok]);
           return $_24C__Ok2;});
-$Comparisons.$PostOffice.$_24C__OkNEW134UNQ108EVLSDCGENConstructor=
+$Comparisons.$PostOffice.$_24C__OkNEW138UNQ110EVLSDCGENConstructor=
  new _F_(function($_24C__Ok)
          {var $Constructor__=
            _e_(new _A_($UHC.$Base.$Constructor__CLS73__355__0,[$_24C__Ok]));
           var $__7=
            {_tag_:0,_1:$Constructor__._1,_2:$Constructor__._2,_3:$Constructor__._3,_4:$Comparisons.$PostOffice.$_24C__OkDFLUHC_2eBase_2econNameGENConstructor};
           return $__7;});
-$Comparisons.$PostOffice.$_24C__OkUNQ107SDCGENConstructor=
+$Comparisons.$PostOffice.$_24C__OkUNQ109SDCGENConstructor=
  new _A_(new _F_(function()
-                 {return new _A_($Comparisons.$PostOffice.$_24C__OkNEW132UNQ107SDCGENConstructor,[$Comparisons.$PostOffice.$_24C__OkUNQ107SDCGENConstructor]);}),[]);
+                 {return new _A_($Comparisons.$PostOffice.$_24C__OkNEW136UNQ109SDCGENConstructor,[$Comparisons.$PostOffice.$_24C__OkUNQ109SDCGENConstructor]);}),[]);
 $Comparisons.$PostOffice.$_24C__OkGENConstructor=
  new _A_(new _F_(function()
-                 {return $Comparisons.$PostOffice.$_24C__OkUNQ107SDCGENConstructor;}),[]);
+                 {return $Comparisons.$PostOffice.$_24C__OkUNQ109SDCGENConstructor;}),[]);
 $Comparisons.$PostOffice.$_24C__ErrorDFLUHC_2eBase_2econNameGENConstructor=
  new _F_(function($x)
          {return new _A_($UHC.$Base.$packedStringToString,["Error"]);});
-$Comparisons.$PostOffice.$_24C__ErrorNEW140UNQ115SDCGENConstructor=
+$Comparisons.$PostOffice.$_24C__ErrorNEW144UNQ117SDCGENConstructor=
  new _F_(function($_24C__Error)
          {var $_24C__Error2=
-           new _A_($Comparisons.$PostOffice.$_24C__ErrorNEW142UNQ116EVLSDCGENConstructor,[$_24C__Error]);
+           new _A_($Comparisons.$PostOffice.$_24C__ErrorNEW146UNQ118EVLSDCGENConstructor,[$_24C__Error]);
           return $_24C__Error2;});
-$Comparisons.$PostOffice.$_24C__ErrorNEW142UNQ116EVLSDCGENConstructor=
+$Comparisons.$PostOffice.$_24C__ErrorNEW146UNQ118EVLSDCGENConstructor=
  new _F_(function($_24C__Error)
          {var $Constructor__=
            _e_(new _A_($UHC.$Base.$Constructor__CLS73__355__0,[$_24C__Error]));
           var $__7=
            {_tag_:0,_1:$Constructor__._1,_2:$Constructor__._2,_3:$Constructor__._3,_4:$Comparisons.$PostOffice.$_24C__ErrorDFLUHC_2eBase_2econNameGENConstructor};
           return $__7;});
-$Comparisons.$PostOffice.$_24C__ErrorUNQ115SDCGENConstructor=
+$Comparisons.$PostOffice.$_24C__ErrorUNQ117SDCGENConstructor=
  new _A_(new _F_(function()
-                 {return new _A_($Comparisons.$PostOffice.$_24C__ErrorNEW140UNQ115SDCGENConstructor,[$Comparisons.$PostOffice.$_24C__ErrorUNQ115SDCGENConstructor]);}),[]);
+                 {return new _A_($Comparisons.$PostOffice.$_24C__ErrorNEW144UNQ117SDCGENConstructor,[$Comparisons.$PostOffice.$_24C__ErrorUNQ117SDCGENConstructor]);}),[]);
 $Comparisons.$PostOffice.$_24C__ErrorGENConstructor=
  new _A_(new _F_(function()
-                 {return $Comparisons.$PostOffice.$_24C__ErrorUNQ115SDCGENConstructor;}),[]);
+                 {return $Comparisons.$PostOffice.$_24C__ErrorUNQ117SDCGENConstructor;}),[]);
 var $main=
  new _A_(new _F_(function()
                  {return new _A_($UHC.$Run.$ehcRunMain,[$Comparisons.$PostOffice.$main]);}),[]);
