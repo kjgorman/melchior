@@ -3,7 +3,7 @@
 <html>
 
   <head>
-    <title>Example app index template</title>
+    <title>PostOffice</title>
 
     <style type="text/css">
       body {
@@ -42,7 +42,9 @@
         margin-top: 28px;
       }
       .hidden { display: none }
-      .outbox * { float: right }
+      .outbox > ol { float: right }
+      ol > li { display: block }
+      .outbox > h3 { float: right }
     </style>
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.css" />
   </head>
@@ -80,13 +82,12 @@
           <hr/>
           <div class="row">
             <div class="span4">
-              <ol>
+              <ol id="inbox">
                 <li>Test in item</li>
               </ol>
             </div>
             <div class="span4 outbox">
-              <ol>
-                <li>Test out item</li>
+              <ol id="outbox">
               </ol>
             </div>
           </div>
@@ -102,8 +103,8 @@
  </body>
 
  <footer>
-   <script type="text/javascript" src="resources/melchior/melchior.js"></script>
-   <script type="text/javascript" src="resources/melchior/application.js"></script>
+   <script type="text/javascript" src="resources/jquery-1.9.1.js"></script>
+   <script type="text/javascript" src="resources/jquery/application.js"></script>
  </footer>
 
 </html>
