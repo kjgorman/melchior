@@ -20,7 +20,21 @@ setupPostOffice :: [Element] -> Dom Element
 setupPostOffice html = do
   composedMessages <- listenForComposition html
   placeInOutbox composedMessages html
+  return $ sendMessages composedMessages
   return $ UHC.Base.head html
+
+data Status = Ok | Error String
+instance JsonSerialisable Status where
+  fromJson Nothing = Error "No Response"
+  fromJson (Just x) = case def $ getJsonString "status" x of
+    "ok" -> Ok
+    "error" -> Error "error"
+
+def Nothing = "error"
+def (Just s) = s
+
+sendMessages :: Signal String -> Signal Status
+sendMessages s = request POST "/send" $ (\x -> stringToJSString x) <$> s
 
 placeInOutbox :: Signal String -> [Element] -> Dom ()
 placeInOutbox s html = do

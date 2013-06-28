@@ -890,7 +890,6 @@ Sockets.createSocketedSignal = function(namespace) {
 
         req.open(method, resource, true /*async*/)
 
-        if(method !== "GET") req.setRequestHeader("Content-type","application/x-www-form-encoded")
         return req
     }
 
@@ -906,7 +905,9 @@ Sockets.createSocketedSignal = function(namespace) {
                 if(req.readyState === 4)
                     outSignal.push(req.response)
             }
-            req.send(value) //should this send now?
+            req.setRequestHeader("content-type", "application/json; charset=utf-8")
+            console.log(value)
+            req.send("{\"data\":\""+value+"\"}") //should this send now?
         })
 
         return outSignal
@@ -63344,15 +63345,15 @@ $Melchior.$Remote.$Json.$fromJson=
 $Melchior.$Remote.$Json.$empty=
  new _A_(new _F_(function()
                  {return new _A_($Melchior.$Remote.$Internal.$Parser.$JsonObject__,[$UHC.$Base.$_5b_5d]);}),[]);
-$Melchior.$Remote.$Json.$__77__20__0=
+$Melchior.$Remote.$Json.$__23__20__0=
  new _F_(function($x)
          {var $__=
            new _A_($Language.$UHC.$JScript.$ECMA.$String.$jsStringToString,[$x]);
           return new _A_($Melchior.$Remote.$Internal.$Parser.$parseJson,[$__]);});
 $Melchior.$Remote.$Json.$toJson=
  new _A_(new _F_(function()
-                 {return new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$Melchior.$Remote.$Json.$__77__20__0]);}),[]);
-$Melchior.$Remote.$Json.$__75__265__2__0=
+                 {return new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$Melchior.$Remote.$Json.$__23__20__0]);}),[]);
+$Melchior.$Remote.$Json.$__21__265__2__0=
  new _A_(new _F_(function()
                  {return new _A_($UHC.$Base.$Eq__DCT73__396__0,[$UHC.$Base.$Eq__DCT73__56__0]);}),[]);
 $Melchior.$Remote.$Json.$matchPair=
@@ -63389,7 +63390,7 @@ $Melchior.$Remote.$Json.$matchPair=
              break;
             case 6:
              var $__13=
-              new _A_($UHC.$Base.$_3d_3d,[$Melchior.$Remote.$Json.$__75__265__2__0,$x1,$__6._1]);
+              new _A_($UHC.$Base.$_3d_3d,[$Melchior.$Remote.$Json.$__21__265__2__0,$x1,$__6._1]);
              $__swJSW5__0=
               $__13;
              break;}
@@ -63475,7 +63476,7 @@ $Melchior.$Remote.$Json.$getJsonString=
               $UHC.$Base.$Nothing__;
              break;}
           return $__swJSW9__0;});
-$Melchior.$Remote.$Json.$JsonSerialisable__CLS73__0__0=
+$Melchior.$Remote.$Json.$JsonSerialisable__CLS19__0__0=
  new _F_(function($JsonSerialisable__)
          {var $JsonSerialisable__2=
            {_tag_:0,_1:$UHC.$Base.$undefined};
@@ -63504,7 +63505,7 @@ $Melchior.$Remote.$XHR.$primGetRemote=
           var $__6=
            _e_($__3);
           return XHR.getRemote($__4,$__5,$__6);});
-$Melchior.$Remote.$XHR.$__83__26__0=
+$Melchior.$Remote.$XHR.$__29__26__0=
  new _F_(function($__,$s)
          {var $__3=
            new _A_($Language.$UHC.$JScript.$ECMA.$String.$jsStringToString,[$s]);
@@ -63520,9 +63521,9 @@ $Melchior.$Remote.$XHR.$server=
           var $__4=
            new _A_($UHC.$Base.$_24,[$Melchior.$Remote.$XHR.$primGetSocketedSignal,$__3]);
           var $__5=
-           new _A_($Melchior.$Remote.$XHR.$__83__26__0,[$__]);
+           new _A_($Melchior.$Remote.$XHR.$__29__26__0,[$__]);
           return new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$__5,$__4]);});
-$Melchior.$Remote.$XHR.$Show__DCT79__0__0DFLUHC_2eBase_2eshow=
+$Melchior.$Remote.$XHR.$Show__DCT25__0__0DFLUHC_2eBase_2eshow=
  new _F_(function($x1)
          {var $__=
            _e_($x1);
@@ -63557,34 +63558,34 @@ $Melchior.$Remote.$XHR.$Show__DCT79__0__0DFLUHC_2eBase_2eshow=
               $UHC.$Base.$undefined;
              break;}
           return $__swJSW0__0;});
-$Melchior.$Remote.$XHR.$Show__NEW20UNQ127DCT79__0__0RDC=
+$Melchior.$Remote.$XHR.$Show__NEW20UNQ127DCT25__0__0RDC=
  new _F_(function($Show__)
          {var $Show__2=
-           new _A_($Melchior.$Remote.$XHR.$Show__NEW22UNQ128EVLDCT79__0__0RDC,[$Show__]);
+           new _A_($Melchior.$Remote.$XHR.$Show__NEW22UNQ128EVLDCT25__0__0RDC,[$Show__]);
           return $Show__2;});
-$Melchior.$Remote.$XHR.$Show__NEW22UNQ128EVLDCT79__0__0RDC=
+$Melchior.$Remote.$XHR.$Show__NEW22UNQ128EVLDCT25__0__0RDC=
  new _F_(function($Show__)
          {var $Show__2=
            _e_(new _A_($UHC.$Base.$Show__CLS73__43__0,[$Show__]));
           var $__6=
-           {_tag_:0,_1:$Melchior.$Remote.$XHR.$Show__DCT79__0__0DFLUHC_2eBase_2eshow,_2:$Show__2._2,_3:$Show__2._3};
+           {_tag_:0,_1:$Melchior.$Remote.$XHR.$Show__DCT25__0__0DFLUHC_2eBase_2eshow,_2:$Show__2._2,_3:$Show__2._3};
           return $__6;});
-$Melchior.$Remote.$XHR.$Show__UNQ127DCT79__0__0RDC=
+$Melchior.$Remote.$XHR.$Show__UNQ127DCT25__0__0RDC=
  new _A_(new _F_(function()
-                 {return new _A_($Melchior.$Remote.$XHR.$Show__NEW20UNQ127DCT79__0__0RDC,[$Melchior.$Remote.$XHR.$Show__UNQ127DCT79__0__0RDC]);}),[]);
-$Melchior.$Remote.$XHR.$Show__DCT79__0__0=
+                 {return new _A_($Melchior.$Remote.$XHR.$Show__NEW20UNQ127DCT25__0__0RDC,[$Melchior.$Remote.$XHR.$Show__UNQ127DCT25__0__0RDC]);}),[]);
+$Melchior.$Remote.$XHR.$Show__DCT25__0__0=
  new _A_(new _F_(function()
-                 {return $Melchior.$Remote.$XHR.$Show__UNQ127DCT79__0__0RDC;}),[]);
+                 {return $Melchior.$Remote.$XHR.$Show__UNQ127DCT25__0__0RDC;}),[]);
 $Melchior.$Remote.$XHR.$remote=
  new _F_(function($x,$s)
          {var $__=
            new _A_($Language.$UHC.$JScript.$ECMA.$String.$stringToJSString,[$s]);
           var $__4=
-           new _A_($UHC.$Base.$show,[$Melchior.$Remote.$XHR.$Show__DCT79__0__0,$x]);
+           new _A_($UHC.$Base.$show,[$Melchior.$Remote.$XHR.$Show__DCT25__0__0,$x]);
           var $__5=
            new _A_($UHC.$Base.$_24,[$Language.$UHC.$JScript.$ECMA.$String.$stringToJSString,$__4]);
           return new _A_($Melchior.$Remote.$XHR.$primGetRemote,[$__5,$__]);});
-$Melchior.$Remote.$XHR.$__83__79__0=
+$Melchior.$Remote.$XHR.$__29__79__0=
  new _F_(function($__,$s)
          {var $__3=
            new _A_($Language.$UHC.$JScript.$ECMA.$String.$jsStringToString,[$s]);
@@ -63596,13 +63597,13 @@ $Melchior.$Remote.$XHR.$request=
          {var $__5=
            new _A_($Language.$UHC.$JScript.$ECMA.$String.$stringToJSString,[$s]);
           var $__6=
-           new _A_($UHC.$Base.$show,[$Melchior.$Remote.$XHR.$Show__DCT79__0__0,$x]);
+           new _A_($UHC.$Base.$show,[$Melchior.$Remote.$XHR.$Show__DCT25__0__0,$x]);
           var $__7=
            new _A_($UHC.$Base.$_24,[$Language.$UHC.$JScript.$ECMA.$String.$stringToJSString,$__6]);
           var $__8=
            new _A_($Melchior.$Remote.$XHR.$primGetRemote,[$__7,$__5,$source]);
           var $__9=
-           new _A_($Melchior.$Remote.$XHR.$__83__79__0,[$__]);
+           new _A_($Melchior.$Remote.$XHR.$__29__79__0,[$__]);
           return new _A_($Control.$Applicative.$_3c_24_3e,[$Melchior.$Control.$Functor__DCT37__0__0,$__9,$__8]);});
 $Melchior.$Remote.$XHR.$SIGNAL__=
  new _A_(new _F_(function()

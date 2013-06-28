@@ -32,7 +32,6 @@ var XHR = function () {
 
         req.open(method, resource, true /*async*/)
 
-        if(method !== "GET") req.setRequestHeader("Content-type","application/x-www-form-encoded")
         return req
     }
 
@@ -48,7 +47,8 @@ var XHR = function () {
                 if(req.readyState === 4)
                     outSignal.push(req.response)
             }
-            req.send(value) //should this send now?
+            req.setRequestHeader("content-type", "application/json; charset=utf-8")
+            req.send("{\"data\":\""+value+"\"}") //should this send now?
         })
 
         return outSignal
