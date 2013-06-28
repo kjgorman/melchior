@@ -6,8 +6,7 @@ Sockets.Socket = function Socket (signal, namespace) {
     if(!('WebSocket' in window)) throw new Error("Websockets not supported in this browser")
 
     var thus = this
-    //TODO -- this host should be configurable -- how to handle configs in haskell?
-    this.connection = io ? io.connect('http://localhost:3001') : new WebSocket("ws://localhost:3001")
+    this.connection = io ? io.connect('/') : new WebSocket("ws://localhost")
     this.signal = signal
 
     this.send = this.connection.emit ? function (value) {

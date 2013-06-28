@@ -1,5 +1,8 @@
-var express = require('express')
-  , app = express()
+var express      = require('express'),
+    app          = express(),
+    http         = require('http'),
+    server       = http.createServer(app),
+    socket       = require('socket.io').listen(server)
 
 app.use("/resources", express.static(__dirname+"/resources"))
 app.use(express.bodyParser())
@@ -33,5 +36,12 @@ app.post("/send", function(req, res) {
     res.send(200, {status:"ok"})
 })
 
+socket.on("connection", function(socket) {
+    console.log("connected")
+    setTimeout(function () {
+        socket.emit("/receive", {message:"hello"})
+    }, 10000)
+})
+
 console.log("\033[0;31m server up on 3003\033[0m")
-app.listen(3003)
+server.listen(3003)
