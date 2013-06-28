@@ -48,7 +48,8 @@ var XHR = function () {
                     outSignal.push(req.response)
             }
             req.setRequestHeader("content-type", "application/json; charset=utf-8")
-            req.send("{\"data\":\""+value+"\"}") //should this send now?
+            var socket = Sockets ? Sockets._current.socket.sessionid : ""
+            req.send("{\"data\":\""+value+"\", \"socket\":\""+socket+"\"}") //should this send now?
         })
 
         return outSignal

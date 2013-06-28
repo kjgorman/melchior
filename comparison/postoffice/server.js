@@ -32,15 +32,15 @@ app.get("/jquery", function(req, res) {
 })
 
 app.post("/send", function(req, res) {
-    console.log(req.body)
+    Object.keys(socket.sockets.sockets).map(function(s) {
+        if(req.body.socket == s) return
+        socket.sockets.sockets[s].emit("/receive", {message:req.body.data})
+    })
     res.send(200, {status:"ok"})
 })
 
 socket.on("connection", function(socket) {
-    console.log("connected")
-    setTimeout(function () {
-        socket.emit("/receive", {message:"hello"})
-    }, 10000)
+    console.log("socket connected")
 })
 
 console.log("\033[0;31m server up on 3003\033[0m")
