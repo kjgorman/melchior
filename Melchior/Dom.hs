@@ -11,6 +11,7 @@ module Melchior.Dom
     , Canvas
     , ListItem
     , ensures
+    , assuredly
       -- * Typeclasses
     , DomNode
       -- * Functions
@@ -57,6 +58,9 @@ ensures :: DomNode a => Maybe a -> a
 ensures e = case e of
   Nothing -> error "Assertion Error -- Missing DOM Node"
   Just x  -> x
+
+assuredly :: DomNode a => IO (Maybe a) -> IO a
+assuredly x = x >>= \m -> return $ ensures m
 
 foreign import js "document"
   document :: Document

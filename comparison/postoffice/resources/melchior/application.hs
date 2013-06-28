@@ -45,8 +45,9 @@ placeInOutbox s html = do
 
 listenForComposition :: [Element] -> Dom (Signal String)
 listenForComposition html = do
-  input <- Dom $ select (inputs . byId "writer" . from) html >>= \m -> return $ ensures m
-  send  <- Dom $ select (byId "submit" . from) html >>= \m -> return $ ensures m
+  input <- Dom $ assuredly $ select (inputs . byId "writer" . from) html
+  nick <- Dom $ assuredly $ select (inputs . byId "nick" . from) html
+  send  <- Dom $ assuredly $ select (byId "submit" . from) html
   return $ (\_ -> jsStringToString $ value input) <$> click send
 
 receiveMessages :: Signal Message
@@ -54,7 +55,7 @@ receiveMessages = server "/receive" :: Signal Message
 
 placeInInbox :: Signal Message -> [Element] -> Dom ()
 placeInInbox s html = do
-  inbox <- Dom $ select (byId "inbox" . from) html >>= \m -> return $ ensures m
+  inbox <- Dom $ assuredly $ select (byId "inbox" . from) html
   prepend inbox s
 
 data Message = Message String

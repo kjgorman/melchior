@@ -32,10 +32,7 @@ app.get("/jquery", function(req, res) {
 })
 
 app.post("/send", function(req, res) {
-    Object.keys(socket.sockets.sockets).map(function(s) {
-        if(req.body.socket == s) return
-        socket.sockets.sockets[s].emit("/receive", {message:req.body.data})
-    })
+    socket.sockets.emit("/receive", {message:req.body.data, nick:req.body.nick})
     res.send(200, {status:"ok"})
 })
 
