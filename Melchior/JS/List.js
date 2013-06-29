@@ -10,13 +10,13 @@ var Lists = function(){
     }
 
     function safeList (lst) {
-        if(window.debug) console.log("lst", lst)
+        window.debug && console.log("lst", lst)
         if(lst && lst[0].length) lst = lst[0]
         return lst
     }
 
     function map(func, list) {
-        if(window.debug) console.log("window.func", window.func = func, list)
+        window.debug && console.log("window.func", window.func = func, list)
         if(!func || !func.__aN__ || typeof func.__aN__ !== "function" || func instanceof Array)
             return undefined
         if(!(list instanceof Array))
@@ -75,9 +75,9 @@ var Lists = function(){
     function head(lst) {
         if(lst === null) return null
         if(!lst) return lst
-        if(window.debug) console.log("trying to take head of the list", lst)
+        window.debug && console.log("trying to take head of the list", lst)
         if(!lst._1) return undefined
-        if(window.debug) console.log("returning", lst._1)
+        window.debug && console.log("returning", lst._1)
         return lst._1
     }
 
@@ -87,7 +87,7 @@ var Lists = function(){
 
     return {
         lconcat : lconcat,
-        length: length, 
+        length: length,
         safeList : safeList,
         map : map,
         fromUHCList : fromUHCList,

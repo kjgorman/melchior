@@ -8,7 +8,7 @@ var Events = function() {
     }
 
     Event.prototype.coordinates = function(evt) {
-        if(window.debug) console.log("EVENTING ::: ", evt)
+        window.debug && console.log("EVENTING ::: ", evt)
         return [evt.pageX, evt.pageY]
     }
 

@@ -1,13 +1,13 @@
 define (
     [
         "./ui/inbox",
-        "./ui/outbox"
+        "./ui/outbox",
+        "./ui/composition"
     ],
-    function (Inbox, Outbox) {
+    function (Inbox, Outbox, Composition) {
+        function initialize () {
 
-        var initialize = function () {
-            //do some logic connection
         };
-        return { initialize: initialize }
+        return {initialize: initialize}
     }
 );

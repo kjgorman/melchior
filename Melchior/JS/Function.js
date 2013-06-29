@@ -4,7 +4,7 @@ var UHCFunction = function () {
     Object.prototype.__aN__ = function () { return this }
 
     function applyNode(func, value) {
-        if(window.debug) console.log("applying node", window.func = func, window.val = value)
+        window.debug && console.log("applying node", window.func = func, window.val = value)
         var argCopy, result
         argCopy = func.args ? func.args.slice() : func.args = []
         if(value || value === "" || value === 0) func.args = func.args.concat([value])
@@ -14,7 +14,7 @@ var UHCFunction = function () {
     }
 
     function call(func, value) {
-        if(window.debug) console.log("calling", func, value)
+        window.debug && console.log("calling", func, value)
         if(func instanceof _F_) {
             return func.__evN__(value)
         } else if(func instanceof Function)
@@ -24,7 +24,7 @@ var UHCFunction = function () {
     }
 
     function apply(func, value) {
-        if(window.debug) console.log("applying", func, value)
+        window.debug && console.log("applying", func, value)
         if(func instanceof _F_) {
             return func.__evN__.apply(func, value)
         } else if(func instanceof Function)

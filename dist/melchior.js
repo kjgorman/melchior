@@ -28,7 +28,7 @@
     }
 
     Selector.prototype.selectById = function(elem, pattern) {
-        if(window.debug) console.log(elem, pattern)
+        window.debug && console.log(elem, pattern)
         return [elem.getElementById(pattern)]
     }
 
@@ -46,7 +46,7 @@
             if(elems && elems.classList &&elems.classList.contains(pattern)) returned.push(elems)
             returned.push(elems.getElementsByClassName(pattern))
         }
-        if(window.debug) console.log("flattening", returned, flatten(returned))
+        window.debug && console.log("flattening", returned, flatten(returned))
         return flatten(returned)
     }
 
@@ -146,7 +146,7 @@
     }
 
     Selector.prototype.runSelector = function(sel) {
-        if(window.debug) console.log("how exactly do I run ", sel)
+        window.debug && console.log("how exactly do I run ", sel)
         return Lists.emptyUHCList();
     }
 
@@ -173,7 +173,7 @@
     }
 
     Signal.prototype.registerListener = function(callback) {
-        if(window.debug) console.log("registering listener", callback, this)
+        window.debug && console.log("registering listener", callback, this)
         this.registeredListeners.push(function (value) {
             if(!callback) return
             UHCFunction.call(callback, value)
@@ -181,9 +181,9 @@
     }
 
     Signal.prototype.push = function(value, event) {
-        if(window.debug) console.log("received", value, event)
+        window.debug && console.log("received", value, event)
         if(this.registeredListeners.length === 0) {
-            if(window.debug) console.log("evaluating", value)
+            window.debug && console.log("evaluating", value)
             evaluate(value)
         } else for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
             this.registeredListeners[i](value, event);
@@ -191,7 +191,7 @@
     }
 
     Signal.prototype.pipe = function(transform, base) {
-        if(window.debug) console.log("constructing with transform", transform)
+        window.debug && console.log("constructing with transform", transform)
 
         var newSignal = new Signal(), shouldAccumulate = base !== undefined
         newSignal.accumulator = base
@@ -203,11 +203,11 @@
             var res = UHCFunction.call(transform, value, event)
             newSignal.previous = newSignal.accumulator
             if(shouldAccumulate) {
-                if(window.debug) console.log("Accumulating", value, newSignal.accumulator)
+                window.debug && console.log("Accumulating", value, newSignal.accumulator)
                 newSignal.accumulator = UHCFunction.apply(transform, [value, newSignal.accumulator])
                 newSignal.push(newSignal.accumulator)
             } else {
-                if(window.debug) console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
+                window.debug && console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
                 newSignal.accumulator = res
                 newSignal.push(res, event)
             }
@@ -218,7 +218,7 @@
     Signal.prototype.__aN__ = function () { return this }
 
     Signal.prototype.sample = function () {
-        if(window.debug) console.log("sampling ", this.currently())
+        window.debug && console.log("sampling ", this.currently())
         var sample = null
         if((sample = this.currently()) === undefined) {
             return emptySignal()
@@ -243,7 +243,7 @@
         if(!thunk) return
         var curr = thunk
         do {
-            if(window.debug) console.log("pre curr", window.curr = curr)
+            window.debug && console.log("pre curr", window.curr = curr)
             if(curr._1) try {
                 Lists.fromUHCList(curr).map(evaluate)
                 break
@@ -259,7 +259,7 @@
             if(curr instanceof _A_undersat_) { //what if its not io?
                 UHCFunction.call(curr, [])
             }
-            if(window.debug) console.log("post curr", curr)
+            window.debug && console.log("post curr", curr)
             if(hasPrimitiveValue(curr) || !curr) break
         } while(curr.hasOwnProperty("__eOrV__") || curr[0] || curr._1 || curr._F_)
     }
@@ -276,7 +276,7 @@
         var s = new Signal()
         elem.addEventListener(event, function (e) {
             Events.applyNativeMapping(e)
-            if(window.debug) console.log("detected", event, "sending to", s)
+            window.debug && console.log("detected", event, "sending to", s)
             s.push({
                 __eOrV__: Dom.get(elem, key) || e,
                 __aN__: function() { return this.__eOrV__ }
@@ -288,7 +288,7 @@
     function createPastDependentSignal (func, base, signal) { return signal.pipe(func, base) }
 
     function applicable (argument) {
-        if(window.debug) console.log("wrapping in applicable node", argument)
+        window.debug && console.log("wrapping in applicable node", argument)
         if(!(argument instanceof _F_)) return {
             __aN__ : function () { return argument }
         }
@@ -303,7 +303,7 @@
     }
 
     function terminate (signal, funct) {
-        if(window.debug) console.log("terminating", signal, funct)
+        window.debug && console.log("terminating", signal, funct)
         signal.registerListener(function(value) {
             if(_e_(value)._tag_ && _e_(value)._tag_ === -1) return //empty
             evaluate(UHCFunction.call(funct, value))
@@ -352,13 +352,13 @@
     }
 
     function safeList (lst) {
-        if(window.debug) console.log("lst", lst)
+        window.debug && console.log("lst", lst)
         if(lst && lst[0].length) lst = lst[0]
         return lst
     }
 
     function map(func, list) {
-        if(window.debug) console.log("window.func", window.func = func, list)
+        window.debug && console.log("window.func", window.func = func, list)
         if(!func || !func.__aN__ || typeof func.__aN__ !== "function" || func instanceof Array)
             return undefined
         if(!(list instanceof Array))
@@ -417,9 +417,9 @@
     function head(lst) {
         if(lst === null) return null
         if(!lst) return lst
-        if(window.debug) console.log("trying to take head of the list", lst)
+        window.debug && console.log("trying to take head of the list", lst)
         if(!lst._1) return undefined
-        if(window.debug) console.log("returning", lst._1)
+        window.debug && console.log("returning", lst._1)
         return lst._1
     }
 
@@ -429,7 +429,7 @@
 
     return {
         lconcat : lconcat,
-        length: length, 
+        length: length,
         safeList : safeList,
         map : map,
         fromUHCList : fromUHCList,
@@ -554,7 +554,7 @@
     Object.prototype.__aN__ = function () { return this }
 
     function applyNode(func, value) {
-        if(window.debug) console.log("applying node", window.func = func, window.val = value)
+        window.debug && console.log("applying node", window.func = func, window.val = value)
         var argCopy, result
         argCopy = func.args ? func.args.slice() : func.args = []
         if(value || value === "" || value === 0) func.args = func.args.concat([value])
@@ -564,7 +564,7 @@
     }
 
     function call(func, value) {
-        if(window.debug) console.log("calling", func, value)
+        window.debug && console.log("calling", func, value)
         if(func instanceof _F_) {
             return func.__evN__(value)
         } else if(func instanceof Function)
@@ -574,7 +574,7 @@
     }
 
     function apply(func, value) {
-        if(window.debug) console.log("applying", func, value)
+        window.debug && console.log("applying", func, value)
         if(func instanceof _F_) {
             return func.__evN__.apply(func, value)
         } else if(func instanceof Function)
@@ -588,6 +588,7 @@
         apply: apply
     }
 }();var Html = function () {
+    "use strict";
 
     function append(a, b) {
         return a + b
@@ -622,7 +623,6 @@ Sockets.Socket = function Socket (signal, namespace) {
     else this.connection.onmessage = function(value) {
         thus.signal.push(value)
     }
-    Sockets._current = this.connection
 }
 
 Sockets.Socket.prototype.Signal = function () {
@@ -640,7 +640,7 @@ Sockets.createSocketedSignal = function(namespace) {
     var DomOperations = function () { }
 
     DomOperations.prototype.addClass = function(element, classString) {
-        if(window.debug) console.log("adding", element, classString)
+        window.debug && console.log("adding", element, classString)
         if(element === null) return null
         if(!element || !classString) return undefined
 
@@ -652,7 +652,7 @@ Sockets.createSocketedSignal = function(namespace) {
     }
 
     DomOperations.prototype.removeClass = function(element, classString) {
-        if(window.debug) console.log("removing", element, classString)
+        window.debug && console.log("removing", element, classString)
         if(element === null) return null
         if(!element || !classString) return undefined
 
@@ -678,15 +678,15 @@ Sockets.createSocketedSignal = function(namespace) {
         if(element === null) return null
         if(!element) return undefined
         if(!element.parentNode) return Lists.emptyUHCList()
-        if(window.debug) console.log("finding siblings of", element)
-        if(window.debug) console.log("returning approx.: ", element.parentNode.children)
+        window.debug && console.log("finding siblings of", element)
+        window.debug && console.log("returning approx.: ", element.parentNode.children)
         return Lists.toUHCList(Array.prototype.slice.call(element.parentNode.children).filter(function(e) {
             return e !== element
         }))
     }
 
     DomOperations.prototype.set = function(elem, key, value) {
-        if(window.debug) console.log("SETTING ::: ", elem, key, value)
+        window.debug && console.log("SETTING ::: ", elem, key, value)
         if(elem.length) elem = elem[0]
         if(elem) elem[key] = value
         return elem[key]
@@ -728,7 +728,7 @@ Sockets.createSocketedSignal = function(namespace) {
     }
 
     DomOperations.prototype.hack = function(str) {
-        if(window.debug) console.log('hmmm')
+        window.debug && console.log('hmmm')
         var el = document.createElement("div");
         el.innerHTML = str
         document.getElementById("main-content")
@@ -747,7 +747,7 @@ Sockets.createSocketedSignal = function(namespace) {
     }
 
     Event.prototype.coordinates = function(evt) {
-        if(window.debug) console.log("EVENTING ::: ", evt)
+        window.debug && console.log("EVENTING ::: ", evt)
         return [evt.pageX, evt.pageY]
     }
 
@@ -841,11 +841,11 @@ Sockets.createSocketedSignal = function(namespace) {
     var Tuple = function () { }
 
     Tuple.prototype.pair = function (s, t, inpSignal) {
-        if(window.debug) console.log("tuple: ", s, t, inpSignal)
+        window.debug && console.log("tuple: ", s, t, inpSignal)
         var newSignal = new Signals.Signal(),
             withS = _e_(UHCFunction.call(s, inpSignal)),
             withT = _e_(UHCFunction.call(t, inpSignal))
-        if(window.debug) console.log("&&&: ", withS, withT)
+        window.debug && console.log("&&&: ", withS, withT)
         withS.registerListener(function(value) {
             newSignal.push(value)
         })
@@ -907,7 +907,6 @@ Sockets.createSocketedSignal = function(namespace) {
                     outSignal.push(req.response)
             }
             req.setRequestHeader("content-type", "application/json; charset=utf-8")
-            console.log(_e_(value))
             req.send(_e_(value)) //should this send now?
         })
 
