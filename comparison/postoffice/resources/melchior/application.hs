@@ -35,20 +35,20 @@ instance JsonSerialisable Status where
 def Nothing = "error"
 def (Just s) = s
 
-sendMessages :: Signal String -> Dom (Signal Status)
-sendMessages s = return $ request POST "/send" $ (\x -> stringToJSString x) <$> (dropWhen s (\x -> x == ""))
+sendMessages :: Signal JsonObject -> Dom (Signal Status)
+sendMessages s = return $ request POST "/send" s
 
-placeInOutbox :: Signal String -> [Element] -> Dom ()
+placeInOutbox :: Signal JsonObject -> [Element] -> Dom ()
 placeInOutbox s html = do
-  outbox <- Dom $ select (byId "outbox" . from) html >>= \m -> return $ ensures m
-  prepend outbox $ (\s -> "<li>"++s++"</li>") <$> s
+  outbox <- Dom $ assuredly $ select (byId "outbox" . from) html
+  prepend outbox $ (\s -> "<li>"++(ensures $ getJsonString "message" s)++"</li>") <$> s
 
-listenForComposition :: [Element] -> Dom (Signal String)
+listenForComposition :: [Element] -> Dom (Signal JsonObject)
 listenForComposition html = do
   input <- Dom $ assuredly $ select (inputs . byId "writer" . from) html
   nick <- Dom $ assuredly $ select (inputs . byId "nick" . from) html
   send  <- Dom $ assuredly $ select (byId "submit" . from) html
-  return $ (\_ -> jsStringToString $ value input) <$> click send
+  return $ (\_ -> ensures $ toJson $ value input) <$> click send
 
 receiveMessages :: Signal Message
 receiveMessages = server "/receive" :: Signal Message

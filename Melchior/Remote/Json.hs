@@ -1,5 +1,6 @@
 module Melchior.Remote.Json (
     parseJson
+  , toJsonSF
   , toJson
   , fromJson
   , getJsonString
@@ -17,8 +18,11 @@ import Melchior.Remote.Internal.Parser
 class JsonSerialisable a where
   fromJson :: (Maybe JsonObject) -> a
 
-toJson :: SF JSString (Maybe JsonObject)
-toJson s = (\x -> parseJson (jsStringToString x)) <$> s
+toJsonSF :: SF JSString (Maybe JsonObject)
+toJsonSF s = (\x -> toJson x) <$> s
+
+toJson :: JSString -> Maybe JsonObject
+toJson x = parseJson (jsStringToString x)
 
 empty :: JsonObject
 empty = JsonObject []

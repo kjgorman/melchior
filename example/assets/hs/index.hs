@@ -29,7 +29,7 @@ setupNavLinks html = do
 
   clicks <- sequence $ clickListener "innerHTML" <$> links
 
-  sequence $ (\click -> click ~> (remote GET "/data" >>> toJson >>> hack)) <$> Melchior.EventSources.Mouse.click <$> button
+  sequence $ (\click -> click ~> (remote GET "/data" >>> toJsonSF >>> hack)) <$> Melchior.EventSources.Mouse.click <$> button
 
   positionLabel <- Dom $ select (byId "where-at" . from) html >>= \m -> return $ ensures m
   sequence $ put positionLabel <$> (\x -> throttle 1000 $ position x) <$> container

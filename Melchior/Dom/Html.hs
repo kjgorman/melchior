@@ -4,6 +4,8 @@ module Melchior.Dom.Html (
   , Html
   , render
   , (<+>)
+  , (|+>)
+  , (<+|)
   ) where
 
 import Melchior.Data.String (JSString, stringToJSString)
@@ -33,6 +35,12 @@ instance (Renderable a, Show a) => Renderable [a] where
 
 (<+>) :: Html -> Html -> Html
 a <+> b = primAppendHtml a b
+
+(|+>) :: String -> Html -> Html
+a +> b = primAppendHtml (stringToJSString a) b
+
+(<+|) :: Html -> String -> Html
+a <+ b = primAppendHtml a (stringToJSString b)
 
 foreign import js "Html.append(%1, %2)"
   primAppendHtml :: Html -> Html -> Html

@@ -54,12 +54,12 @@ newtype Span = Span {unSpan :: JSPtr Node}
 newtype Canvas = Canvas {unCanvas :: JSPtr Node}
 newtype ListItem = ListItem {unListItem :: JSPtr Node}
 
-ensures :: DomNode a => Maybe a -> a
+ensures :: Maybe a -> a
 ensures e = case e of
   Nothing -> error "Assertion Error -- Missing DOM Node"
   Just x  -> x
 
-assuredly :: DomNode a => IO (Maybe a) -> IO a
+assuredly :: IO (Maybe a) -> IO a
 assuredly x = x >>= \m -> return $ ensures m
 
 foreign import js "document"
