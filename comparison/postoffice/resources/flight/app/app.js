@@ -1,13 +1,12 @@
 define (
     [
-        "./ui/switcher",
-        "./ui/tweeter"
+        "./ui/inbox",
+        "./ui/outbox"
     ],
-    function (Switcher, Tweeter) {
+    function (Inbox, Outbox) {
 
         var initialize = function () {
-            Switcher.attachTo(".link");
-            Tweeter.attachTo(document);
+            //do some logic connection
         };
         return { initialize: initialize }
     }
