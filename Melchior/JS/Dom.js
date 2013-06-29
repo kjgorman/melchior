@@ -4,7 +4,7 @@ var Dom = function() {
     var DomOperations = function () { }
 
     DomOperations.prototype.addClass = function(element, classString) {
-        if(window.debug) console.log("adding", element, classString)
+        window.debug && console.log("adding", element, classString)
         if(element === null) return null
         if(!element || !classString) return undefined
 
@@ -16,7 +16,7 @@ var Dom = function() {
     }
 
     DomOperations.prototype.removeClass = function(element, classString) {
-        if(window.debug) console.log("removing", element, classString)
+        window.debug && console.log("removing", element, classString)
         if(element === null) return null
         if(!element || !classString) return undefined
 
@@ -42,15 +42,15 @@ var Dom = function() {
         if(element === null) return null
         if(!element) return undefined
         if(!element.parentNode) return Lists.emptyUHCList()
-        if(window.debug) console.log("finding siblings of", element)
-        if(window.debug) console.log("returning approx.: ", element.parentNode.children)
+        window.debug && console.log("finding siblings of", element)
+        window.debug && console.log("returning approx.: ", element.parentNode.children)
         return Lists.toUHCList(Array.prototype.slice.call(element.parentNode.children).filter(function(e) {
             return e !== element
         }))
     }
 
     DomOperations.prototype.set = function(elem, key, value) {
-        if(window.debug) console.log("SETTING ::: ", elem, key, value)
+        window.debug && console.log("SETTING ::: ", elem, key, value)
         if(elem.length) elem = elem[0]
         if(elem) elem[key] = value
         return elem[key]
@@ -92,7 +92,7 @@ var Dom = function() {
     }
 
     DomOperations.prototype.hack = function(str) {
-        if(window.debug) console.log('hmmm')
+        window.debug && console.log('hmmm')
         var el = document.createElement("div");
         el.innerHTML = str
         document.getElementById("main-content")

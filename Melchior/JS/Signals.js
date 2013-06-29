@@ -19,7 +19,7 @@ var Signals = function () {
     }
 
     Signal.prototype.registerListener = function(callback) {
-        if(window.debug) console.log("registering listener", callback, this)
+        window.debug && console.log("registering listener", callback, this)
         this.registeredListeners.push(function (value) {
             if(!callback) return
             UHCFunction.call(callback, value)
@@ -27,9 +27,9 @@ var Signals = function () {
     }
 
     Signal.prototype.push = function(value, event) {
-        if(window.debug) console.log("received", value, event)
+        window.debug && console.log("received", value, event)
         if(this.registeredListeners.length === 0) {
-            if(window.debug) console.log("evaluating", value)
+            window.debug && console.log("evaluating", value)
             evaluate(value)
         } else for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
             this.registeredListeners[i](value, event);
@@ -37,7 +37,7 @@ var Signals = function () {
     }
 
     Signal.prototype.pipe = function(transform, base) {
-        if(window.debug) console.log("constructing with transform", transform)
+        window.debug && console.log("constructing with transform", transform)
 
         var newSignal = new Signal(), shouldAccumulate = base !== undefined
         newSignal.accumulator = base
@@ -49,11 +49,11 @@ var Signals = function () {
             var res = UHCFunction.call(transform, value, event)
             newSignal.previous = newSignal.accumulator
             if(shouldAccumulate) {
-                if(window.debug) console.log("Accumulating", value, newSignal.accumulator)
+                window.debug && console.log("Accumulating", value, newSignal.accumulator)
                 newSignal.accumulator = UHCFunction.apply(transform, [value, newSignal.accumulator])
                 newSignal.push(newSignal.accumulator)
             } else {
-                if(window.debug) console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
+                window.debug && console.log("pushing res", window.res = res, window.transform = transform, window.value = value)
                 newSignal.accumulator = res
                 newSignal.push(res, event)
             }
@@ -64,7 +64,7 @@ var Signals = function () {
     Signal.prototype.__aN__ = function () { return this }
 
     Signal.prototype.sample = function () {
-        if(window.debug) console.log("sampling ", this.currently())
+        window.debug && console.log("sampling ", this.currently())
         var sample = null
         if((sample = this.currently()) === undefined) {
             return emptySignal()
@@ -89,7 +89,7 @@ var Signals = function () {
         if(!thunk) return
         var curr = thunk
         do {
-            if(window.debug) console.log("pre curr", window.curr = curr)
+            window.debug && console.log("pre curr", window.curr = curr)
             if(curr._1) try {
                 Lists.fromUHCList(curr).map(evaluate)
                 break
@@ -105,7 +105,7 @@ var Signals = function () {
             if(curr instanceof _A_undersat_) { //what if its not io?
                 UHCFunction.call(curr, [])
             }
-            if(window.debug) console.log("post curr", curr)
+            window.debug && console.log("post curr", curr)
             if(hasPrimitiveValue(curr) || !curr) break
         } while(curr.hasOwnProperty("__eOrV__") || curr[0] || curr._1 || curr._F_)
     }
@@ -122,7 +122,7 @@ var Signals = function () {
         var s = new Signal()
         elem.addEventListener(event, function (e) {
             Events.applyNativeMapping(e)
-            if(window.debug) console.log("detected", event, "sending to", s)
+            window.debug && console.log("detected", event, "sending to", s)
             s.push({
                 __eOrV__: Dom.get(elem, key) || e,
                 __aN__: function() { return this.__eOrV__ }
@@ -134,7 +134,7 @@ var Signals = function () {
     function createPastDependentSignal (func, base, signal) { return signal.pipe(func, base) }
 
     function applicable (argument) {
-        if(window.debug) console.log("wrapping in applicable node", argument)
+        window.debug && console.log("wrapping in applicable node", argument)
         if(!(argument instanceof _F_)) return {
             __aN__ : function () { return argument }
         }
@@ -149,7 +149,7 @@ var Signals = function () {
     }
 
     function terminate (signal, funct) {
-        if(window.debug) console.log("terminating", signal, funct)
+        window.debug && console.log("terminating", signal, funct)
         signal.registerListener(function(value) {
             if(_e_(value)._tag_ && _e_(value)._tag_ === -1) return //empty
             evaluate(UHCFunction.call(funct, value))

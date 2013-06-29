@@ -16,7 +16,7 @@ var Selectors = function () {
     }
 
     Selector.prototype.selectById = function(elem, pattern) {
-        if(window.debug) console.log(elem, pattern)
+        window.debug && console.log(elem, pattern)
         return [elem.getElementById(pattern)]
     }
 
@@ -34,7 +34,7 @@ var Selectors = function () {
             if(elems && elems.classList &&elems.classList.contains(pattern)) returned.push(elems)
             returned.push(elems.getElementsByClassName(pattern))
         }
-        if(window.debug) console.log("flattening", returned, flatten(returned))
+        window.debug && console.log("flattening", returned, flatten(returned))
         return flatten(returned)
     }
 
@@ -134,7 +134,7 @@ var Selectors = function () {
     }
 
     Selector.prototype.runSelector = function(sel) {
-        if(window.debug) console.log("how exactly do I run ", sel)
+        window.debug && console.log("how exactly do I run ", sel)
         return Lists.emptyUHCList();
     }
 
