@@ -3,6 +3,7 @@ module Melchior.Remote.Internal.Parser (
   , JsonPair
   , JsonString
   , JsonObject
+  , JsNull
   , parseJson
   ) where
 
@@ -11,10 +12,30 @@ import Melchior.Remote.Internal.ParserUtils
 
 data Json = JsonString String | JsBool String | JsNull | JsonArray [Json] | JsonObj JsonObject | JsonNumber String
           | JsonPair (Json, Json)
-            deriving (Show)
 
 data JsonObject = JsonObject [Json]
-                  deriving (Show)
+
+instance Show Json where
+  show (JsonString s) = "\""++s++"\""
+  show (JsBool b) = b
+  show JsNull = "null"
+  show (JsonArray x) = "["++(commaSeparate x)++"]"
+  show (JsonObj x) = show x
+  show (JsonNumber s) = s
+  show (JsonPair x) = (show $ fst x) ++":"++ (show $ snd x)
+
+instance Show JsonObject where
+  show (JsonObject x) = "{"++(commaSeparate (exceptNull x))++"}"
+
+exceptNull :: [Json] -> [Json]
+exceptNull [] = []
+exceptNull (JsNull:xs) = exceptNull xs
+exceptNull (x:xs) = x:(exceptNull xs)
+
+commaSeparate :: (Show a) => [a] -> String
+commaSeparate [] = ""
+commaSeparate (x:[]) = show x
+commaSeparate (x:xs) = (show x) ++ "," ++ (commaSeparate xs)
 
 {-
 backus naur form of json(ish)

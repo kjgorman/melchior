@@ -2,11 +2,17 @@ module Melchior.Remote.Json (
     parseJson
   , toJsonSF
   , toJson
+  , toDto
   , fromJson
   , getJsonString
+  , stringOrError
   , JsonSerialisable
   , Json
   , JsonObject
+  , JsonPair
+  , JsonString
+  , JsNull
+  , parseJson
   ) where
 
 
@@ -17,6 +23,9 @@ import Melchior.Remote.Internal.Parser
 
 class JsonSerialisable a where
   fromJson :: (Maybe JsonObject) -> a
+
+toDto :: JsonObject -> JSString
+toDto x = stringToJSString $ show x
 
 toJsonSF :: SF JSString (Maybe JsonObject)
 toJsonSF s = (\x -> toJson x) <$> s
@@ -48,3 +57,8 @@ getJsonString s j = case getKey s j of
 stringFrom :: Json -> Maybe String
 stringFrom (JsonPair (x, JsonString y)) = Just y
 stringFrom _ = Nothing
+
+stringOrError :: JsonObject -> String -> String
+stringOrError j key = case getJsonString key j of
+  Nothing -> "error"
+  (Just s) -> s

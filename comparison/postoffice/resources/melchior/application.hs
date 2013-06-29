@@ -36,7 +36,7 @@ def Nothing = "error"
 def (Just s) = s
 
 sendMessages :: Signal JsonObject -> Dom (Signal Status)
-sendMessages s = return $ request POST "/send" s
+sendMessages s = return $ request POST "/send" $ (\x -> toDto x) <$> s
 
 placeInOutbox :: Signal JsonObject -> [Element] -> Dom ()
 placeInOutbox s html = do
@@ -48,7 +48,8 @@ listenForComposition html = do
   input <- Dom $ assuredly $ select (inputs . byId "writer" . from) html
   nick <- Dom $ assuredly $ select (inputs . byId "nick" . from) html
   send  <- Dom $ assuredly $ select (byId "submit" . from) html
-  return $ (\_ -> ensures $ toJson $ value input) <$> click send
+  return $ (\_ -> JsonObject [JsonPair (JsonString "message", JsonString (jsStringToString $ value input))
+                            , JsonPair (JsonString "nick", JsonString (jsStringToString $ value nick))]) <$> click send
 
 receiveMessages :: Signal Message
 receiveMessages = server "/receive" :: Signal Message
@@ -56,13 +57,13 @@ receiveMessages = server "/receive" :: Signal Message
 placeInInbox :: Signal Message -> [Element] -> Dom ()
 placeInInbox s html = do
   inbox <- Dom $ assuredly $ select (byId "inbox" . from) html
-  prepend inbox s
+  nick <- Dom $ assuredly $ select (inputs . byId "nick" .from) html
+  prepend inbox $ dropWhen s (\(Message m n) -> n == (jsStringToString $ value nick))
 
-data Message = Message String
+data Message = Message String String
 instance JsonSerialisable Message where
-  fromJson Nothing = Message "nothing to see here..."
-  fromJson (Just s) = case getJsonString "message" s of
-    Nothing -> Message "nothing to see here..."
-    Just x  -> Message x
+  fromJson Nothing = Message "nothing to see here..." ""
+  fromJson (Just s) = Message (stringOrError s "message") (stringOrError s "nick")
+
 instance Renderable Message where
-  render (Message x) = stringToJSString $ "<li>"++x++"</li>"
+  render (Message x y) = stringToJSString $ "<li>"++y++":"++x++"</li>"
