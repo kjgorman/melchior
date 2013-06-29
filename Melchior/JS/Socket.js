@@ -24,7 +24,6 @@ Sockets.Socket = function Socket (signal, namespace) {
     else this.connection.onmessage = function(value) {
         thus.signal.push(value)
     }
-    Sockets._current = this.connection
 }
 
 Sockets.Socket.prototype.Signal = function () {
