@@ -9,11 +9,13 @@ $(document).ready(function () {
 function sendComposedMail() {
     $("#submit").on("click", function () {
         if($("#writer").val() == "") return
+        var post = {message:$("#writer").val(), nick: $("#nick").val()}
+        console.log(post)
         $.ajax({
             method:"POST",
             type:"JSON",
             url:"/send",
-            data:{data:$("#writer").val(), nick: $("#nick").val()},
+            data:post,
             success: function(r) {
                 if(r.status == "ok")
                     $("#outbox").prepend($("<li>"+$("#writer").val()+"</li>"))
