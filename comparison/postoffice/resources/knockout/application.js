@@ -1,29 +1,40 @@
-var FakeTweetModel = function() {
-    var currentTab = ko.observable("Home")
-    , contents = {
-        Home: $("#main-container").html(),
-        About: "When in doubt, rip off twitter!",
-        Contact: "kieran.gorman@ecs.vuw.ac.nz"
-    };
+var PostOfficeModel = function () {
+    var self = this
+    this.inbox = ko.observableArray([])
+    this.outbox = ko.observableArray([])
 
-    this.currentEntries = ko.observableArray([])
-
-    this.tabSwitcher = function(tab, event) {
-        $(".active").removeClass("active");
-        $(event.target).parent().addClass("active");
-
-        $("#main-container").html(contents[$(event.target).html()]);
+    this.compose = function () {
+        var nick = document.getElementById("nick").value
+          , message = document.getElementById("writer").value
+        if(nick == "" || message == "") return
+        send({nick:nick, message:message}, self)
     }
 
-    !function getNext() {
-        $.get("/homes", function(data) {
-            data = data["homes"][0];
-            thus.currentEntries.push(data);
-        });
-        setTimeout(getNext, 5000);
-    }();
-
-    var thus = this;
+    receive(self)
 }
 
-ko.applyBindings(new FakeTweetModel());
+function send(data, office) {
+    $.ajax({
+        url:"/send",
+        method:"POST",
+        type:"JSON",
+        data:data,
+        success:function(result) {
+            if(result.status == "ok")
+                office.outbox.push({message:data.message})
+        }
+    })
+}
+
+function receive(office) {
+    var conn = io.connect("/")
+    conn.on("/receive", function(data) {
+        if(data.nick  !== document.getElementById("nick").value)
+            office.inbox.push({nick:data.nick, message:data.message})
+    })
+}
+
+var office = new PostOfficeModel()
+
+ko.applyBindings(office)
+
