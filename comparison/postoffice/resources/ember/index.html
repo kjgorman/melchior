@@ -67,29 +67,9 @@
 
         <hr>
         <div id='container'>
-          <div class="row">
-            <div class="span12">
-              <input type="text" id="nick" placeholder="nickname" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="span12">
-              <span>Compose:</span><input type="text" id="writer" /><button class="btn btn-success" id="submit">send</buttoon>
-            </div>
-          </div>
-          <div class="row">
-            <div class="span4">
-              <h3>Inbox</h3>
-            </div>
-            <div class="span4 outbox">
-              <h3>Outbox</h3>
-            </div>
-          </div>
-          <hr/>
             <div>
               {{outlet}}
             </div>
-
         </div>
       </div>
       <hr>
@@ -102,16 +82,35 @@
       </script>
       <script type="text/x-handlebars" id="message">
         <div class="row">
+            <div class="span12">
+              <input type="text" id="nick" placeholder="nickname" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="span12">
+              <span>Compose:</span><input type="text" id="writer" /><button {{action 'click'}} class="btn btn-success" id="submit">send</buttoon>
+            </div>
+          </div>
+          <div class="row">
+            <div class="span4">
+              <h3>Inbox</h3>
+            </div>
+            <div class="span4 outbox">
+              <h3>Outbox</h3>
+            </div>
+          </div>
+          <hr/>
+        <div class="row">
           <div class="span4">
             <ol id="inbox">
-              {{#each m in inbox}}
+              {{#each inbox}}
               <li>{{nick}}:{{message}}</li>
               {{/each}}
             </ol>
           </div>
           <div class="span4 outbox">
             <ol id="outbox">
-              {{#each m in outbox}}
+              {{#each outbox}}
               <li>{{message}}</li>
               {{/each}}
             </ol>

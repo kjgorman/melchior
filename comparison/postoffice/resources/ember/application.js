@@ -23,12 +23,34 @@ App.Message = DS.Model.extend({
 
 App.MessageRoute = Ember.Route.extend({
     activate: function () {
-        console.log("messaging, etc.")
-    }
+        var s = io.connect("/"), _this = this
+        s.on("/receive", function(data) {
+            if(data.nick == document.getElementById("nick").value) return
+            var message = App.Message.createRecord({message:data.message, nick:data.nick})
+            _this.controllerFor("Message").inbox.addObject(message)
+        })
+    },
 })
 
 App.MessageController = Ember.Controller.extend({
     inbox:[],
-    outbox:[]
+    outbox:[],
+    click: function () {
+        var data = {
+            message: document.getElementById("writer").value,
+            nick: document.getElementById("nick").value
+        },  message = App.Message.createRecord(data)
+         , _this = this
+        $.ajax({
+            url:"/send",
+            method:"POST",
+            type:"JSON",
+            data:data,
+            success:function(d) {
+                if(d.status == "ok")
+                    _this.outbox.addObject(message)
+            }
+        })
+    }
 })
 
