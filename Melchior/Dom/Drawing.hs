@@ -6,6 +6,7 @@ module Melchior.Dom.Drawing (
   , strokeStyle
   -- * Shapes
   , circle
+  , rectangle
   -- * Colours
   , red
   , green
@@ -44,3 +45,9 @@ circle x y r context = Dom $ primCircle x y r context
 
 foreign import js "Canvas.circle(%4, %1, %2, %3)"
   primCircle :: Int -> Int -> Int -> Context -> IO ()
+
+rectangle :: Int -> Int -> Int -> Int -> Context -> Dom ()
+rectangle x y w h c = Dom $ primRectangle x y w h c
+
+foreign import js "Canvas.rectangle(%5, %1, %2, %3, %4)"
+  primRectangle :: Int -> Int -> Int -> Int -> Context -> IO ()
