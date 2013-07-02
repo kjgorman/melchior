@@ -1,5 +1,6 @@
 module Melchior.Time (
     current
+  , after
   , every
   , minute
   , second

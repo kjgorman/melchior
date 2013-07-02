@@ -151,7 +151,7 @@ var Signals = function () {
     function terminate (signal, funct) {
         window.debug && console.log("terminating", signal, funct)
         signal.registerListener(function(value) {
-            if(_e_(value)._tag_ && _e_(value)._tag_ === -1) return //empty
+            if(value && _e_(value)._tag_ && _e_(value)._tag_ === -1) return //empty
             evaluate(UHCFunction.call(funct, value))
         })
     }

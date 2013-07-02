@@ -36,9 +36,9 @@ strokeStyle c s = primSetStrokeStyle c (stringToJSString s)
 foreign import js "Canvas.setStrokeStyle(%1, %2)"
   primSetStrokeStyle :: Context -> JSString -> Context
 
-red   = "FF0000"
-green = "00FF00"
-blue  = "0000FF"
+red   = "#FF0000"
+green = "#00FF00"
+blue  = "#0000FF"
 
 circle :: Int -> Int -> Int -> Context -> Dom ()
 circle x y r context = Dom $ primCircle x y r context
