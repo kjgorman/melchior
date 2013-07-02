@@ -50,6 +50,7 @@
   </head>
 
  <body>
+   <script type="text/x-handlebars">
    <div class="container-narrow">
 
       <div class="masthead">
@@ -85,26 +86,10 @@
             </div>
           </div>
           <hr/>
-          <div class="row">
-            <div class="span4">
-              <script type="text/handlebars" data-template-name="inbox" id="inbox">
-              <ol id="inbox">
-                {{#each model}}
-                <li>{{nick}}:{{message}}</li>
-                {{/each}}
-              </ol>
-              </script>
+            <div>
+              {{outlet}}
             </div>
-            <div class="span4 outbox">
-              <script type="text/handlebars" data-template-name="outbox" id="outbox">
-                <ol id="outbox">
-                  {{#each model}}
-                  <li>{{message}}</li>
-                  {{/each}}
-                </ol>
-              </script>
-            </div>
-          </div>
+
         </div>
       </div>
       <hr>
@@ -113,7 +98,26 @@
         <p>&copy; Kieran Gorman 2013</p>
       </div>
 
-    </div> <!-- /container -->
+      </div> <!-- container -->
+      </script>
+      <script type="text/x-handlebars" id="message">
+        <div class="row">
+          <div class="span4">
+            <ol id="inbox">
+              {{#each m in inbox}}
+              <li>{{nick}}:{{message}}</li>
+              {{/each}}
+            </ol>
+          </div>
+          <div class="span4 outbox">
+            <ol id="outbox">
+              {{#each m in outbox}}
+              <li>{{message}}</li>
+              {{/each}}
+            </ol>
+          </div>
+        </div>
+      </script>
  </body>
 
  <footer>

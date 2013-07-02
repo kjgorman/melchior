@@ -1,6 +1,8 @@
 App = Ember.Application.create();
 
-App.Store = DS.Store.extend({revision:12})
+App.Store = DS.Store.extend({
+    revision:12
+})
 
 App.Router.map(function() {
     this.resource("message")
@@ -20,17 +22,13 @@ App.Message = DS.Model.extend({
 })
 
 App.MessageRoute = Ember.Route.extend({
-    activate:function() {
-        App.Message.setupSockets =  function (id) {
-                console.log("finding things, etc")
-                var s = io.connect("/")
-                s.on("/receive", function(d) {
-                    console.log("hmmm...", d)
-                    if(d.nick !== document.getElementById("nick").value)
-                        $("#inbox").prepend($("<li>"+d.nick+":"+d.message))
-                    Ember.Handlebars.template("inbox")
-                })
-        }
-        App.Message.setupSockets()
+    activate: function () {
+        console.log("messaging, etc.")
     }
 })
+
+App.MessageController = Ember.Controller.extend({
+    inbox:[],
+    outbox:[]
+})
+
