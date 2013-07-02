@@ -3,7 +3,7 @@
 <html>
 
   <head>
-    <title>Example app index template</title>
+    <title>PostOffice | Ember</title>
 
     <style type="text/css">
       body {
@@ -42,7 +42,9 @@
         margin-top: 28px;
       }
       .hidden { display: none }
-      .outbox * { float: right }
+      .outbox > ol { float: right }
+      ol > li { display: block }
+      .outbox > h3 { float: right }
     </style>
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.css" />
   </head>
@@ -66,6 +68,11 @@
         <div id='container'>
           <div class="row">
             <div class="span12">
+              <input type="text" id="nick" placeholder="nickname" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="span12">
               <span>Compose:</span><input type="text" id="writer" /><button class="btn btn-success" id="submit">send</buttoon>
             </div>
           </div>
@@ -80,14 +87,22 @@
           <hr/>
           <div class="row">
             <div class="span4">
-              <ol>
-                <li>Test in item</li>
+              <script type="text/handlebars" data-template-name="inbox" id="inbox">
+              <ol id="inbox">
+                {{#each model}}
+                <li>{{nick}}:{{message}}</li>
+                {{/each}}
               </ol>
+              </script>
             </div>
             <div class="span4 outbox">
-              <ol>
-                <li>Test out item</li>
-              </ol>
+              <script type="text/handlebars" data-template-name="outbox" id="outbox">
+                <ol id="outbox">
+                  {{#each model}}
+                  <li>{{message}}</li>
+                  {{/each}}
+                </ol>
+              </script>
             </div>
           </div>
         </div>
@@ -102,8 +117,12 @@
  </body>
 
  <footer>
-   <script type="text/javascript" src="resources/melchior/melchior.js"></script>
-   <script type="text/javascript" src="resources/melchior/application.js"></script>
+   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+   <script type="text/javascript" src="resources/ember/handlebars.js"></script>
+   <script type="text/javascript" src="resources/jquery-1.9.1.js"></script>
+   <script type="text/javascript" src="resources/ember/ember-1.0.0-rc.2.js"></script>
+   <script type="text/javascript" src="resources/ember/ember-data.js"></script>
+   <script type="text/javascript" src="resources/ember/application.js"></script>
  </footer>
 
 </html>

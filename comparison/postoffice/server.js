@@ -31,6 +31,8 @@ app.get("/jquery", function(req, res) {
     res.sendfile("resources/jquery/index.html")
 })
 
+app.get("/messages", function(req, res) { res.send(200) })
+
 app.post("/send", function(req, res) {
     socket.sockets.emit("/receive", {message:req.body.message, nick:req.body.nick})
     res.send(200, {status:"ok"})

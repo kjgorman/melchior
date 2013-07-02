@@ -1,38 +1,36 @@
 App = Ember.Application.create();
 
-App.Store = DS.Store.extend({
-    revision: 12,
-    adapter: DS.RESTAdapter.extend({
-        url:"http://localhost:3000"
-    })
-});
+App.Store = DS.Store.extend({revision:12})
 
 App.Router.map(function() {
-    this.resource("home");
-    this.resource("about");
-    this.resource("contact");
-});
-
-App.HomeRoute = Ember.Route.extend({
-    model: function() {
-        return App.Home.find();
-    }
+    this.resource("message")
 });
 
 App.IndexRoute = Ember.Route.extend({
-    redirect: function() {
-        this.transitionTo("home");
+    redirect: function () {
+        this.transitionTo("message")
     }
-});
+})
 
-App.Home = DS.Model.extend({
-    author: DS.attr('string'),
-    body: DS.attr('string')
-});
+App.InboxView = Ember.View.extend({})
 
-function getNext() {
-    App.Home.find();
-    setTimeout(getNext, 10000);
-}
+App.Message = DS.Model.extend({
+    nick: DS.attr("string"),
+    message:DS.attr("string"),
+})
 
-setTimeout(function () { getNext(); }, 5000);
+App.MessageRoute = Ember.Route.extend({
+    activate:function() {
+        App.Message.setupSockets =  function (id) {
+                console.log("finding things, etc")
+                var s = io.connect("/")
+                s.on("/receive", function(d) {
+                    console.log("hmmm...", d)
+                    if(d.nick !== document.getElementById("nick").value)
+                        $("#inbox").prepend($("<li>"+d.nick+":"+d.message))
+                    Ember.Handlebars.template("inbox")
+                })
+        }
+        App.Message.setupSockets()
+    }
+})
