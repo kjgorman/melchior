@@ -9,6 +9,7 @@ module Melchior.Dom.Selectors
     , byClass
     , from
     , inputs
+    , canvases
     ) where
 
 import Control.Category
@@ -64,11 +65,11 @@ data Selector a b = Selector (a -> IO b)
 
 instance Functor (Selector a) where
     fmap f (Selector g) = Selector $ \x -> liftM f $ g x
-    
+
 instance Category Selector where
     id = Selector return
     (Selector f) . (Selector g) = Selector $ g >=> f
-    
+
 select :: Selector a b -> a -> IO b
 select (Selector s) = s
 
@@ -96,13 +97,13 @@ inputs = Selector $ \z -> liftM (fmap $ \y -> Input $ unEl y) $ filterIO (\x -> 
 
 foreign import js "Selectors.tag(%1, 'input')"
     inpF :: JSPtr Node -> IO Bool
- 
+
 divs :: Nodes f => Selector (f Element) (f Div)
 divs = Selector $ \z -> liftM (fmap $ \y -> Div $ unEl y) $ filterIO (\x -> divF $ unwrap x) z
 
 foreign import js "Selectors.tag(%1, 'div')"
     divF :: JSPtr Node -> IO Bool
-            
+
 spans :: Nodes f => Selector (f Element) (f Span)
 spans = Selector $ \z -> liftM (fmap $ \y -> Span $ unEl y) $ filterIO (\x -> spanF $ unwrap x) z
 
@@ -113,6 +114,6 @@ canvases :: Nodes f => Selector (f Element) (f Canvas)
 canvases = Selector $ \z -> liftM (fmap $ \y -> Canvas $ unEl y) $ filterIO (\x -> canvasF $ unwrap x) z
 
 foreign import js "Selectors.tag(%1, 'canvas')"
-    canvasF :: JSPtr Node -> IO Bool             
+    canvasF :: JSPtr Node -> IO Bool
 
 
