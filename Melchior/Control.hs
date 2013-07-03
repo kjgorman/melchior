@@ -8,6 +8,7 @@ module Melchior.Control
   , (~>)
   , foldp
   , sample
+  , takes
   , constant
   , dropRepeats
   , dropWhen
@@ -112,6 +113,12 @@ sample = primSample
 
 foreign import js "%1.sample()"
   primSample :: Signal a -> a
+
+takes :: Signal a -> a
+takes s = primTake s True
+
+foreign import js "%1.sample(%2)"
+  primTake :: Signal a -> Bool -> a
 
 previous :: Signal a -> a
 previous = primPrevious

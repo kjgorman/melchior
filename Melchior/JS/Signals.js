@@ -10,8 +10,10 @@ var Signals = function () {
         this.__isSignal = true
     }
 
-    Signal.prototype.currently = function () {
-        return this.accumulator
+    Signal.prototype.currently = function (take) {
+        var res = this.accumulator
+        if(take) this.accumulator = undefined
+        return res
     }
 
     Signal.prototype.was = function () {
@@ -63,15 +65,15 @@ var Signals = function () {
 
     Signal.prototype.__aN__ = function () { return this }
 
-    Signal.prototype.sample = function () {
+    Signal.prototype.sample = function (take) {
         window.debug && console.log("sampling ", this.currently())
         var sample = null
-        if((sample = this.currently()) === undefined) {
+        if((sample = this.currently(take)) === undefined) {
             return emptySignal()
         } else if(sample.hasOwnProperty("_tag_") || typeof sample === "string") {
             return sample
         } else {
-            return { __aN__: function () { return sample }}
+            return { __eOrV__: function () { return sample }}
         }
     }
 

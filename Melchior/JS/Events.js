@@ -43,7 +43,9 @@ var Events = function() {
     }
 
     Event.prototype.keyCode = function(evt) {
-        return evt.keyCode
+        return {
+            __eOrV__: function () { return evt.keyCode }
+        }
     }
 
     return new Event()
