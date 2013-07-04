@@ -13,6 +13,10 @@ var Canvas = function () {
         ctx.strokeRect(x, y, w, h)
     }
 
+    function text(ctx, str, x, y) {
+        ctx.fillText(str, x, y)
+    }
+
     function canvasToContext(canvas) {
         if(canvas && canvas instanceof HTMLCanvasElement) return canvas.getContext("2d")
     }
@@ -27,11 +31,18 @@ var Canvas = function () {
         return context
     }
 
+    function setFontStyle(context, setting) {
+        context.font = setting
+        return context
+    }
+
     return {
         circle: circle,
         rectangle:rectangle,
+        text:text,
         canvasToContext:canvasToContext,
         setFillStyle:setFillStyle,
-        setStrokeStyle:setStrokeStyle
+        setStrokeStyle:setStrokeStyle,
+        setFontStyle:setFontStyle
     }
 }()
