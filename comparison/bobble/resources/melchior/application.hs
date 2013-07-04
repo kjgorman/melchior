@@ -62,7 +62,12 @@ collideP p = if ((abs $ (x p) - 375) < 25) || ((x p) < 25) || ((x p) > 700)
              else p
 
 collideB :: Player -> Player -> Ball -> Ball
-collideB _ _ b = b
+collideB p1 p2 b = collideWith p1 $ collideWith p2 b
+
+collideWith :: Player -> Ball -> Ball
+collideWith p (Ball bx by vx vy) = if ((x p - bx)^2 + (y p - by)^2) < (25^2)
+                                   then (Ball bx by (-vy) vx)
+                                   else (Ball bx by vx vy)
 
 move :: Game -> Int -> Game
 move (Game p1 p2 b) i = if i > 40
@@ -84,4 +89,4 @@ moveP p i = if (i == 37 || i == 65)
 gravitate (Player x y vx vy s) = Player x (if y > 350 then 350 else y) vx (vy+0.5) s
 
 moveB :: Ball -> Ball
-moveB (Ball x y vx vy) = Ball (x+(round vx)) (y+(round vy)) (vx) (vy)
+moveB (Ball x y vx vy) = Ball (x+(round vx)) (y+(round vy)) (vx) (vy+0.1)
