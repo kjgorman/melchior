@@ -53,15 +53,15 @@ drawBackground c = do
 
 drawGameElements :: Game -> Context -> IO ()
 drawGameElements (Game p1 p2 b) c = do
-  drawScores (score p1) (score p2) (fillStyle c black)
+  drawScores (score p1) (score p2) c
   drawPlayer p1 (fillStyle c red)
   drawPlayer p2 (fillStyle c blue)
   drawBall b (fillStyle c green)
 
 drawScores :: Int -> Int -> Context -> IO ()
 drawScores p1 p2 c = do
-  let Dom io = text (show p1) 25 50 (fillStyle (fontStyle c "40pt Helvetica") black) in io
-  let Dom io = text (show p2) 650 50 (fillStyle (fontStyle c "40pt Helvetica") black) in io
+  let Dom io = text (show p1) 25 50 (fontStyle c "40pt Helvetica") in io
+  let Dom io = text (show p2) 650 50 (fontStyle c "40pt Helvetica") in io
 
 drawPlayer :: Player -> Context -> IO ()
 drawPlayer p c = let Dom io = circle (x p) (y p) 25 c in io
