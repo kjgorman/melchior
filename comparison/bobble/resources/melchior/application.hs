@@ -22,7 +22,7 @@ data Ball   = Ball Int Int Float Float
 setupBobble html = do
   canvas <- Dom $ assuredly $ select (canvases . byId "canvas" . from) html
   context <- return $ contextOf canvas
-  game <- return $ Game (Player 50 350 0 0 0) (Player 650 350 0 0 0) (Ball 350 50 1 1)
+  game <- return $ Game (Player 50 350 0 0 0) (Player 650 350 0 0 0) (Ball 350 50 3 1)
   keys <- return $ keyCode $ keyDownSignal (toElement document)
   play game context keys
   return $ toElement canvas
@@ -31,9 +31,19 @@ play :: Game -> Context -> Signal Int -> Dom ()
 play g context keys = terminate (after frame)
                       (\_ -> do
                           drawBackground context
-                          h <- return $ collide $ move g (takes keys)
+                          h <- return $ scoreG $ collide $ move g (takes keys)
                           drawGameElements h context
                           let Dom io = play h context keys in io)
+
+scoreG :: Game -> Game
+scoreG g@(Game _ _ (Ball x y _ _)) = if y > 350 then reset $ scoreP (x < 375) g else g
+
+reset :: Game -> Game
+reset (Game p1 p2 _) = Game p1 p2 (Ball 350 50 3 1)
+
+scoreP :: Bool -> Game -> Game
+scoreP True (Game (Player x y vx vy s) p b) = Game (Player x y vx vy (s+1)) p b
+scoreP False (Game p (Player x y vx vy s) b) = Game p (Player x y vx vy (s+1)) b
 
 drawBackground :: Context -> IO ()
 drawBackground c = do
@@ -43,9 +53,15 @@ drawBackground c = do
 
 drawGameElements :: Game -> Context -> IO ()
 drawGameElements (Game p1 p2 b) c = do
+  drawScores (score p1) (score p2) (fillStyle c black)
   drawPlayer p1 (fillStyle c red)
   drawPlayer p2 (fillStyle c blue)
   drawBall b (fillStyle c green)
+
+drawScores :: Int -> Int -> Context -> IO ()
+drawScores p1 p2 c = do
+  let Dom io = text (show p1) 25 50 (fillStyle (fontStyle c "40pt Helvetica") black) in io
+  let Dom io = text (show p2) 650 50 (fillStyle (fontStyle c "40pt Helvetica") black) in io
 
 drawPlayer :: Player -> Context -> IO ()
 drawPlayer p c = let Dom io = circle (x p) (y p) 25 c in io
