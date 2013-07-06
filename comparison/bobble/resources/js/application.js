@@ -89,6 +89,8 @@
         collideWithWalls(p1, 25)
         collideWithWalls(p2, 25)
         collideWithWalls(ball, 10)
+        collideWithBall(p1, ball)
+        collideWithBall(p2, ball)
     }
 
     function collideWithWalls (x, r) {
@@ -96,6 +98,38 @@
             x.vx *= -1
             x.x += x.vx
         }
+    }
+
+    function collideWithBall (p, b) {
+        if( ((p.x - b.x) * (p.x - b.x)) + ((p.y - b.y) * (p.y - b.y)) < (25 * 25)) {
+            var n = normalisedVectorBetween(p, b)
+            var a1 = dot({x:b.vx, y:b.vy}, n)
+            var a2 = dot({x:p.vx, y:p.vy}, n)
+            var op = (2*(a2-a1))/(1+2)
+            var v = prod(-0.99, diff({x:b.vx, y:b.vy}, prod(op, prod(2, n))))
+            b.x += 2*v.x
+            b.y += 2*v.y
+            b.vx += v.x
+            b.vy += v.y
+        }
+    }
+
+    function prod(scalar, vector) {
+        return {x: scalar*vector.x, y: scalar*vector.y }
+    }
+
+    function diff(a, b) {
+        return {x: a.x - b.x, y: a.y - b.y}
+    }
+
+    function dot (p, n) {
+        return p.x * n.x + p.y * n.y
+    }
+
+    function normalisedVectorBetween(p, b) {
+        var dx = p.x - b.x, dy = p.y - b.y
+        var d = Math.sqrt(dx*dx + dy*dy)
+        return { x:dx/d, y: dy/d }
     }
 
     function score(p1, p2, ball) {
