@@ -17,7 +17,7 @@ frame = 17 -- ~16.66ms / 60fps
 
 data Game   = Game Player Player Ball
 data Player = Player { x :: Int, y :: Int, vx :: Float, vy :: Float, score :: Int }
-data Ball   = Ball Int Int Float Float
+data Ball   = Ball { xb :: Int, yb :: Int, vxb :: Float, vyb :: Float }
 
 setupBobble html = do
   canvas <- Dom $ assuredly $ select (canvases . byId "canvas" . from) html
@@ -36,7 +36,7 @@ play g context keys = terminate (after frame)
                           let Dom io = play h context keys in io)
 
 scoreG :: Game -> Game
-scoreG g@(Game _ _ (Ball x y _ _)) = if y > 350 then reset $ scoreP (x < 375) g else g
+scoreG g@(Game _ _ b) = if yb b > 360 then reset $ scoreP (xb b < 375) g else g
 
 reset :: Game -> Game
 reset (Game p1 p2 _) = Game p1 p2 (Ball 350 50 4 4)
@@ -67,7 +67,7 @@ drawPlayer :: Player -> Context -> IO ()
 drawPlayer p c = let Dom io = circle (x p) (y p) 25 c in io
 
 drawBall :: Ball -> Context -> IO ()
-drawBall (Ball x y _ _) c = let Dom io = circle x y 10 c in io
+drawBall b c = let Dom io = circle (xb b) (yb b) 10 c in io
 
 collide :: Game -> Game
 collide (Game p1 p2 b) = Game (collideP p1) (collideP p2) (collideBWall $ collideB p1 p2 b)
@@ -81,21 +81,19 @@ collideB :: Player -> Player -> Ball -> Ball
 collideB p1 p2 b = collideWith p1 $ collideWith p2 b
 
 collideBWall :: Ball -> Ball
-collideBWall b@(Ball x y vx vy) = if x < 10 || x > 740 then Ball x y (vx*(-1)) vy else b
+collideBWall b = if (xb b) < 10 || (xb b) > 740 then Ball (xb b) (yb b) ((vxb b)*(-1)) (vyb b) else b
 
 collideWith :: Player -> Ball -> Ball
-collideWith p b@(Ball bx by vx vy) = if ((x p - bx)^2 + (y p - by)^2) < (25^2)
-                                   then collision p b
-                                   else (Ball bx by vx vy)
+collideWith p b = if ((x p - (xb b))^2 + (y p - (yb b))^2) < (25^2) then collision p b else b
 
 collision :: Player -> Ball -> Ball
-collision p (Ball bx by bvx bvy) = Ball (bx + 2*(floor $ fst v')) (by + 2*(floor $ snd v')) (fst v') (snd v')
-                                    where
-                                      v' = prod (-0.95) $ diff (bvx, bvy) (prod op $ prod 2 n)
-                                      n  = normalisedVectorBetween (x p, y p) (bx, by)
-                                      a1 = dot (bvx, bvy) n
-                                      a2 = dot (vx p, vy p) n
-                                      op = (2.0 * (a1-a2))/(1+2)
+collision p b = Ball ((xb b) + 2*(floor $ fst v')) ((yb b) + 2*(floor $ snd v')) (fst v') (snd v')
+  where
+    v' = prod (-0.95) $ diff ((vxb b), (vyb b)) (prod op $ prod 2 n)
+    n  = normalisedVectorBetween (x p, y p) ((xb b), (yb b))
+    a1 = dot ((vxb b), (vyb b)) n
+    a2 = dot (vx p, vy p) n
+    op = (2.0 * (a1-a2))/(1+2)
 
 normalisedVectorBetween :: (Int, Int) -> (Int, Int) -> (Float, Float)
 normalisedVectorBetween a b = (dx/d, dy/d)
@@ -133,4 +131,4 @@ moveP p i = if (i == 37 || i == 65)
 gravitate (Player x y vx vy s) = Player x (if y > 350 then 350 else y) vx (vy+0.5) s
 
 moveB :: Ball -> Ball
-moveB (Ball x y vx vy) = Ball (x+(round vx)) (y+(round vy)) (vx) (vy+0.25)
+moveB b = Ball ((xb b)+(round (vxb b))) ((yb b)+(round (vyb b))) (vxb b) ((vyb b)+0.25)
