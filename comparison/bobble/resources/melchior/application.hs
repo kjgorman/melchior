@@ -42,8 +42,8 @@ reset :: Game -> Game
 reset (Game p1 p2 _) = Game p1 p2 (Ball 350 50 4 4)
 
 scoreP :: Bool -> Game -> Game
-scoreP True (Game (Player x y vx vy s) p b) = Game (Player x y vx vy (s+1)) p b
-scoreP False (Game p (Player x y vx vy s) b) = Game p (Player x y vx vy (s+1)) b
+scoreP False (Game (Player x y vx vy s) p b) = Game (Player x y vx vy (s+1)) p b
+scoreP True  (Game p (Player x y vx vy s) b) = Game p (Player x y vx vy (s+1)) b
 
 drawBackground :: Context -> IO ()
 drawBackground c = do
@@ -87,13 +87,13 @@ collideWith :: Player -> Ball -> Ball
 collideWith p b = if ((x p - (xb b))^2 + (y p - (yb b))^2) < (25^2) then collision p b else b
 
 collision :: Player -> Ball -> Ball
-collision p b = Ball ((xb b) + 2*(floor $ fst v')) ((yb b) + 2*(floor $ snd v')) (fst v') (snd v')
+collision p b = Ball ((xb b) + 2*(round $ fst v')) ((yb b) + 2*(round $ snd v')) (fst v') (snd v')
   where
-    v' = prod (-0.95) $ diff ((vxb b), (vyb b)) (prod op $ prod 2 n)
     n  = normalisedVectorBetween (x p, y p) ((xb b), (yb b))
     a1 = dot ((vxb b), (vyb b)) n
     a2 = dot (vx p, vy p) n
-    op = (2.0 * (a1-a2))/(1+2)
+    op = (2.0 * (a2 - a1))/(1+2)
+    v' = prod (-0.95) $ diff ((vxb b), (vyb b)) (prod op $ prod 2 n)
 
 normalisedVectorBetween :: (Int, Int) -> (Int, Int) -> (Float, Float)
 normalisedVectorBetween a b = (dx/d, dy/d)

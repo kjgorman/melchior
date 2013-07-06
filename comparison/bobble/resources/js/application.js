@@ -105,7 +105,7 @@
             var n = normalisedVectorBetween(p, b)
             var a1 = dot({x:b.vx, y:b.vy}, n)
             var a2 = dot({x:p.vx, y:p.vy}, n)
-            var op = (2*(a2-a1))/(1+2)
+            var op = (2*(a2-a1))/2
             var v = prod(-0.99, diff({x:b.vx, y:b.vy}, prod(op, prod(2, n))))
             b.x += 2*v.x
             b.y += 2*v.y
