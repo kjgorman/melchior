@@ -10,20 +10,8 @@ app.get("/melchior", function(req, res) {
     res.sendfile("resources/melchior/index.html")
 })
 
-app.get("/ember", function(req, res) {
-    res.sendfile("resources/ember/index.html")
-})
-
-app.get("/flight", function(req, res) {
-    res.sendfile("resources/flight/index.html")
-})
-
-app.get("/knockout", function(req, res) {
-    res.sendfile("resources/knockout/index.html")
-})
-
-app.get("/jquery", function(req, res) {
-    res.sendfile("resources/jquery/index.html")
+app.get("/js", function (req, res) {
+    res.sendfile("resources/js/index.html")
 })
 
 app.get("/", function (req, res) {

@@ -31,7 +31,7 @@ play :: Game -> Context -> Signal Int -> Dom ()
 play g context keys = terminate (after frame)
                       (\_ -> do
                           drawBackground context
-                          h <- return $ scoreG $ collide $ move g (takes keys)
+                          h <- return $ scoreG $ collide $ move g $ takes keys
                           drawGameElements h context
                           let Dom io = play h context keys in io)
 
