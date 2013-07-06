@@ -32,31 +32,23 @@
         document.addEventListener("keydown", function (e) {
             function movePlayer(p, l, u, r) {
                 if (e.keyCode == l) {
-                    p.x -= p1.vx
+                    p.x += p.vx
                     p.vx -= dv
                 } else if (e.keyCode == u) {
-                    if (e.y >= 350) {
-                        p.y += p.vy
+                    if (p.y >= 350) {
                         p.vy -= 5 * dv
+                        p.y += p.vy
                     } else {
                         p.x += p.vx
                         p.y += p.vy
-                        p.vx *= 0.9
-                        p.vy *= 0.9
                     }
                 } else if (e.keyCode == r) {
-                    p.x += vx
-                    p.vx += dv
-                } else {
                     p.x += p.vx
-                    p.y += p.vy
-                    p.vx *= 0.9
-                    p.vy *= 0.9
+                    p.vx += dv
                 }
-
-                movePlayer(p1, 37, 38, 39)
-                movePlayer(p2, 65, 87, 68)
             }
+            movePlayer(p1, 65, 87, 68)
+            movePlayer(p2, 37, 38, 39)
         })
     }
 
@@ -78,15 +70,32 @@
             if (p.y > 350) p.y = 350
             p.vy += 0.5
         }
+        function tick(p) {
+            p.x += p.vx
+            p.y += p.vy
+            p.vx *= 0.9
+            p.vy *= 0.9
+        }
         lowerBound(p1)
         lowerBound(p2)
+        tick(p1)
+        tick(p2)
         ball.x += ball.vx
         ball.y += ball.vy
         ball.vy += 0.25
     }
 
     function collide(p1, p2, ball) {
+        collideWithWalls(p1, 25)
+        collideWithWalls(p2, 25)
+        collideWithWalls(ball, 10)
+    }
 
+    function collideWithWalls (x, r) {
+        if(x.x < r || x.x > (700 - r) || r > 10 && Math.abs(x.x-375) < r) {
+            x.vx *= -1
+            x.x += x.vx
+        }
     }
 
     function score(p1, p2, ball) {
