@@ -92,7 +92,7 @@ collision p b = Ball ((xb b) + 2*(round $ fst v')) ((yb b) + 2*(round $ snd v'))
     n  = normalisedVectorBetween (x p, y p) ((xb b), (yb b))
     a1 = dot ((vxb b), (vyb b)) n
     a2 = dot (vx p, vy p) n
-    op = (2.0 * (a2 - a1))/(1+2)
+    op = (2.0 * (a2 - a1))/4
     v' = prod (-0.95) $ diff ((vxb b), (vyb b)) (prod op $ prod 2 n)
 
 normalisedVectorBetween :: (Int, Int) -> (Int, Int) -> (Float, Float)
