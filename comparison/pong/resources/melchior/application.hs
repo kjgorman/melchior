@@ -13,7 +13,7 @@ import Melchior.Time
 main :: IO Element
 main = runDom setupPong
 
-frame = 16
+frame = 16 -- ~60 fps
 data Game = Game Player Player Ball
 data Player = Player {x :: Float, y :: Float, mv :: Int, score :: Int }
 data Ball = Ball { bx :: Float, by :: Float, vx :: Float, vy :: Float }
@@ -31,7 +31,7 @@ setupPong html = do
 play :: Game -> Context -> Signal Int -> Signal Int -> Dom ()
 play game ctx u d = terminate (after frame)
                      (\_ -> do
-                         back ctx
+                         back ctx --my kingdom, my kingdom for a point free style!
                          next <- return $ scoreg $ collide $ step $ pop (takes d) $ push (takes u) game
                          elems next ctx
                          let Dom io = play next ctx u d in io)
@@ -94,6 +94,6 @@ elems :: Game -> Context -> IO ()
 elems (Game p1 p2 b) c = do
   let Dom io = rectangle ((floor $ x p1)-10) ((floor $ y p1)-35) 20 70 (fillStyle c "#FFF") in io
   let Dom io = rectangle (floor $ x p2) ((floor $ y p2)-35) 20 70 (fillStyle c "#FFF") in io
-  let Dom io = text (show $ score p1) 100 50 (fontStyle c "20pt Helvetiva") in io
+  let Dom io = text (show $ score p1) 100 50 (fontStyle c "20pt Helvetica") in io
   let Dom io = text (show $ score p2) 600 50 (fontStyle c "20pt Helvetica") in io
   let Dom io = circle (floor $ bx b) (floor $ by b) 10 (fillStyle c "#FFF") in io
