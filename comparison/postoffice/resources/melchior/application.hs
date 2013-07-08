@@ -2,7 +2,6 @@ module Comparisons.PostOffice where
 
 import Control.Category hiding ((>>>), (<<<))
 import Control.Applicative
-import Prelude hiding ((.), id)
 
 import Melchior.Control
 import Melchior.Data.String

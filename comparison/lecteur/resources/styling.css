@@ -1,0 +1,49 @@
+div.sidebar {
+  width:20%;
+  height:100%;
+  position:fixed;
+  padding-left:10px;
+  top:0;
+  left:0;
+  overflow:scroll;
+  background-color:#EFEFEF;
+}
+
+.sidebar > .title {
+    font-size:2em;
+    color:#333;
+    padding:20px;
+    background-color:#E9E9E9;
+}
+
+.sidebar * {
+    font-family: "Helvetica Neue";
+}
+
+.link > .title {
+    color:#444;
+    margin-top:15px;
+    padding-top:7px;
+    padding-bottom:7px;
+    background-color:#E4E4E4;
+    cursor:pointer;
+}
+
+.link > .body {
+   color:#6e6e6e;
+   font-size:0.7em;
+}
+
+.main-content {
+    margin-left:20%;
+    width:70%;
+    height:100%;
+    padding:60px;
+    background-color:#F9F9F9;
+    font-family: "Helvetica Neue";
+}
+
+.main-content > .title {
+    font-size:2.5em;
+    color:#88A6D7;
+}
