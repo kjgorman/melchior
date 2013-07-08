@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="UTF-8"><title>Main</title><script type="text/javascript" src="./elm-mini.js"></script><script type="text/javascript">
+Elm.Main = function(elm){
+  var N = Elm.Native, _N = N.Utils(elm), _L = N.List(elm), _E = N.Error(elm), _str = N.JavaScript(elm).toString;
+  var $op = {};
+  var _ = Elm.Text(elm); var Text = _; var hiding={link:1, color:1, height:1}; for(var k in _){if(k in hiding)continue;eval('var '+k+'=_["'+k+'"]')}
+  var _ = Elm.Prelude(elm); var Prelude = _; var hiding={}; for(var k in _){if(k in hiding)continue;eval('var '+k+'=_["'+k+'"]')}
+  var _ = Elm.Signal(elm); var Signal = _; var hiding={}; for(var k in _){if(k in hiding)continue;eval('var '+k+'=_["'+k+'"]')}
+  var _ = Elm.List(elm); var List = _; var hiding={}; for(var k in _){if(k in hiding)continue;eval('var '+k+'=_["'+k+'"]')}
+  var _ = Elm.Maybe(elm); var Maybe = _; var hiding={}; for(var k in _){if(k in hiding)continue;eval('var '+k+'=_["'+k+'"]')}
+  var _ = Elm.Time(elm); var Time = _; var hiding={}; for(var k in _){if(k in hiding)continue;eval('var '+k+'=_["'+k+'"]')}
+  var _ = Elm.Graphics.Element(elm); var Graphics = Graphics||{};Graphics.Element = _; var hiding={}; for(var k in _){if(k in hiding)continue;eval('var '+k+'=_["'+k+'"]')}
+  var _ = Elm.Color(elm); var Color = _; var hiding={}; for(var k in _){if(k in hiding)continue;eval('var '+k+'=_["'+k+'"]')}
+  var _ = Elm.Graphics.Collage(elm); var Graphics = Graphics||{};Graphics.Collage = _; var hiding={}; for(var k in _){if(k in hiding)continue;eval('var '+k+'=_["'+k+'"]')}
+  var _ = Elm.Keyboard(elm); var Keyboard = _;
+  var _ = Elm.Window(elm); var Window = _;
+  var Play_9 = {ctor:"Play"};
+  var Pause_10 = {ctor:"Pause"};
+  var Input_0 = F4(function(space_28, dirL_29, dirR_30, delta_31){
+    return {
+      _:{
+      },
+      delta:delta_31,
+      dirL:dirL_29,
+      dirR:dirR_30,
+      space:space_28};});
+  var player_11 = function(x_42){
+    return {
+      _:{
+      },
+      score:0,
+      vx:0,
+      vy:0,
+      x:x_42,
+      y:0};};
+  var stepObj_13 = F2(function(t_43, obj_44){
+    return function(){
+      var _36000_45 = obj_44;
+      var x_46 = _36000_45.x;
+      var y_47 = _36000_45.y;
+      var vx_48 = _36000_45.vx;
+      var vy_49 = _36000_45.vy;
+      return _N.replace([['x',(x_46+(vx_48*t_43))],['y',(y_47+(vy_49*t_43))]], obj_44);}();});
+  var near_14 = F3(function(k_50, c_51, n_52){
+    return ((_N.cmp(n_52,(k_50-c_51)).ctor!=='LT')&&(_N.cmp(n_52,(k_50+c_51)).ctor!=='GT'));});
+  var within_15 = F2(function(ball_53, paddle_54){
+    return (A3(near_14, paddle_54.x, 8, ball_53.x)&&A3(near_14, paddle_54.y, 20, ball_53.y));});
+  var stepV_16 = F3(function(v_55, lowerCollision_56, upperCollision_57){
+    return (lowerCollision_56 ? abs(v_55) : (upperCollision_57 ? (0-abs(v_55)) : v_55));});
+  var stepBall_17 = F4(function(t_58, ball_59, p1_60, p2_61){
+    return (not(A3(near_14, 0, halfWidth_7, ball_59.x))?_N.replace([['x',0],['y',0]], ball_59):function(){
+      var _51000_62 = ball_59;
+      var x_63 = _51000_62.x;
+      var y_64 = _51000_62.y;
+      var vx_65 = _51000_62.vx;
+      var vy_66 = _51000_62.vy;
+      return A2(stepObj_13, t_58, _N.replace([['vx',A3(stepV_16, vx_65, within_15(ball_59)(p1_60), within_15(ball_59)(p2_61))],['vy',A3(stepV_16, vy_66, (_N.cmp(y_64,(7-halfHeight_8)).ctor==='LT'), (_N.cmp(y_64,(halfHeight_8-7)).ctor==='GT'))]], ball_59));}());});
+  var stepPlyr_18 = F4(function(t_67, dir_68, points_69, player_70){
+    return function(){
+      var player1_71 = A2(stepObj_13, t_67, _N.replace([['vy',(dir_68*200)]], player_70));
+      return _N.replace([['y',A3(clamp, (22-halfHeight_8), (halfHeight_8-22), player1_71.y)],['score',(player_70.score+points_69)]], player1_71);}();});
+  var stepGame_19 = F2(function(_70000_72, game_73){
+    return function(){
+      var space_74 = _70000_72.space;
+      var dirL_75 = _70000_72.dirL;
+      var dirR_76 = _70000_72.dirR;
+      var delta_77 = _70000_72.delta;
+      return function(){
+        var _61000_78 = game_73;
+        var state_79 = _61000_78.state;
+        var ball_80 = _61000_78.ball;
+        var playerL_81 = _61000_78.playerL;
+        var playerR_82 = _61000_78.playerR;
+        var scoreL_83 = ((_N.cmp(ball_80.x,halfWidth_7).ctor==='GT')?1:0);
+        var scoreR_84 = ((_N.cmp(ball_80.x,(0-halfWidth_7)).ctor==='LT')?1:0);
+        return _N.replace([['state',(space_74 ? Play_9 : (!_N.eq(scoreL_83,scoreR_84) ? Pause_10 : state_79))],['ball',(_N.eq(state_79,Pause_10)?ball_80:A4(stepBall_17, delta_77, ball_80, playerL_81, playerR_82))],['playerL',A4(stepPlyr_18, delta_77, dirL_75, scoreL_83, playerL_81)],['playerR',A4(stepPlyr_18, delta_77, dirR_76, scoreR_84, playerR_82)]], game_73);}();}();});
+  var txt_23 = function(f_85){
+    return function(x){
+      return text(f_85(monospace(A2(Text.color, textGreen_22, toText(x)))));};};
+  var make_25 = F2(function(obj_86, shape_87){
+    return A2(move, {ctor:"Tuple2", _0:obj_86.x, _1:obj_86.y}, A2(filled, white, shape_87));});
+  var display_26 = F2(function(_94001_88, _94000_89){
+    return function(){ 
+    switch (_94001_88.ctor) {
+      case 'Tuple2':
+        return function(){
+          var state_92 = _94000_89.state;
+          var ball_93 = _94000_89.ball;
+          var playerL_94 = _94000_89.playerL;
+          var playerR_95 = _94000_89.playerR;
+          return function(){
+            var scores_96 = A2(txt_23, Text.height(4), _L.append(show(playerL_94.score),_L.append(_str('  '),show(playerR_95.score))));
+            return A4(container, _94001_88._0, _94001_88._1, middle, A3(collage, round(gameWidth_4), round(gameHeight_5), _L.Cons(A2(filled, pongGreen_21, A2(rect, gameWidth_4, gameHeight_5)),_L.Cons(A2(make_25, ball_93, A2(oval, 15, 15)),_L.Cons(A2(make_25, playerL_94, A2(rect, 10, 40)),_L.Cons(A2(make_25, playerR_95, A2(rect, 10, 40)),_L.Cons(A2(move, {ctor:"Tuple2", _0:0, _1:((gameHeight_5/2)-40)}, toForm(scores_96)),_L.Cons(A2(move, {ctor:"Tuple2", _0:0, _1:(40-(gameHeight_5/2))}, toForm((_N.eq(state_92,Play_9)?A2(spacer, 1, 1):A2(txt_23, id, msg_24)))),_L.Nil))))))));}();}();
+    }_E.Case('Line 85, Column 3') }();});
+  var delta_1 = A2(lift,inSeconds,fps(35));
+  var input_2 = A2(sampleOn, delta_1, A3(lift2,F2(function(f,x){return f(x)}),A3(lift2,F2(function(f,x){return f(x)}),A3(lift2,F2(function(f,x){return f(x)}),A2(lift,Input_0,Keyboard.space),A2(lift, function(__32){
+    return __32.y;}, Keyboard.wasd)),A2(lift, function(__33){
+    return __33.y;}, Keyboard.arrows)),delta_1));
+  var _21000_3 = {ctor:"Tuple2", _0:600, _1:400};
+  var gameWidth_4 = function(){ 
+  switch (_21000_3.ctor) {
+    case 'Tuple2':
+      return _21000_3._0;
+  }_E.Case('Line 21, Column 27') }();
+  var gameHeight_5 = function(){ 
+  switch (_21000_3.ctor) {
+    case 'Tuple2':
+      return _21000_3._1;
+  }_E.Case('Line 21, Column 27') }();
+  var _22000_6 = {ctor:"Tuple2", _0:300, _1:200};
+  var halfWidth_7 = function(){ 
+  switch (_22000_6.ctor) {
+    case 'Tuple2':
+      return _22000_6._0;
+  }_E.Case('Line 22, Column 27') }();
+  var halfHeight_8 = function(){ 
+  switch (_22000_6.ctor) {
+    case 'Tuple2':
+      return _22000_6._1;
+  }_E.Case('Line 22, Column 27') }();
+  var defaultGame_12 = {
+    _:{
+    },
+    ball:{
+    _:{
+    },
+    vx:200,
+    vy:200,
+    x:0,
+    y:0},
+    playerL:player_11((20-halfWidth_7)),
+    playerR:player_11((halfWidth_7-20)),
+    state:Pause_10};
+  var gameState_20 = A3(foldp, stepGame_19, defaultGame_12, input_2);
+  var pongGreen_21 = A3(rgb, 60, 100, 60);
+  var textGreen_22 = A3(rgb, 160, 200, 160);
+  var msg_24 = _str('SPACE to start, WS and &uarr;&darr; to move');
+  var main_27 = A3(lift2, display_26, Window.dimensions, gameState_20);
+  elm.Native = elm.Native||{};
+  var _ = elm.Native.Main||{};
+  _.$op = {};
+  _.Input = Input_0;
+  _.delta = delta_1;
+  _.input = input_2;
+  _._21000 = _21000_3;
+  _.gameWidth = gameWidth_4;
+  _.gameHeight = gameHeight_5;
+  _._22000 = _22000_6;
+  _.halfWidth = halfWidth_7;
+  _.halfHeight = halfHeight_8;
+  _.Play = Play_9;
+  _.Pause = Pause_10;
+  _.player = player_11;
+  _.defaultGame = defaultGame_12;
+  _.stepObj = stepObj_13;
+  _.near = near_14;
+  _.within = within_15;
+  _.stepV = stepV_16;
+  _.stepBall = stepBall_17;
+  _.stepPlyr = stepPlyr_18;
+  _.stepGame = stepGame_19;
+  _.gameState = gameState_20;
+  _.pongGreen = pongGreen_21;
+  _.textGreen = textGreen_22;
+  _.txt = txt_23;
+  _.msg = msg_24;
+  _.make = make_25;
+  _.display = display_26;
+  _.main = main_27
+  return elm.Main = _;
+  };</script></head><body><script type="text/javascript">Elm.fullscreen(Elm.Main)</script><noscript><p>SPACE to start, WS and &uarr;&darr; to move</p><p>  </p></noscript></body></html>
