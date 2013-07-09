@@ -4,6 +4,7 @@ module Melchior.Remote.Internal.Parser (
   , JsonString
   , JsonObject
   , JsNull
+  , JsonNumber
   , parseJson
   ) where
 

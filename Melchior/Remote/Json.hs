@@ -6,6 +6,7 @@ module Melchior.Remote.Json (
   , fromJson
   , getJsonString
   , stringOrError
+  , numberOrNought
   , JsonSerialisable
   , Json
   , JsonObject
@@ -54,11 +55,25 @@ getJsonString s j = case getKey s j of
   Nothing -> Nothing
   (Just j) -> stringFrom j
 
+getJsonNumber :: String -> JsonObject -> Maybe Float
+getJsonNumber s j = case getKey s j of
+  Nothing -> Nothing
+  (Just j) -> numberFrom j
+
 stringFrom :: Json -> Maybe String
 stringFrom (JsonPair (x, JsonString y)) = Just y
 stringFrom _ = Nothing
+
+numberFrom :: Json -> Maybe Float
+numberFrom (JsonPair(_, JsonNumber y)) = Just (read y :: Float)
+numberFrom _ = Nothing
 
 stringOrError :: JsonObject -> String -> String
 stringOrError j key = case getJsonString key j of
   Nothing -> "error"
   (Just s) -> s
+
+numberOrNought :: JsonObject -> String -> Float
+numberOrNought j key = case getJsonNumber key j of
+  Nothing -> 0
+  (Just n) -> n
