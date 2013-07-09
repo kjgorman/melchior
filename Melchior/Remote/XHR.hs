@@ -25,7 +25,7 @@ instance Show XHRMethod where
 
 -- | Continuous signal of server output on the input url channel
 server :: (JsonSerialisable a) => String -> Signal a
-server channel = (\s -> fromJson $ parseJson $ jsStringToString s) <$> (primGetSocketedSignal $ stringToJSString channel)
+server channel = (\s -> fromJson $ toJson s) <$> (primGetSocketedSignal $ stringToJSString channel)
 
 foreign import js "Sockets.createSocketedSignal(%1)"
   primGetSocketedSignal :: JSString -> Signal JSString
@@ -36,7 +36,7 @@ remote x s source = primGetRemote (stringToJSString $ show x) (stringToJSString 
 
 -- | Return a xhr request, or signal
 request :: (JsonSerialisable a) => XHRMethod -> String -> Signal s -> Signal a
-request  x s source = (\s -> fromJson (parseJson $ jsStringToString s)) <$> (primGetRemote (stringToJSString $ show x) (stringToJSString s) source)
+request  x s source = (\s -> fromJson $ toJson s) <$> (primGetRemote (stringToJSString $ show x) (stringToJSString s) source)
 
 foreign import js "XHR.getRemote(%1, %2, %3)"
   primGetRemote :: JSString -> JSString -> Signal a -> Signal JSString
