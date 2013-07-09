@@ -17,24 +17,18 @@ main = runDom setupLecteur
 
 setupLecteur :: [Element] -> Dom Element
 setupLecteur html = do
-  clicked <- articles html
-  streamer <- return $ map fetch clicked
   content <- Dom $ assuredly $ select (byId "main-container" . from) html
-  sequence $ map (\p -> focus p content) streamer
+  clicked <- clicks
+  focus (fetch clicked) content
   return $ head html
-
-articles :: [Element] -> Dom [Signal JSString]
-articles html = do
-  articles <- Dom $ select (byClass "article" . from) html
-  sequence $ map clicks articles
 
 fetch :: Signal JSString -> Signal Post
 fetch s = request POST "/post" $ (\x -> toDto $ toIdObj x) <$> s
           where
             toIdObj s = JsonObject [JsonPair (JsonString "id", JsonString $ jsStringToString s)]
 
-clicks :: Element -> Dom (Signal JSString)
-clicks e = createEventedSignalOf (Of $ stringToJSString "jsstring") e (MouseEvt ClickEvt) "data-reactive"
+clicks :: Dom (Signal JSString)
+clicks = delegateOf (Of $ stringToJSString "jsstring") ".article" (MouseEvt ClickEvt) "data-reactive" $ toElement document
 
 focus :: Signal Post -> Element -> Dom ()
 focus s e = put e s
