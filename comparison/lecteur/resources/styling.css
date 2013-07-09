@@ -20,7 +20,7 @@ div.sidebar {
     font-family: "Helvetica Neue";
 }
 
-.link > .title {
+.items * .title {
     color:#444;
     margin-top:15px;
     padding-top:7px;
@@ -29,7 +29,7 @@ div.sidebar {
     cursor:pointer;
 }
 
-.link > .body {
+.items * .body {
    color:#6e6e6e;
    font-size:0.7em;
 }
@@ -43,7 +43,7 @@ div.sidebar {
     font-family: "Helvetica Neue";
 }
 
-.main-content > .title {
+.main-content * .title {
     font-size:2.5em;
     color:#88A6D7;
 }

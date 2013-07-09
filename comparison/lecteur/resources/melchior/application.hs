@@ -21,7 +21,7 @@ setupLecteur html = do
   content <- Dom $ assuredly $ select (byId "main-container" . from) html
   clicked <- clicks
   focus (fetch clicked) content
-  sidebar <- Dom $ select (byClass "sidebar" . from) html
+  sidebar <- Dom $ select (byClass "items" . from) html
   loader sidebar
   return $ head html
 
@@ -44,6 +44,6 @@ instance JsonSerialisable Post where
   fromJson Nothing = Post "" "" 0
   fromJson (Just p) = Post (stringOrError p "title") (stringOrError p "body") (numberOrNought p "iden")
 instance Renderable Post where
-  render p = stringToJSString $ "<div class='link'><div class='article title' data-reactive='"++(show $ iden p)++"'>"++(title p)++"</div><div class='separator'>-</div><div class='body'>"++(body p)++"</div></div>"
+  render p = stringToJSString $ "<div><div class='article title' data-reactive='"++(show $ iden p)++"'>"++(title p)++"</div><div class='separator'>&nbsp;</div><div class='body'>"++(body p)++"</div></div>"
 
 
