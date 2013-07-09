@@ -131,13 +131,13 @@ describe("append and prepend should parse html", function () {
         Dom.append(anElement, "<div>foo</div>")
         var numChildren = anElement.children.length
         expect(numChildren).toBe(2)
-        expect(anElement.children[numChildren-1].tagName).toBe("div")
+        expect(anElement.children[numChildren-1].tagName).toBe("DIV")
     })
 
     it("should parse a tag when prepending", function () {
         Dom.prepend(anElement, "<input type='text' />")
         var numChildren = anElement.children.length
         expect(numChildren).toBe(3)
-        expect(anElement.children[0].tagName).toBe("input")
+        expect(anElement.children[0].tagName).toBe("INPUT")
     })
 })
