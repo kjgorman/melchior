@@ -34,6 +34,11 @@ app.post("/post", function(req, res) {
     res.send(200, posts[req.body.id])
 })
 
+var next = 0
+app.get("/next", function(req, res) {
+    res.send(200, posts[++next])
+})
+
 var posts = {
     1: {title:"Bottom-up Type Annotation with the Cofree Comonad"
         , body:"How do we add extra information to a tree? This has been called The AST Typing Problem. \
@@ -43,11 +48,9 @@ var posts = {
             out it's been done before but I couldn't find any complete example."
        },
     2: {title:"Carberp Code Leak Stokes Copycat Fears"
-        , body:"The source code for “Carberp” — a botnet creation kit coded by a team \
+        , body:"The source code for 'Carberp' — a botnet creation kit coded by a team \
             of at least two dozen hackers who used it to relieve banks of an \
             estimated $250 million — has been posted online for anyone to \
-            download. The code leak offers security experts a fascinating and \
-            somewhat rare glimpse into the malcoding economy, but many also worry \
             that its publication will spawn new hybrid strains of sophisticated \
             banking malware."
        },
@@ -56,8 +59,10 @@ var posts = {
             renaming? Well, you’ll be glad to know that you can now remove them \
             using the web-based interface too! Simply view any file in your \
             repository, click the delete button at the top, and commit the \
-            removal just like any other web-based edit."}
+            removal just like any other web-based edit."
+       }
 }
-
+/*            download. The code leak offers security experts a fascinating and \
+            somewhat rare glimpse into the malcoding economy, but many also worry \*/
 console.log("\033[036m~~server up on 3004~~\033[0m")
 app.listen(3004)

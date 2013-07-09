@@ -11,6 +11,7 @@ import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 import Melchior.Remote.Json
 import Melchior.Remote.XHR
+import Melchior.Time
 
 main :: IO Element
 main = runDom setupLecteur
@@ -20,7 +21,12 @@ setupLecteur html = do
   content <- Dom $ assuredly $ select (byId "main-container" . from) html
   clicked <- clicks
   focus (fetch clicked) content
+  sidebar <- Dom $ select (byClass "sidebar" . from) html
+  loader sidebar
   return $ head html
+
+loader :: [Element] -> Dom [()]
+loader s = sequence $ (\x -> append x (dropWhen (request GET "/next" $ every second :: Signal Post) (\x -> (title x) == ""))) <$> s
 
 fetch :: Signal JSString -> Signal Post
 fetch s = request POST "/post" $ (\x -> toDto $ toIdObj x) <$> s
@@ -38,6 +44,6 @@ instance JsonSerialisable Post where
   fromJson Nothing = Post "" ""
   fromJson (Just p) = Post (stringOrError p "title") (stringOrError p "body")
 instance Renderable Post where
-  render p = stringToJSString $ "<div class='title'>"++(title p)++"</div><div class='separator'>&nbsp</div><div class='body'>"++(body p)++"</div>"
+  render p = stringToJSString $ "<div><div class='article title'>"++(title p)++"</div><div class='separator'>-</div><div class='body'>"++(body p)++"</div></div>"
 
 
