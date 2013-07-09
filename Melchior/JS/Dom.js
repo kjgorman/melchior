@@ -76,11 +76,17 @@ var Dom = function() {
     function tryParseHtml(html) {
         var parser = new DOMParser()
         var fragment = parser.parseFromString(html, "text/xml")
+        var temp
         var doc /* ;_; jshint...*/
+
         if(fragment.body && /parsererror/.test(fragment.body.innerHTML)) {
             doc = document.createElement("span")
             doc.innerHTML = html
-        } else doc = fragment.firstChild
+        } else {
+            temp = document.createElement("div")
+            temp.innerHTML = html
+            return temp.firstChild
+        }
         return doc
     }
 
