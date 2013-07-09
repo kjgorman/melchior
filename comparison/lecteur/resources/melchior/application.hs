@@ -39,11 +39,11 @@ clicks = delegateOf (Of $ stringToJSString "jsstring") ".article" (MouseEvt Clic
 focus :: Signal Post -> Element -> Dom ()
 focus s e = put e s
 
-data Post = Post { title :: String, body :: String, iden :: String }
+data Post = Post { title :: String, body :: String, iden :: Float }
 instance JsonSerialisable Post where
-  fromJson Nothing = Post "" "" ""
-  fromJson (Just p) = Post (stringOrError p "title") (stringOrError p "body") (stringOrError p "iden")
+  fromJson Nothing = Post "" "" 0
+  fromJson (Just p) = Post (stringOrError p "title") (stringOrError p "body") (numberOrNought p "iden")
 instance Renderable Post where
-  render p = stringToJSString $ "<div class='link'><div class='article title' data-reactive='"++(iden p)++"'>"++(title p)++"</div><div class='separator'>-</div><div class='body'>"++(body p)++"</div></div>"
+  render p = stringToJSString $ "<div class='link'><div class='article title' data-reactive='"++(show $ iden p)++"'>"++(title p)++"</div><div class='separator'>-</div><div class='body'>"++(body p)++"</div></div>"
 
 
