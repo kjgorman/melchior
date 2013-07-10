@@ -31,10 +31,19 @@ App.IndexRoute = Ember.Route.extend({
             var iden = /script>(\d+)<script/.exec($(e.target).attr("data-reactive"))[1]
             console.log(iden)
             mainController.set("currentItems", [])
-            mainController.currentItems.addObject(sidebarController.items[iden-1])
-            _this.render("main", {
-                outlet:"main",
-                controller:mainController
+            $.ajax({
+                url:"/post",
+                data: {id: iden},
+                method:"POST",
+                type:"JSON",
+                success: function(data) {
+                    var article = App.Link.createRecord({title:data.title, body:data.body, iden:data.iden})
+                    mainController.currentItems.addObject(article)
+                    _this.render("main", {
+                        outlet:"main",
+                        controller:mainController
+                    })
+                }
             })
         })
     },
