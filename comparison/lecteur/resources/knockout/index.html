@@ -1,0 +1,37 @@
+<!DOCTYPE>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="resources/styling.css" />
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <div class="title">
+        Lecteur
+      </div>
+      <div class="items" data-bind="foreach: sidebar">
+        <div>
+          <div style="display:none" data-bind="text:iden"></div>
+          <div class="article title" data-bind="text:title">
+
+          </div>
+          <div class="body" data-bind="text: body">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="main-content" id="main-container">
+      
+    </div>
+  </body>
+
+  <footer>
+    <script type="text/javascript" src="resources/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="resources/knockout/knockout-2.2.1.js"></script>
+    <script type="text/javascript" src="resources/knockout/application.js"></script>
+  </footer>
+
+</html>
+
