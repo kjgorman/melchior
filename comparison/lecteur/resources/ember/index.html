@@ -1,0 +1,61 @@
+<!DOCTYPE>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="resources/styling.css" />
+  </head>
+
+  <body>
+    <script type="text/x-handlebars">
+    <div class="sidebar">
+      <div class="title">
+        Lecteur
+      </div>
+      {{outlet sidebar}}
+    </div>
+    <div class="main-content" id="main-container">
+      {{outlet main}}
+    </div>
+    </script>
+  </body>
+
+  <script type="text/x-handlebars" id="sidebar">
+    <div class="items">
+      {{#each items}}
+      <div>
+        <div class="article title" data-reactive="{{iden}}">
+          {{title}}
+        </div>
+        <div class='separator'>&nbsp;</div>
+        <div class="body">
+          {{body}}
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </script>
+
+  <script type="text/x-handlebars" id="main">
+    {{#each currentItems}}
+      <div>
+        <div class="article title" data-reactive="{{iden}}">
+          {{title}}
+        </div>
+        <div class='separator'>&nbsp;</div>
+        <div class="body">
+          {{body}}
+        </div>
+      </div>
+    {{/each}}
+  </script>
+
+  <footer>
+   <script type="text/javascript" src="resources/ember/handlebars.js"></script>
+   <script type="text/javascript" src="resources/jquery-1.9.1.js"></script>
+   <script type="text/javascript" src="resources/ember/ember-1.0.0-rc.2.js"></script>
+   <script type="text/javascript" src="resources/ember/ember-data.js"></script>
+   <script type="text/javascript" src="resources/ember/application.js"></script>
+  </footer>
+
+</html>
+
