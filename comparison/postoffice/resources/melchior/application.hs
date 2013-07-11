@@ -47,8 +47,7 @@ listenForComposition html = do
   input <- Dom $ assuredly $ select (inputs . byId "writer" . from) html
   nick <- Dom $ assuredly $ select (inputs . byId "nick" . from) html
   send  <- Dom $ assuredly $ select (byId "submit" . from) html
-  return $ (\_ -> JsonObject [JsonPair (JsonString "message", JsonString (jsStringToString $ value input))
-                            , JsonPair (JsonString "nick", JsonString (jsStringToString $ value nick))]) <$> click send
+  return $ (\_ -> toJsonDict [("message", jsStringToString $ value input), ("nick", jsStringToString $ value nick)]) <$> click send
 
 receiveMessages :: Signal Message
 receiveMessages = server "/receive" :: Signal Message

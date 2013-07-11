@@ -3,6 +3,7 @@ module Melchior.Remote.Json (
   , toJsonSF
   , toJson
   , toDto
+  , toJsonDict
   , fromJson
   , getJsonString
   , stringOrError
@@ -33,6 +34,11 @@ toJsonSF s = (\x -> toJson x) <$> s
 
 toJson :: JSString -> Maybe JsonObject
 toJson x = parseJson (jsStringToString x)
+
+toJsonDict :: [(String, String)] -> JsonObject
+toJsonDict pairs = JsonObject $ map pairify pairs
+                   where
+                     pairify x = JsonPair (JsonString $ fst x, JsonString $ snd x)
 
 empty :: JsonObject
 empty = JsonObject []

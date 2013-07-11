@@ -64,7 +64,7 @@ var Dom = function() {
         if(elem.attributes && elem.attributes.getNamedItem(key)) {
             return elem.attributes.getNamedItem(key).value
         }
-        console.log("could't find attribute, returning undefined")
+
         return undefined
     }
 
