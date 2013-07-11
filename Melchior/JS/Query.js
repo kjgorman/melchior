@@ -24,7 +24,9 @@ var Query = function () {
             Events.applyNativeMapping(event)
             var element = event.srcElement, matches = false
             //todo -- make queries compose
-            thus.queries[eventName] && thus.queries[eventName].map(function (query) { matches |= query.matches(element) })
+            matches = thus.queries[eventName] && thus.queries[eventName].reduce(function (matches, query) {
+                matches |= (query.hasOwnProperty('matches') || query.matches(element))
+            }, matches)
             if (matches) {
                 if(key !== undefined) signal.push(Dom.get(element, key))
                 else signal.push(event)

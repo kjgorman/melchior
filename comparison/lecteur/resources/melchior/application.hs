@@ -44,6 +44,13 @@ instance JsonSerialisable Post where
   fromJson Nothing = Post "" "" 0
   fromJson (Just p) = Post (stringOrError p "title") (stringOrError p "body") (numberOrNought p "iden")
 instance Renderable Post where
-  render p = stringToJSString $ "<div><div class='article title' data-reactive='"++(show $ iden p)++"'>"++(title p)++"</div><div class='separator'>&nbsp;</div><div class='body'>"++(body p)++"</div></div>"
+   render p = stringToJSString $ show $ constructPost p
+
+constructPost p = JDiv [header, sep, bodyOf]
+                  where
+                    header = addAttribute "data-reactive" (show $ iden p) $ addClassTo "article" $ addClassTo "title" $ JDiv [Text $ stringToJSString (title p)]
+                    sep = addClassTo "separator" $ JDiv [Text $ stringToJSString "&nbsp;"]
+                    bodyOf = addClassTo "body" $ JDiv [Text $ stringToJSString (body p)]
+
 
 

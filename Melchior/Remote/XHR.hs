@@ -1,6 +1,7 @@
 module Melchior.Remote.XHR (
     remote
   , request
+  , rawRequest
   , server
     -- * Types
   , GET
@@ -40,4 +41,7 @@ request  x s source = (\s -> fromJson $ toJson s) <$> (primGetRemote (stringToJS
 
 foreign import js "XHR.getRemote(%1, %2, %3)"
   primGetRemote :: JSString -> JSString -> Signal a -> Signal JSString
+
+rawRequest :: XHRMethod -> String -> Signal s -> Signal JSString
+rawRequest x s source = primGetRemote (stringToJSString $ show x) (stringToJSString s) source
 
