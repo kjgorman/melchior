@@ -31,7 +31,7 @@ loader s = sequence $ (\x -> append x (dropWhen (request GET "/next" $ every sec
 fetch :: Signal JSString -> Signal Post
 fetch s = request POST "/post" $ (\x -> toDto $ toIdObj x) <$> s
           where
-            toIdObj s = JsonObject [JsonPair (JsonString "id", JsonString $ jsStringToString s)]
+            toIdObj s = toJsonDict [("id", jsStringToString s)]
 
 clicks :: Dom (Signal JSString)
 clicks = delegateOf (Of $ stringToJSString "jsstring") ".article" (MouseEvt ClickEvt) "data-reactive" $ toElement document
