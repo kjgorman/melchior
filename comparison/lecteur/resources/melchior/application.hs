@@ -48,7 +48,7 @@ instance Renderable Post where
 
 constructPost p = JDiv [header, sep, bodyOf]
                   where
-                    header = addAttribute "data-reactive" (show $ iden p) $ addClassTo "article" $ addClassTo "title" $ JDiv [Text $ stringToJSString (title p)]
+                    header = addAttribute "data-reactive" (show $ iden p) $ addClassTo "article title" $ JDiv [Text $ stringToJSString (title p)]
                     sep = addClassTo "separator" $ JDiv [Text $ stringToJSString "&nbsp;"]
                     bodyOf = addClassTo "body" $ JDiv [Text $ stringToJSString (body p)]
 

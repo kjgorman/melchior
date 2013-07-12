@@ -31,7 +31,7 @@ app.get("/melchior", function(req, res) {
 })
 
 app.post("/post", function(req, res) {
-    res.send(200, posts[req.body.id])
+    res.send(200, posts[req.body.id.trim()])
 })
 
 var next = 0

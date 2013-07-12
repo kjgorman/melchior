@@ -61,7 +61,7 @@ var Dom = function() {
         var ret = elem[key]
 
         if(ret) return ret
-        console.log(elem)
+
         if(elem.attributes && elem.attributes.getNamedItem(key)) {
             return elem.attributes.getNamedItem(key).value
         }

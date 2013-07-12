@@ -25,8 +25,9 @@ var Query = function () {
             var element = event.srcElement, matches = false
             //todo -- make queries compose
             matches = thus.queries[eventName] && thus.queries[eventName].reduce(function (matches, query) {
-                matches |= (query.hasOwnProperty('matches') || query.matches(element))
+                return matches |= (query.hasOwnProperty('matches') || query.matches(element))
             }, matches)
+            console.log(eventName, key, element, matches)
             if (matches) {
                 if(key !== undefined) signal.push(Dom.get(element, key))
                 else signal.push(event)
