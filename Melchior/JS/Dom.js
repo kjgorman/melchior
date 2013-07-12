@@ -65,7 +65,6 @@ var Dom = function() {
         if(elem.attributes && elem.attributes.getNamedItem(key)) {
             return elem.attributes.getNamedItem(key).value
         }
-        console.log('ruh-roh')
         return undefined
     }
 

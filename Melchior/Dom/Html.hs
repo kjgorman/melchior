@@ -24,7 +24,13 @@ instance Show Fragment where
   show (Text h) = show h
   show (JDiv f) = "<div>" ++ (concatMap show f) ++ "</div>"
   show (JSpan f) = "<span>" ++ (concatMap show f) ++ "</div>"
-  show (Attribute t f) = "<"++(tag f)++" "++(collapse t)++">"++(show f)++"</"++(tag f)++">"
+  show (Attribute t f) = "<"++(tag f)++" "++(collapse t)++">"++(concatMap show $ fragments f)++"</"++(tag f)++">"
+
+fragments :: Fragment -> [Fragment]
+fragments (Text _) = []
+fragments (JDiv d) = d
+fragments (JSpan s) = s
+fragments (Attribute _ f) = fragments f
 
 tag :: Fragment -> String
 tag (Text _) = ""
