@@ -18,7 +18,7 @@ main = runDom setupLecteur
 
 setupLecteur :: [Element] -> Dom Element
 setupLecteur html = do
-  content <- Dom $ assuredly $ select (byId "main-container" . from) html
+  content <- Dom $ select (byId "main-container" . from) html
   clicked <- clicks
   focus (fetch clicked) content
   sidebar <- Dom $ select (byClass "items" . from) html
@@ -36,8 +36,9 @@ fetch s = request POST "/post" $ (\x -> toDto $ toIdObj x) <$> s
 clicks :: Dom (Signal JSString)
 clicks = delegateOf (Of $ stringToJSString "jsstring") ".article" (MouseEvt ClickEvt) "data-reactive" $ toElement document
 
-focus :: Signal Post -> Element -> Dom ()
-focus s e = put e s
+focus :: Signal Post -> Maybe Element -> Dom ()
+focus s (Just e) = put e s
+focus s Nothing = return ()
 
 data Post = Post { title :: String, body :: String, iden :: Float }
 instance JsonSerialisable Post where
