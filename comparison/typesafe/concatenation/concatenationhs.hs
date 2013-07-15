@@ -8,10 +8,10 @@ import Melchior.Dom
 import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 
-main :: IO Element
+main :: IO ()
 main = runDom setupComparisons
 
-setupComparisons :: [Element] -> Dom Element
+setupComparisons :: [Element] -> Dom ()
 setupComparisons html = do
   output <- Dom $ select (byId "hs-output" . from) html
   appendConcatenation output "String to String" $ stringToString "hello " "world"
@@ -22,7 +22,6 @@ setupComparisons html = do
   appendConcatenation output "Int to List" $ intToList 42 [43, 44]
   appendConcatenation output "ADT to List" $ objectToList (Datum "foo") ["bar", "quux"]
   appendConcatenation output "List to string" $ listToString ["e.g.", "i.e"] "viz."
-  return $ UHC.Base.head html
 
 appendConcatenation :: Maybe Element -> String -> String -> Dom ()
 appendConcatenation Nothing _ _ = return ()
