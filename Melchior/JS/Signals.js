@@ -156,6 +156,7 @@ var Signals = function () {
             if(value && _e_(value)._tag_ && _e_(value)._tag_ === -1) return //empty
             evaluate(UHCFunction.call(funct, value))
         })
+        signal.push(signal.sample())
     }
 
     function emptySignal () {
