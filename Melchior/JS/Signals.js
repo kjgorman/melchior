@@ -68,7 +68,7 @@ var Signals = function () {
     Signal.prototype.sample = function (take) {
         window.debug && console.log("sampling ", this.currently())
         var sample = null
-        if((sample = this.currently(take)) === undefined) {
+        if(typeof (sample = this.currently(take)) === "undefined") {
             return emptySignal()
         } else if(sample.hasOwnProperty("_tag_") || typeof sample === "string") {
             return sample
