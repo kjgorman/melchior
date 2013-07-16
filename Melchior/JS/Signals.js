@@ -85,6 +85,7 @@ var Signals = function () {
         var s = new Signal()
         s.currently = function () { return value }
         s.registerListener = function (callback) {
+            Signal.prototype.registerListener.call(this, callback)
             callback(value)
         }
         return s
