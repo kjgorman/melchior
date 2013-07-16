@@ -7,6 +7,7 @@ import Melchior.Data.List
 import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Events
+import Melchior.Dom.Drawing
 import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 import Melchior.EventSources.Mouse
