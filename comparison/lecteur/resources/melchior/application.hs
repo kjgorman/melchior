@@ -13,17 +13,16 @@ import Melchior.Remote.Json
 import Melchior.Remote.XHR
 import Melchior.Time
 
-main :: IO Element
+main :: IO [()]
 main = runDom setupLecteur
 
-setupLecteur :: [Element] -> Dom Element
+setupLecteur :: [Element] -> Dom [()]
 setupLecteur html = do
   content <- Dom $ select (byId "main-container" . from) html
   clicked <- clicks
   focus (fetch clicked) content
   sidebar <- Dom $ select (byClass "items" . from) html
   loader sidebar
-  return $ head html
 
 loader :: [Element] -> Dom [()]
 loader s = sequence $ (\x -> append x (dropWhen (request GET "/next" $ every second :: Signal Post) (\x -> (title x) == ""))) <$> s

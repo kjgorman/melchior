@@ -10,7 +10,7 @@ import Melchior.Dom.Selectors
 import Melchior.EventSources.Keyboard
 import Melchior.Time
 
-main :: IO Element
+main :: IO ()
 main = runDom setupPong
 
 frame = 16 -- ~60 fps
@@ -18,15 +18,14 @@ data Game = Game Player Player Ball
 data Player = Player {x :: Float, y :: Float, mv :: Int, score :: Int }
 data Ball = Ball { bx :: Float, by :: Float, vx :: Float, vy :: Float }
 
-setupPong :: [Element] -> Dom Element
+setupPong :: [Element] -> Dom ()
 setupPong html = do
   canvas <- Dom $ assuredly $ select (canvases . byId "canvas" . from) html
-  context <- return $ contextOf canvas
-  game <- return $ Game (Player 15 200 0 0) (Player 675 200 0 0) (Ball 350 200 5 5)
-  keyd <- return $ keyCode $ keyDownSignal (toElement document)
-  keyu <- return $ keyCode $ keyUpSignal (toElement document)
+  let context = contextOf canvas
+      game = Game (Player 15 200 0 0) (Player 675 200 0 0) (Ball 350 200 5 5)
+      keyd = keyCode $ keyDownSignal (toElement document)
+      keyu = keyCode $ keyUpSignal (toElement document)
   play game context keyd keyu
-  return $ head html
 
 play :: Game -> Context -> Signal Int -> Signal Int -> Dom ()
 play game ctx u d = terminate (after frame)

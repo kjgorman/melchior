@@ -13,16 +13,15 @@ import Melchior.EventSources.Mouse
 import Melchior.Remote.Json
 import Melchior.Remote.XHR
 
-main :: IO Element
+main :: IO ()
 main = runDom setupPostOffice
 
-setupPostOffice :: [Element] -> Dom Element
+setupPostOffice :: [Element] -> Dom ()
 setupPostOffice html = do
   composedMessages <- listenForComposition html
   placeInOutbox composedMessages html
   sendMessages composedMessages
   placeInInbox receiveMessages html
-  return $ UHC.Base.head html
 
 data Status = Ok | Error String
 instance JsonSerialisable Status where

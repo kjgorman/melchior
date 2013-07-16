@@ -14,16 +14,15 @@ import Melchior.Remote.XHR
 import Melchior.Remote.Internal.ParserUtils
 import Melchior.Time
 
-main :: IO Element
+main :: IO ()
 main = runDom setupSorting
 
-setupSorting :: [Element] -> Dom Element
+setupSorting :: [Element] -> Dom ()
 setupSorting html = do
   inp <- Dom $ select (inputs . byId "inp" . from) html >>= \m -> return $ ensures m
   manualSorting html inp
   fetch <- Dom $ select (byId "remote" . from) html >>= \m -> return $ ensures m
   setValue (toInput inp) $ stringify (remote GET "/numbers" (click fetch))
-  return $ UHC.Base.head html
 
 stringify :: Signal JSString -> Signal String
 stringify s = (\x -> jsStringToString x) <$> s

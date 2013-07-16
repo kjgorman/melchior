@@ -10,7 +10,7 @@ import Melchior.Dom.Selectors
 import Melchior.EventSources.Keyboard
 import Melchior.Time
 
-main :: IO Element
+main :: IO ()
 main = runDom setupBobble
 
 frame = 17 -- ~16.66ms / 60fps
@@ -21,11 +21,10 @@ data Ball   = Ball { xb :: Int, yb :: Int, vxb :: Float, vyb :: Float }
 
 setupBobble html = do
   canvas <- Dom $ assuredly $ select (canvases . byId "canvas" . from) html
-  context <- return $ contextOf canvas
-  game <- return $ Game (Player 50 350 0 0 0) (Player 650 350 0 0 0) (Ball 350 50 4 2)
-  keys <- return $ keyCode $ keyDownSignal (toElement document)
+  let context = contextOf canvas
+      game = Game (Player 50 350 0 0 0) (Player 650 350 0 0 0) (Ball 350 50 4 2)
+      keys = keyCode $ keyDownSignal (toElement document)
   play game context keys
-  return $ toElement canvas
 
 play :: Game -> Context -> Signal Int -> Dom ()
 play g context keys = terminate (after frame)

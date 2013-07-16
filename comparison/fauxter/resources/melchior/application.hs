@@ -14,15 +14,14 @@ import Melchior.Remote.Json
 import Melchior.Remote.XHR
 import Melchior.Time
 
-main :: IO Element
+main :: IO ()
 main = runDom setupFauxter
 
-setupFauxter :: [Element] -> Dom Element
+setupFauxter :: [Element] -> Dom ()
 setupFauxter html = do
   initialiseTabs html
   container <- Dom $ select (byId "container" . from) html >>= \m -> return $ ensures m
   append container (request GET "/next" $ every 10000 :: Signal Fauxt)
-  return $ UHC.Base.head html
 
 initialiseTabs html = do
     links <- Dom $ select (byClass "link" . from) html
