@@ -20,7 +20,7 @@ setupAccess html = do
   appendAccess output "Simple access" (show $ x anObject)
 --  appendAccess output "Missing field" (show $ a anObject)
 --  "names not in scope: a (Value)"
-  
+
 
 appendAccess :: Maybe Element -> String -> String -> Dom ()
 appendAccess Nothing _ _ = return ()
