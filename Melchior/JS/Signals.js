@@ -67,13 +67,13 @@ var Signals = function () {
 
     Signal.prototype.sample = function (take) {
         window.debug && console.log("sampling ", this.currently())
-        var sample = null
-        if(typeof (sample = this.currently(take)) === "undefined") {
+        var sampled
+        if(typeof (sampled = this.currently(take)) === "undefined") {
             return emptySignal()
-        } else if(sample.hasOwnProperty("_tag_") || typeof sample === "string") {
-            return sample
+        } else if(sampled.hasOwnProperty("_tag_") || typeof sampled === "string") {
+            return sampled
         } else {
-            return { __eOrV__: function () { return sample }}
+            return { __eOrV__: function () { return sampled }}
         }
     }
 
@@ -84,6 +84,9 @@ var Signals = function () {
     function constant(value) {
         var s = new Signal()
         s.currently = function () { return value }
+        s.registerListener = function (callback) {
+            callback(value)
+        }
         return s
     }
 
@@ -156,7 +159,6 @@ var Signals = function () {
             if(value && _e_(value)._tag_ && _e_(value)._tag_ === -1) return //empty
             evaluate(UHCFunction.call(funct, value))
         })
-        signal.push(signal.sample())
     }
 
     function emptySignal () {
