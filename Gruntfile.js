@@ -29,6 +29,11 @@ module.exports = function(grunt) {
                 command : "find . -name '*hs' -exec melchior {} \;"
             }
         },
+        uglify : {
+            my_targets: {
+                files : { 'dist/melchior.min.js' : ['dist/melchior.js'] }
+            }
+        },
         jshint : {
             all: ["Melchior/JS/**/*.js"],
             options : {
@@ -133,26 +138,17 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-jasmine");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-watch");
+    grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-shell");
-
 
     grunt.registerTask('default',
                        ['jshint',
                         'shell:build',
                         'shell:buildTests',
                         'concat',
-                        'shell:copyDistToSpec',
-                        'shell:copyDistToComparison',
+                        'uglify',
                         'jasmine',
                        ]);
-    grunt.registerTask('dev',
-                       ['jshint',
-                        'shell:build',
-                        'shell:buildTests',
-                        'concat',
-                        'shell:copyDistToSpec',
-                        'jasmine',
-                        'watch'])
     grunt.registerTask('travis', ['jshint', 'jasmine']);
     grunt.registerTask('compile', ['shell:compile']);
     grunt.registerTask('example',
