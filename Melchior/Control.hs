@@ -44,6 +44,10 @@ type SF a b = Signal a -> Signal b
 instance Functor Signal where
   fmap = pipe
 
+instance Applicative Signal where
+  pure = constant
+  f <*> x = (\v -> (sample f) v) <$> x
+
 runDom :: ([Element] -> Dom a) -> IO a
 runDom f = io
            where Dom io = f root

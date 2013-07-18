@@ -19,27 +19,34 @@ main = runDom setupSorting
 
 setupSorting :: [Element] -> Dom ()
 setupSorting html = do
-  inp <- Dom $ select (inputs . byId "inp" . from) html >>= \m -> return $ ensures m
-  manualSorting html inp
-  fetch <- Dom $ select (byId "remote" . from) html >>= \m -> return $ ensures m
+  inp <- Dom $ assuredly $ select (inputs . byId "inp" . from) html
+  fetch <- Dom $ assuredly $ select (byId "remote" . from) html
+  manualSorting html inp $ pure qsort
   setValue (toInput inp) $ stringify (remote GET "/numbers" (click fetch))
 
 stringify :: Signal JSString -> Signal String
 stringify s = (\x -> jsStringToString x) <$> s
 
-manualSorting html inp = do
-  qout <- Dom $ select (byId "quick" . from) html >>= \m -> return $ ensures m
-  mout <- Dom $ select (byId "merge" . from) html >>= \m -> return $ ensures m
-  hout <- Dom $ select (byId "heap" . from) html >>= \m -> return $ ensures m
-  input <- return $ createEventedSignal (Of "string") inp (ElementEvt InputEvt)
+manualSorting :: [Element] -> Input -> Signal ([Int] -> [Int]) -> Dom ()
+manualSorting html inp sorter = do
+  qout <- Dom $ assuredly $ select (byId "quick" . from) html
+  mout <- Dom $ assuredly $ select (byId "merge" . from) html
+  hout <- Dom $ assuredly $ select (byId "heap" . from) html
+  appl <- Dom $ assuredly $ select (byId "applicative" . from) html
+  let input = createEventedSignal (Of "string") inp (ElementEvt InputEvt)
+  put appl $ sorter <*> ((\_ -> parseToNumbers $ value $ inp) <$> input)
   put qout ((\_ -> qsort $ parseToNumbers $ value $ inp) <$> input)
   put mout ((\_ -> msort $ parseToNumbers $ value $ inp) <$> input)
   put hout ((\_ -> hsort $ parseToNumbers $ value $ inp) <$> input)
 
+merger :: [Signal JSString] -> Signal JSString
+merger (x:[]) = x
+merger (x:xs) = Melchior.Control.merge x $ merger xs
+
 stringListToNumbers :: String -> [Int]
 stringListToNumbers s = case parse numbers s of
   [] -> []
-  (x:xs) -> map (\x -> (read x :: Int)) (fst x)
+  (x:xs) -> map (\x -> read x) (fst x)
 
 numbers = many1 numberAndDelim
 numberAndDelim = do { n <- many1 digit; space; symb "," +++ return []; return n }
