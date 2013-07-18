@@ -12,6 +12,7 @@ import Melchior.Dom.Selectors
 import Melchior.EventSources.Mouse
 import Melchior.Remote.Json
 import Melchior.Remote.XHR
+import Melchior.Sink
 
 main :: IO ()
 main = runDom setupPostOffice

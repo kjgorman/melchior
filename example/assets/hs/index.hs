@@ -14,6 +14,7 @@ import Melchior.EventSources.Mouse
 import Melchior.EventSources.Keyboard
 import Melchior.Remote.Json
 import Melchior.Remote.XHR
+import Melchior.Sink
 import Melchior.Time
 
 import Prelude hiding ((.), id, head, map)

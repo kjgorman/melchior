@@ -9,6 +9,7 @@ import Melchior.Dom.Selectors
 import Melchior.EventSources.Mouse
 import Melchior.Remote.XHR
 import Melchior.Remote.Json
+import Melchior.Sink
 
 main :: IO ()
 main = runDom setupDataTransfer

@@ -8,6 +8,7 @@ import Melchior.Dom
 import Melchior.Dom.Drawing
 import Melchior.Dom.Selectors
 import Melchior.EventSources.Keyboard
+import Melchior.Sink
 import Melchior.Time
 
 main :: IO ()

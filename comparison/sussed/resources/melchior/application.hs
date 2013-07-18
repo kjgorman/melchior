@@ -12,6 +12,7 @@ import Melchior.EventSources.Mouse
 import Melchior.Dom.Selectors
 import Melchior.Remote.XHR
 import Melchior.Remote.Internal.ParserUtils
+import Melchior.Sink
 import Melchior.Time
 
 main :: IO ()

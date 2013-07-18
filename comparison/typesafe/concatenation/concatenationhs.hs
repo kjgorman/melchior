@@ -7,6 +7,7 @@ import Melchior.Data.String
 import Melchior.Dom
 import Melchior.Dom.Html
 import Melchior.Dom.Selectors
+import Melchior.Sink
 
 main :: IO ()
 main = runDom setupComparisons

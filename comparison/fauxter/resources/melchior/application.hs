@@ -12,6 +12,7 @@ import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 import Melchior.Remote.Json
 import Melchior.Remote.XHR
+import Melchior.Sink
 import Melchior.Time
 
 main :: IO ()
