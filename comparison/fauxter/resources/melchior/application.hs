@@ -20,7 +20,7 @@ main = runDom setupFauxter
 setupFauxter :: [Element] -> Dom ()
 setupFauxter html = do
   initialiseTabs html
-  container <- Dom $ select (byId "container" . from) html >>= \m -> return $ ensures m
+  container <- Dom $ assuredly $ select (byId "container" . from) html
   append container (request GET "/next" $ every 10000 :: Signal Fauxt)
 
 initialiseTabs html = do

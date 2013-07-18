@@ -36,7 +36,7 @@ app.post("/post", function(req, res) {
 
 var next = 0
 app.get("/next", function(req, res) {
-    res.send(200, posts[++next])
+    res.send(200, posts[++next % (Object.keys(posts).length)])
 })
 
 var posts = {
