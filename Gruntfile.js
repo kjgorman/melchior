@@ -11,10 +11,10 @@ module.exports = function(grunt) {
         },
         shell : {
             build : {
-                command : "uhc -tjs example/assets/hs/index.js && find Melchior -name '*.hs' | uhc -tjs"
+                command : "melchior example/assets/hs/index.js && find Melchior -name '*.hs' | uhc -tjs"
             },
             buildTests : {
-                command : "find . -name 'spec/hs/*hs' -exec uhc -tjs {} \;"
+                command : "find . -name 'spec/hs/*hs' -exec melchior {} \;"
             },
             copyDistToSpec : {
                 command : "cp dist/melchior.js spec/hs/melchior-helper.js"
@@ -26,7 +26,7 @@ module.exports = function(grunt) {
                 command : "cp dist/melchior.js comparison/fauxter/resources/melchior/"
             },
             compile : {
-                command : "find . -name '*hs' -exec uhc -tjs {} \;"
+                command : "find . -name '*hs' -exec melchior {} \;"
             }
         },
         jshint : {
