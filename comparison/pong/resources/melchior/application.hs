@@ -31,8 +31,8 @@ play :: Game -> Context -> Signal Int -> Signal Int -> Dom ()
 play game ctx u d = terminate (after frame)
                      (\_ -> do
                          back ctx --my kingdom, my kingdom for a point free style!
-                         next <- return $ scoreg $ collide $ step $ pop (takes d) $ push (takes u) game
-                         elems next ctx
+                         let next = scoreg $ collide $ step $ pop (takes d) $ push (takes u) game
+                         let Dom drawn = elems next ctx in drawn
                          let Dom io = play next ctx u d in io)
 
 back :: Context -> IO ()
@@ -89,10 +89,10 @@ score' p b c = if c (bx b) then Player (x p) (y p) (mv p) ((score p) + 1) else p
 reset :: Ball -> Bool
 reset b = (bx b) < 10 || (bx b) > 790
 
-elems :: Game -> Context -> IO ()
+elems :: Game -> Context -> Dom ()
 elems (Game p1 p2 b) c = do
-  let Dom io = rectangle ((floor $ x p1)-10) ((floor $ y p1)-35) 20 70 (fillStyle c "#FFF") in io
-  let Dom io = rectangle (floor $ x p2) ((floor $ y p2)-35) 20 70 (fillStyle c "#FFF") in io
-  let Dom io = text (show $ score p1) 100 50 (fontStyle c "20pt Helvetica") in io
-  let Dom io = text (show $ score p2) 600 50 (fontStyle c "20pt Helvetica") in io
-  let Dom io = circle (floor $ bx b) (floor $ by b) 10 (fillStyle c "#FFF") in io
+  rectangle ((floor $ x p1)-10) ((floor $ y p1)-35) 20 70 (fillStyle c "#FFF")
+  rectangle (floor $ x p2) ((floor $ y p2)-35) 20 70 (fillStyle c "#FFF")
+  text (show $ score p1) 100 50 (fontStyle c "20pt Helvetica")
+  text (show $ score p2) 600 50 (fontStyle c "20pt Helvetica")
+  circle (floor $ bx b) (floor $ by b) 10 (fillStyle c "#FFF")
