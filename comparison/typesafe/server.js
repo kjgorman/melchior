@@ -7,6 +7,14 @@ app.get("/melchior/melchior.js", function (req, res) {
     res.sendfile("melchior/melchior.js")
 })
 
+app.get("/data", function (res, res) {
+    res.send(200, {
+        header: "A header",
+        body  : "A body",
+        footer: "A footer"
+    })
+})
+
 app.get(/\/(\w+)$/, function (req, res) {
     res.sendfile(req.params[0]+".html")
 })
