@@ -22,11 +22,6 @@ module Melchior.Control
   , (<<<)
   , (&&&)
   , pipe
-  , terminate
-  , put
-  , append
-  , prepend
-  , setValue
   , emptySignal
   ) where
 
@@ -63,24 +58,6 @@ s <<< t = \x -> s $ t x
 
 (&&&) :: SF a b -> SF a c -> SF a (b, c)
 s &&& t = \x -> primAmpersands s t x
-
-terminate :: Signal a -> (a -> IO ()) -> Dom ()
-terminate s f = Dom $ primTerminate s f
-
-foreign import js "Signals.terminate(%1, %2)"
-  primTerminate :: Signal a -> (a -> IO ()) -> IO ()
-
-setValue :: (Show a) => Input -> Signal a -> Dom ()
-setValue i s = terminate s (\x -> setV i (show x))
-
-put :: (Renderable a) => Element -> Signal a -> Dom ()
-put el s = terminate s (\x -> return $ set el "innerHTML" $ render x)
-
-append :: (Renderable a) => Element -> Signal a -> Dom ()
-append el s = terminate s (\x -> appendHtml el $ render x)
-
-prepend :: (Renderable a) => Element -> Signal a -> Dom ()
-prepend el s = terminate s (\x -> prependHtml el $ render x)
 
 -- * Misc. primitive signal operations
 

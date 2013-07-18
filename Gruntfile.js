@@ -118,6 +118,7 @@ module.exports = function(grunt) {
                      "Melchior/Dom/Melchior_Dom_Drawing.mjs",
                     "Melchior/Melchior_Dom.mjs",
                     "Melchior/Melchior_Control.mjs",
+                    "Melchior/Melchior_Sink.mjs",
                     "Melchior/Melchior_Time.mjs",
                     "Melchior/Data/Melchior_Data_List.mjs",
                     "Melchior/Dom/Melchior_Dom_Selectors.mjs",
