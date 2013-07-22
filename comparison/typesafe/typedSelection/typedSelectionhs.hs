@@ -16,13 +16,13 @@ main = runDom typedSelection
 typedSelection html = do
   container <- Dom $ select (byId "hs" . from) html
   inputted <- Dom $ select (inputs . byClass "file" . from) container
-  accumulationOf container inputted
+  numberSelected container inputted
   out <- Dom $ select (byId "hs-out" . from) container
   echo out $ foldl merge (constant $ stringToJSString "") $ map inputValue inputted
 
-accumulationOf :: Maybe Element -> [Input] -> Dom ()
-accumulationOf Nothing _ = return ()
-accumulationOf (Just container) inputted = append container $ constant $ length inputted
+numberSelected :: Maybe Element -> [Input] -> Dom ()
+numberSelected Nothing _ = return ()
+numberSelected (Just container) inputted = append container $ constant $ length inputted
 
 echo :: Maybe Element -> Signal JSString -> Dom ()
 echo Nothing _ = return ()
