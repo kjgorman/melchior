@@ -12,6 +12,7 @@ import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 import Melchior.EventSources.Mouse
 import Melchior.EventSources.Keyboard
+import Melchior.EventSources.Elements
 import Melchior.Remote.Json
 import Melchior.Remote.XHR
 import Melchior.Sink
