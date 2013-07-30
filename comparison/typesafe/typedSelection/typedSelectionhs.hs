@@ -16,8 +16,8 @@ main = runDom typedSelection
 typedSelection html = do
   container <- Dom $ select (byId "hs" . from) html
   inputted <- Dom $ select (inputs . byClass "file" . from) container
-  numberSelected container inputted
   out <- Dom $ select (byId "hs-out" . from) container
+  numberSelected container inputted
   echo out $ foldl merge (constant $ stringToJSString "") $ map inputValue inputted
 
 numberSelected :: Maybe Element -> [Input] -> Dom ()
