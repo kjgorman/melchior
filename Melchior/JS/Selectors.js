@@ -45,22 +45,22 @@ var Selectors = function () {
     }
 
     Selector.prototype.idEq = function(el_a, idS) {
-        return el_a.id === idS ? $UHC.$Base.$True__ : $UHC.$Base.$False__
+        return el_a.id === idS ? $UHC.$Base.$True__ || true : $UHC.$Base.$False__ || false
     }
 
     Selector.prototype.clEq = function(el_a, clsName) {
         if(el_a instanceof HTMLElement && el_a.classList.contains(clsName)) {
-            return $UHC.$Base.$True__
+            return $UHC.$Base.$True__ || true
         } else {
-            return $UHC.$Base.$False__
+            return $UHC.$Base.$False__ || false
         }
     }
 
     Selector.prototype.tag = function(node, tagName) {
         if(node.tagName === tagName.toUpperCase())
-            return $UHC.$Base.$True__
+            return $UHC.$Base.$True__ || true
         else
-            return $UHC.$Base.$False__
+            return $UHC.$Base.$False__ || false
     }
 
     Selector.prototype.children = function(el) {
