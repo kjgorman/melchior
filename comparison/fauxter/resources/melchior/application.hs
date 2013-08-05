@@ -22,7 +22,7 @@ setupFauxter :: [Element] -> Dom ()
 setupFauxter html = do
   initialiseTabs html
   container <- Dom $ assuredly $ select (byId "container" . from) html
-  append container (request GET "/next" $ every 10000 :: Signal Fauxt)
+  append container (request GET "/next" $ every second :: Signal Fauxt)
 
 initialiseTabs html = do
     links <- Dom $ select (byClass "link" . from) html

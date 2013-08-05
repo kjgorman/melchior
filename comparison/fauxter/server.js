@@ -42,4 +42,5 @@ app.get("/melchior", function(req, res) {
     res.sendfile("resources/melchior/index.html");
 });
 
+console.log("Server up on: "+ 3002);
 app.listen(3002);

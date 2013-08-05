@@ -14,6 +14,14 @@ app.get("/js", function (req, res) {
     res.sendfile("resources/js/index.html")
 })
 
+app.get("/elm", function (req, res) {
+    res.sendfile("resources/elm/bobble.html")
+})
+
+app.get("/elm-mini.js", function (req, res) {
+    res.sendfile("resources/elm/elm-mini.js")
+})
+
 app.get("/", function (req, res) {
     res.sendfile("index.html")
 })

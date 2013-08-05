@@ -19,7 +19,7 @@ function(defineComponent) {
                     }
                 });
 
-                setTimeout(getNext, 10000);
+                setTimeout(getNext, 1000);
             }();
         });
     }
