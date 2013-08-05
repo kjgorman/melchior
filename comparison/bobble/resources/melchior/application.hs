@@ -81,19 +81,19 @@ collideB :: Player -> Player -> Ball -> Ball
 collideB p1 p2 b = collideWith p1 $ collideWith p2 b
 
 collideBWall :: Ball -> Ball
-collideBWall b = if (xb b) < 10 || (xb b) > 740 then Ball (xb b) (yb b) ((vxb b)*(-1)) (vyb b) else b
+collideBWall b = if (xb b) < 10 || (xb b) > 740 then Ball (xb b) (yb b) (vxb b * (-1)) (vyb b) else b
 
 collideWith :: Player -> Ball -> Ball
-collideWith p b = if ((x p - (xb b))^2 + (y p - (yb b))^2) < (25^2) then collision p b else b
+collideWith p b = if ((x p - xb b)^2 + (y p - yb b)^2) < (30^2) then collision p b else b
 
 collision :: Player -> Ball -> Ball
-collision p b = Ball ((xb b) + 2*(round $ fst v')) ((yb b) + 2*(round $ snd v')) (fst v') (snd v')
+collision p b = Ball (xb b + round (2 * fst v')) (yb b + round (2 * snd v')) (vxb b + fst v') (vyb b + snd v')
   where
-    n  = normalisedVectorBetween (x p, y p) ((xb b), (yb b))
-    a1 = dot ((vxb b), (vyb b)) n
+    n  = normalisedVectorBetween (x p, y p) (xb b, yb b)
+    a1 = dot (vxb b, vyb b) n
     a2 = dot (vx p, vy p) n
-    op = (2.0 * (a2 - a1))/4
-    v' = prod (-0.95) $ diff ((vxb b), (vyb b)) (prod op $ prod 2 n)
+    op = (2.0 * (a2 - a1))/4.0
+    v' = prod (-1.8) $ diff (vxb b, vyb b) (prod op $ prod 2 n)
 
 normalisedVectorBetween :: (Int, Int) -> (Int, Int) -> (Float, Float)
 normalisedVectorBetween a b = (dx/d, dy/d)
@@ -106,7 +106,7 @@ dot :: (Float, Float) -> (Float, Float) -> Float
 dot a b = (fst a * fst b) + (snd a * snd b)
 
 prod :: Float -> (Float, Float) -> (Float, Float)
-prod s v = ((s*fst v), (s*snd v))
+prod s v = (s * fst v, s * snd v)
 
 diff :: (Float, Float) -> (Float, Float) -> (Float, Float)
 diff a b = ((fst a - fst b), (snd a - snd b))

@@ -26,7 +26,7 @@ data State = Play | Pause
 player x = { x=x, y=0, vx=0, vy=0, score=0 }
 defaultGame =
   { state   = Pause,
-    ball    = { x=0, y=0, vx=200, vy=200 },
+    ball    = { x=0, y=0, vx=200, vy=0 },
     playerL = player (20-halfWidth) ,
     playerR = player (halfWidth-20) }
 

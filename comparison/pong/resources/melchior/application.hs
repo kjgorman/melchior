@@ -23,7 +23,7 @@ setupPong :: [Element] -> Dom ()
 setupPong html = do
   canvas <- Dom $ assuredly $ select (canvases . byId "canvas" . from) html
   let context = contextOf canvas
-      game = Game (Player 15 200 0 0) (Player 675 200 0 0) (Ball 350 200 5 5)
+      game = Game (Player 15 200 0 0) (Player 675 200 0 0) (Ball 350 200 5.714 0)
       keyd = keyCode $ keyDownSignal (toElement document)
       keyu = keyCode $ keyUpSignal (toElement document)
   play game context keyd keyu
