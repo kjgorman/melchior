@@ -41,22 +41,16 @@ setupPong html = do
   display state context
 
 -- * game logic
-
 push :: Int -> Game -> Game
-push i (Game p1 p2 b) = Game (push' p1 i 87 83) (push' p2 i 38 40) b
-
-push' :: Player -> Int -> Int -> Int -> Player
-push' p i u d | i == u = Player (x p) (y p) (-1) (score p)
-              | i == d = Player (x p) (y p) 1 (score p)
-              | otherwise = p
+push i (Game p1 p2 b) = Game (transition p1 i 87 83 1) (transition p2 i 38 40 1) b
 
 pop :: Int -> Game ->  Game
-pop i (Game p1 p2 b) = Game (pop' p1 i 87 83) (pop' p2 i 38 40) b
+pop i (Game p1 p2 b) = Game (transition p1 i 87 83 0) (transition p2 i 38 40 0) b
 
-pop' :: Player -> Int -> Int -> Int -> Player
-pop' p i u d | i == u = Player (x p) (y p) 0 (score p)
-             | i == d = Player (x p) (y p) 0 (score p)
-             | otherwise = p
+transition :: Player -> Int -> Int -> Int -> Int -> Player
+transition p i u d m | i == u = Player (x p) (y p) ((-1)*m) (score p)
+                     | i == d = Player (x p) (y p) (1*m) (score p)
+                     | otherwise = p
 
 step :: Game -> Game
 step (Game p1 p2 b) = Game (move p1) (move p2) (Ball (bx b + vx b) (by b + vy b) (vx b) (vy b))
@@ -91,7 +85,6 @@ score' p b c = if c (bx b) then Player (x p) (y p) (mv p) ((score p) + 1) else p
 
 reset :: Ball -> Bool
 reset b = (bx b) < 10 || (bx b) > 790
-
 
 -- * effectful actions
 elems :: Game -> Context -> Dom ()
