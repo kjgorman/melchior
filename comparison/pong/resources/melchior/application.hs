@@ -30,9 +30,8 @@ state = foldp next initial tick
         where next key game = scoreg $ collide $ step $ pop (fst key) $ push (snd key) $ game
 
 display :: Signal Game -> Context -> Dom ()
-display g ctx = terminate g (\g -> do
-                                back ctx
-                                let Dom io = elems g ctx in io)
+display g ctx = terminate g (\g -> let Dom io = back ctx >> elems g ctx in io)
+
 -- * network
 setupPong :: [Element] -> Dom ()
 setupPong html = do
@@ -95,6 +94,5 @@ elems (Game p1 p2 b) c = do
   text (show $ score p2) 500 50 (fontStyle c "20pt Helvetica")
   circle (floor $ bx b) (floor $ by b) 10 (fillStyle c "#FFF")
 
-back :: Context -> IO ()
-back c = do
-  let Dom io = rectangle 0 0 600 400 (fillStyle c "#3C643C") in io
+back :: Context -> Dom ()
+back c = rectangle 0 0 600 400 (fillStyle c "#3C643C")
