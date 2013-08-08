@@ -26,7 +26,7 @@ initial = Game (Player 15 200 0 0) (Player 575 200 0 0) (Ball 350 200 delta 0)
 keys = presses $ toElement document
 tick = (\_ -> takes keys) <$> every frame
 
-state = foldp (\key game -> next key game) initial tick
+state = foldp next initial tick
         where next key game = scoreg $ collide $ step $ pop (fst key) $ push (snd key) $ game
 
 display :: Signal Game -> Context -> Dom ()
