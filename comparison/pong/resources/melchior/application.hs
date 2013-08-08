@@ -1,7 +1,7 @@
 module Comparisons.Pong where
 
 import Control.Applicative ((<$>))
-import Control.Category hiding ((>>>), (<<<))
+import Control.Category
 import Prelude hiding ((.), id)
 
 import Melchior.Control
