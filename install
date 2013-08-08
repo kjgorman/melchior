@@ -1,0 +1,4 @@
+npm install
+grunt example
+echo "#!/bin/sh
+uhc -tjs -v1 -O2 -i `pwd` \$1" | cat > /usr/bin/melchior
