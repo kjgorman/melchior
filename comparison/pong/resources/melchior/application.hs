@@ -1,5 +1,6 @@
 module Comparisons.Pong where
 
+import Control.Applicative ((<$>))
 import Control.Category hiding ((>>>), (<<<))
 import Prelude hiding ((.), id)
 
@@ -13,32 +14,33 @@ import Melchior.Time
 
 main :: IO ()
 main = runDom setupPong
-
+-- * rates
 frame = 16 -- ~60 fps
+delta = 200 * 1 / 35
+-- * models
 data Game = Game Player Player Ball
 data Player = Player {x :: Float, y :: Float, mv :: Int, score :: Int }
 data Ball = Ball { bx :: Float, by :: Float, vx :: Float, vy :: Float }
+initial = Game (Player 15 200 0 0) (Player 575 200 0 0) (Ball 350 200 delta 0)
+-- * signals
+keys = presses $ toElement document
+tick = (\_ -> takes keys) <$> every frame
 
+state = foldp (\key game -> next key game) initial tick
+        where next key game = scoreg $ collide $ step $ pop (fst key) $ push (snd key) $ game
+
+display :: Signal Game -> Context -> Dom ()
+display g ctx = terminate g (\g -> do
+                                back ctx
+                                let Dom io = elems g ctx in io)
+-- * network
 setupPong :: [Element] -> Dom ()
 setupPong html = do
   canvas <- Dom $ assuredly $ select (canvases . byId "canvas" . from) html
   let context = contextOf canvas
-      game = Game (Player 15 200 0 0) (Player 675 200 0 0) (Ball 350 200 5.714 0)
-      keyd = keyCode $ keyDownSignal (toElement document)
-      keyu = keyCode $ keyUpSignal (toElement document)
-  play game context keyd keyu
+  display state context
 
-play :: Game -> Context -> Signal Int -> Signal Int -> Dom ()
-play game ctx u d = terminate (after frame)
-                     (\_ -> do
-                         back ctx --my kingdom, my kingdom for a point free style!
-                         let next = scoreg $ collide $ step $ pop (takes d) $ push (takes u) game
-                         let Dom drawn = elems next ctx in drawn
-                         let Dom io = play next ctx u d in io)
-
-back :: Context -> IO ()
-back c = do
-  let Dom io = rectangle 0 0 700 400 (fillStyle c "#3C643C") in io
+-- * game logic
 
 push :: Int -> Game -> Game
 push i (Game p1 p2 b) = Game (push' p1 i 87 83) (push' p2 i 38 40) b
@@ -81,7 +83,7 @@ wall b | (by b) < 10 || (by b) > 390 = Ball (bx b) (by b) (vx b) ((-1) * vy b)
        | otherwise = b
 
 scoreg :: Game -> Game
-scoreg (Game p1 p2 b) | reset b = Game (score' p1 b (< 10)) (score' p2 b (> 780)) (Ball 350 200 5 5)
+scoreg (Game p1 p2 b) | reset b = Game (score' p1 b (< 10)) (score' p2 b (> 480)) (Ball 350 200 5 5)
                       | otherwise = Game p1 p2 b
 
 score' :: Player -> Ball -> (Float -> Bool) -> Player
@@ -90,10 +92,16 @@ score' p b c = if c (bx b) then Player (x p) (y p) (mv p) ((score p) + 1) else p
 reset :: Ball -> Bool
 reset b = (bx b) < 10 || (bx b) > 790
 
+
+-- * effectful actions
 elems :: Game -> Context -> Dom ()
 elems (Game p1 p2 b) c = do
   rectangle ((floor $ x p1)-10) ((floor $ y p1)-35) 20 70 (fillStyle c "#FFF")
   rectangle (floor $ x p2) ((floor $ y p2)-35) 20 70 (fillStyle c "#FFF")
   text (show $ score p1) 100 50 (fontStyle c "20pt Helvetica")
-  text (show $ score p2) 600 50 (fontStyle c "20pt Helvetica")
+  text (show $ score p2) 500 50 (fontStyle c "20pt Helvetica")
   circle (floor $ bx b) (floor $ by b) 10 (fillStyle c "#FFF")
+
+back :: Context -> IO ()
+back c = do
+  let Dom io = rectangle 0 0 600 400 (fillStyle c "#3C643C") in io

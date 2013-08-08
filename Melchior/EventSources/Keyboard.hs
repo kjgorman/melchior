@@ -3,6 +3,7 @@ module Melchior.EventSources.Keyboard (
   , keyPressSignal
   , keyUpSignal
   , keyCode
+  , presses
   ) where
 
 import Control.Applicative
@@ -20,9 +21,13 @@ keyPressSignal e = createEventedSignal (Of KeyPress) e (KeyboardEvt KeyPress)
 keyUpSignal :: Element -> Signal KeyboardEvent
 keyUpSignal e = createEventedSignal (Of KeyUp) e (KeyboardEvt KeyUp)
 
-keyCode :: Signal KeyboardEvent -> Signal (Int)
+keyCode :: Signal KeyboardEvent -> Signal Int
 keyCode s = (\x -> code x) <$> s
 
 foreign import js "Events.keyCode(%1)"
   code :: KeyboardEvent -> Int
 
+presses :: Element -> Signal (Int, Int)
+presses el = (\_ -> (takes up, takes down)) <$> merge up down
+            where up   = keyCode $ keyUpSignal el
+                  down = keyCode $ keyDownSignal el

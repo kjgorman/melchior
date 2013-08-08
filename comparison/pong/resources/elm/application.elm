@@ -37,7 +37,7 @@ stepObj t obj = let {x,y,vx,vy} = obj in
                 { obj | x <- x + vx*t, y <- y + vy*t }
 
 near k c n = n >= k-c && n <= k+c
-within ball paddle = (ball.x |> near paddle.x 8)
+within ball paddle = (ball.x |> near paddle.x 20)
                   && (ball.y |> near paddle.y 20)
 
 stepV v lowerCollision upperCollision =
@@ -85,7 +85,7 @@ display (w,h) {state,ball,playerL,playerR} =
   let scores = txt (Text.height 4) (show playerL.score ++ "  " ++ show playerR.score)
   in container w h middle $ collage (round gameWidth) (round gameHeight)
        [ rect gameWidth gameHeight |> filled pongGreen
-       , oval 15 15 |> make ball
+       , oval 40 40 |> make ball
        , rect 10 40 |> make playerL
        , rect 10 40 |> make playerR
        , toForm scores |> move (0, gameHeight/2 - 40)
