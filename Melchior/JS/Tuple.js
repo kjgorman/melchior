@@ -18,5 +18,19 @@ var Tuples = function () {
         return newSignal
     }
 
+    Tuple.prototype.combine = function (s, t) {
+        var newSignal = new Signals.Signal()
+
+        s.registerListener(function (value) {
+            newSignal.push([value, t.sample()])
+        })
+        t.registerListener(function (value) {
+            newSignal.push([s.sample(), value])
+        })
+
+        return newSignal
+    }
+
+
     return new Tuple()
 }()

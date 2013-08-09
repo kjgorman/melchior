@@ -21,6 +21,7 @@ module Melchior.Control
   , (>>>)
   , (<<<)
   , (&&&)
+  , (&)
   , pipe
   , emptySignal
   ) where
@@ -59,7 +60,13 @@ s <<< t = \x -> s $ t x
 (&&&) :: SF a b -> SF a c -> SF a (b, c)
 s &&& t = \x -> primAmpersands s t x
 
+(&) :: Signal a -> Signal b -> Signal (a, b)
+s & t = primPair s t
+
 -- * Misc. primitive signal operations
+
+foreign import js "Tuples.combine(%1, %2)"
+  primPair :: Signal a -> Signal b -> Signal (a, b)
 
 foreign import js "Tuples.pair(%1, %2, %3)"
   primAmpersands :: SF a b -> SF a c -> Signal a -> Signal (b, c)
