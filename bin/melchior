@@ -1,2 +1,0 @@
-#!/bin/sh
-uhc -tjs -v1 -O2 -i `echo $MELCHIOR_HOME_DIR` $1
