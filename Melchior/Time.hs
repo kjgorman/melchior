@@ -8,6 +8,7 @@ module Melchior.Time (
   , debounce
   , throttle
   , count
+  , delta
   ) where
 
 import Control.Applicative
@@ -59,3 +60,9 @@ throttle n s = (\_ -> sample s) <$> every n
 
 count :: Signal a -> Signal Int
 count s = foldp (\t acc -> acc+1) 0 s
+
+delta :: Signal a -> Signal Int
+delta s = primDelta s
+
+foreign import js "Time.delta(%1)"
+  primDelta :: Signal a -> Signal Int

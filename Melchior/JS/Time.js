@@ -10,9 +10,10 @@ var Time = function () {
     }
 
     Time.prototype.currentI = function () {
-        var s = new Signal()
+        var s = new Signals.Signal()
         s.currently = function () {
-            return (new Date()).getTime()
+            var d = new Date()
+            return d.getTime()
         }
         return s
     }
@@ -43,6 +44,24 @@ var Time = function () {
             setTimeout(function() { s.push(value) }, period)
         })
         return s
+    }
+
+    Time.prototype.actual = function (thunk) {
+        return thunk
+    }
+
+    Time.prototype.delta = function (signal) {
+        return new Delta(signal).output
+    }
+
+    var Delta = function (signal) {
+        this.output = new Signals.Signal()
+        var prev = new Date().getTime(), thus = this
+        signal.registerListener(function () {
+            var curr = new Date().getTime()
+            thus.output.push(curr - prev)
+            prev = curr
+        })
     }
 
     return new Time()

@@ -28,6 +28,6 @@ foreign import js "Events.keyCode(%1)"
   code :: KeyboardEvent -> Int
 
 presses :: Element -> Signal (Int, Int)
-presses el = (\_ -> (takes up, takes down)) <$> merge up down
+presses el = (\_ -> (sample up, sample down)) <$> merge up down
             where up   = keyCode $ keyUpSignal el
                   down = keyCode $ keyDownSignal el

@@ -6,13 +6,13 @@ var Signals = function () {
         this.registeredListeners = []
         this.accumulator = null
         this.previous = null
-
+        this.folding = false
         this.__isSignal = true
     }
 
     Signal.prototype.currently = function (take) {
         var res = this.accumulator
-        if(take) this.accumulator = undefined
+        if(!this.folding && take) this.accumulator = undefined
         return res
     }
 
@@ -68,7 +68,7 @@ var Signals = function () {
     Signal.prototype.sample = function (take) {
         window.debug && console.log("sampling ", this.currently())
         var sampled
-        if(typeof (sampled = this.currently(take)) === "undefined") {
+        if(typeof (sampled = this.currently(true)) === "undefined" || sampled === null) {
             return emptySignal()
         } else if(sampled.hasOwnProperty("_tag_") || typeof sampled === "string") {
             return sampled
@@ -137,7 +137,11 @@ var Signals = function () {
         return s
     }
 
-    function createPastDependentSignal (func, base, signal) { return signal.pipe(func, base) }
+    function createPastDependentSignal (func, base, signal) {
+        var s = signal.pipe(func, base)
+        s.folding = true
+        return s
+    }
 
     function applicable (argument) {
         window.debug && console.log("wrapping in applicable node", argument)
