@@ -15,19 +15,19 @@ import Melchior.Time
 main :: IO ()
 main = runDom setupPong
 -- * rates
-frame = 16 -- ~60 fps
-delta = 200 * 1 / 35
+frame = 29 -- ~35 fps
 -- * models
 data Game = Game Player Player Ball
 data Player = Player {x :: Float, y :: Float, mv :: Int, score :: Int }
 data Ball = Ball { bx :: Float, by :: Float, vx :: Float, vy :: Float }
-initial = Game (Player 15 200 0 0) (Player 575 200 0 0) (Ball 350 200 delta 0)
+initial = Game (Player 15 200 0 0) (Player 575 200 0 0) (Ball 350 200 200 0)
+
 -- * signals
 keys = presses $ toElement document
-tick = keys & (every frame)
+tick = keys & (delta $ every frame)
 
 state = foldp next initial tick
-        where next key game = scoreg $ collide $ step $ pop (fst $ fst key) $ push (snd $ fst key) $ game
+        where next key game = scoreg $ collide $ step key $ pop (fst $ fst key) $ push (snd $ fst key) $ game
 
 display :: Signal Game -> Context -> Dom ()
 display g ctx = terminate g (\g -> let Dom io = back ctx >> elems g ctx in io)
@@ -51,8 +51,9 @@ transition p i u d m | i == u = Player (x p) (y p) ((-1)*m) (score p)
                      | i == d = Player (x p) (y p) (1*m) (score p)
                      | otherwise = p
 
-step :: Game -> Game
-step (Game p1 p2 b) = Game (move p1) (move p2) (Ball (bx b + vx b) (by b + vy b) (vx b) (vy b))
+step :: ((Int, Int), Int) -> Game -> Game
+step s (Game p1 p2 b) = Game (move p1) (move p2) (Ball (bx b + vx b * d) (by b + vy b * d) (vx b) (vy b))
+                        where d = (fromIntegral $ snd s) * 0.001
 
 move :: Player -> Player
 move p | (mv p) == (-1) = Player (x p) ((y p)-10) (mv p) (score p)
@@ -76,7 +77,7 @@ wall b | (by b) < 10 || (by b) > 390 = Ball (bx b) (by b) (vx b) ((-1) * vy b)
        | otherwise = b
 
 scoreg :: Game -> Game
-scoreg (Game p1 p2 b) | reset b = Game (score' p1 b (< 10)) (score' p2 b (> 480)) (Ball 350 200 5 5)
+scoreg (Game p1 p2 b) | reset b = Game (score' p1 b (< 10)) (score' p2 b (> 480)) (Ball 350 200 200 200)
                       | otherwise = Game p1 p2 b
 
 score' :: Player -> Ball -> (Float -> Bool) -> Player
