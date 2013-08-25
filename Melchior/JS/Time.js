@@ -31,8 +31,8 @@ var Time = function () {
 
     Time.prototype.after = function(timeout) {
         var signal = new Signals.Signal()
-        function push(t) {
-            signal.push(t)
+        function push() {
+            signal.push(timeout)
         }
         setTimeout(push, timeout)
         return signal
