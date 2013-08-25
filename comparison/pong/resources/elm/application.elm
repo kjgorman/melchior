@@ -85,9 +85,9 @@ display (w,h) {state,ball,playerL,playerR} =
   let scores = txt (Text.height 4) (show playerL.score ++ "  " ++ show playerR.score)
   in container w h middle $ collage (round gameWidth) (round gameHeight)
        [ rect gameWidth gameHeight |> filled pongGreen
-       , oval 40 40 |> make ball
-       , rect 10 40 |> make playerL
-       , rect 10 40 |> make playerR
+       , oval 20 20 |> make ball
+       , rect 20 70 |> make playerL
+       , rect 20 70 |> make playerR
        , toForm scores |> move (0, gameHeight/2 - 40)
        , toForm (if state == Play then spacer 1 1 else txt id msg)
            |> move (0, 40 - gameHeight/2)

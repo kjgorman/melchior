@@ -1,0 +1,12 @@
+{
+  "name": "pong",
+  "version": "0.0.0",
+  "description": "pong in haskell, elm, js",
+  "main": "server.js",
+  "repository": "",
+  "author": "kjgorman",
+  "license": "BSD",
+  "dependencies": {
+    "express":"*"
+  }
+}
