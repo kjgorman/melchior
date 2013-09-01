@@ -26,7 +26,7 @@ var UHCFunction = function () {
     function apply(func, value) {
         window.debug && console.log("applying", func, value)
         if(func instanceof _F_) {
-            return func.__evN__.apply(func, value)
+            return func.__evN__(value.slice(0,1)).__aN__(value.slice(1)).__eOrV__()
         } else if(func instanceof Function)
             return func.apply(func, value)
         else
