@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+
+<html>
+
+  <header>
+    <style>
+      h3 { font-family: "Helvetica Neue", "Helvetica", "Arial", "Sans"
+    </style>
+  </header>
+
+  <body>
+    <h3>Hey, try opening up chrome devtools and looking at the memory usage!</h3>
+  </body>
+
+  <footer>
+    <script type="text/javascript">
+      !function () {
+        var thing = null
+          , replace = function () {
+              var original = thing
+                , unused = function () {
+                    if (original) console.log("I have a reference to original")
+                  }
+              thing = {
+                long: new Array(10000000).join('*'),
+                method: function () {
+                  console.log("whatever")
+                }
+              }
+            }
+         setInterval(replace, 1000)
+      }()
+    </script>
+  </footer>
+
+</html>
