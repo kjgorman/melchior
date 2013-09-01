@@ -3,6 +3,7 @@ import Control.Applicative
 
 --all Melchior exports
 import Melchior.Control
+import Melchior.Crypto
 import Melchior.Data.List
 import Melchior.Data.String
 import Melchior.Dom

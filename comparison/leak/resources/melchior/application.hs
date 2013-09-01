@@ -18,7 +18,7 @@ consume html = do
   container <- Dom $ assuredly $ select (byId "main-content" . from) html
   printTo container
 
-thunk = foldp (\t acc -> "a string of some kind that will become a thunk on the heap":acc) ["foo"] (every 100)
+thunk = foldp (\t acc -> (show t++"a string of some kind that will become a thunk on the heap"):acc) ["foo"] (every 100)
 
 printTo :: Element -> Dom ()
 printTo c = append c $ (\_ -> sample thunk) <$> (every minute)

@@ -9,6 +9,7 @@ module Melchior.Dom
     , Div
     , Span
     , Canvas
+    , Image
     , ListItem
     , ensures
     , assuredly
@@ -52,6 +53,7 @@ newtype Input = Input { unIn :: JSPtr Node }
 newtype Div = Div { unDiv :: JSPtr Node }
 newtype Span = Span {unSpan :: JSPtr Node}
 newtype Canvas = Canvas {unCanvas :: JSPtr Node}
+newtype Image = Image {unImage :: JSPtr Node}
 newtype ListItem = ListItem {unListItem :: JSPtr Node}
 
 ensures :: Maybe a -> a
@@ -80,6 +82,7 @@ instance DomNode Div where
 instance DomNode Span where
 instance DomNode Canvas where
 instance DomNode ListItem where
+instance DomNode Image where
 
 foreign import js "id(%2)"
   toElement :: (DomNode a) => a -> Element

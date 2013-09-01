@@ -10,6 +10,7 @@ module Melchior.Dom.Selectors
     , from
     , inputs
     , canvases
+    , images
     ) where
 
 import Control.Category
@@ -115,5 +116,12 @@ canvases = Selector $ \z -> liftM (fmap $ \y -> Canvas $ unEl y) $ filterIO (\x 
 
 foreign import js "Selectors.tag(%1, 'canvas')"
     canvasF :: JSPtr Node -> IO Bool
+
+
+images :: Nodes f => Selector (f Element) (f Image)
+images = Selector $ \z -> liftM (fmap $ \y -> Image $ unEl y) $ filterIO (\x -> imageF $ unwrap x) z
+
+foreign import js "Selectors.tag(%1, 'img')"
+    imageF :: JSPtr Node -> IO Bool
 
 
