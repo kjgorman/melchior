@@ -16,17 +16,8 @@ main = quickHttpServe site
 site :: Snap ()
 site =
     ifTop (serveFile "./static/index.html") <|>
-    route [ ("foo", writeBS "bar")
-          , ("echo/:echoparam", echoHandler)
-          , ("ajax", writeTime)
-          ] <|>
+    route [ ("ajax", writeTime)] <|>
     dir "static" (serveDirectory "./static/")
-
-echoHandler :: Snap ()
-echoHandler = do
-    param <- getParam "echoparam"
-    maybe (writeBS "must specify echo/param in URL")
-          writeBS param
 
 writeTime :: Snap ()
 writeTime = do

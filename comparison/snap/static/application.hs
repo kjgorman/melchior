@@ -38,7 +38,4 @@ fetch i o = case bind of
   where bind = (press i) >>= \signal -> o >>= \out -> Just $ put out signal
 
 press :: Maybe Element -> Maybe (Signal Datum)
-press e = do
-  elem <- e
-  let presses = click elem
-  return $ request GET "/ajax" presses
+press e = e >>= \elem -> Just $ request GET "/ajax" (click elem)
