@@ -13,6 +13,7 @@ import Melchior.EventSources.Mouse
 import Melchior.EventSources.Elements
 import Melchior.Remote.Json
 import Melchior.Remote.XHR
+import Melchior.Remote.Internal.ParserUtils
 import Melchior.Sink
 
 main :: IO ()
@@ -25,20 +26,16 @@ client html = do
 
 sendInputs :: [Element] -> Dom ()
 sendInputs html = do
-  keyInput <- Dom $ assuredly $ select (inputs . byId "set-key" . from) html
-  valueInput <- Dom $ assuredly $ select (inputs . byId "set-value" . from) html
+  titleInput <- Dom $ assuredly $ select (inputs . byId "set-title" . from) html
+  codeInput <- Dom $ assuredly $ select (inputs . byId "set-code" . from) html
+  pointsInput <- Dom $ assuredly $ select (inputs . byId "set-points" . from) html
   submit <- Dom $ assuredly $ select (byId "set-send" . from) html
-  keys <- return $ inputValue keyInput
-  values <- return $ inputValue valueInput
+  title <- return $ inputValue titleInput
+  code <- return $ inputValue codeInput
+  points <- return $ inputValue pointsInput
   clicks <- return $ click submit
-  let json = constructPost keys values
-  sets <- return $ remote POST "/post" $ (\_ -> toDto json) <$> clicks
+  sets <- return $ remote POST "/post" $ (\_ -> toDto $ parseToJson (sample title) (sample code) (sample points)) <$> clicks
   terminate sets (\_ -> return ())
-  where
-    constructPost k v = JsonObject [key k, value v]
-    key k = JsonPair (JsonString "key", JsonString $ jsStringToString $ sample k)
-    value v = JsonPair (JsonString "value", JsonString $ jsStringToString $ sample v)
-
 
 retrieveGets :: [Element] -> Dom ()
 retrieveGets html = do
@@ -46,7 +43,46 @@ retrieveGets html = do
   textSubmit <- Dom $ assuredly $ select (byId "get" . from) html
   textOut <- Dom $ assuredly $ select (byId "get-out" . from) html
   values <- return $ inputValue textInput
-  let clicks = click textSubmit
-      json = JsonObject [JsonPair (JsonString "name", JsonString $ jsStringToString $ sample values)]
-  gets <- return $ remote POST "/get" $ (\_ -> toDto json) <$> clicks
-  put textOut gets
+  clicks <- return $ click textSubmit
+  gets <- return $ remote POST "/get" $ (\_ -> toDto $ json $ sample values) <$> clicks
+  put textOut (((\s -> fromJson $ toJson $ process s) <$> gets) :: Signal Course)
+  where json v = JsonObject [JsonPair (JsonString "name", JsonString $ jsStringToString v)]
+
+
+process :: JSString -> JSString
+process t = stringToJSString $ unescape $ trimTail $ trimHead s
+  where s = jsStringToString t
+        trimHead s = if (head s) == '"' then tail s else s
+        trimTail s = if (last s) == '"' then (take ((length s)-1) s) else s
+        unescape [] = []
+        unescape (x:[]) = [x]
+        unescape (x:y:xs) = if x == '\\' && y == '"' then unescape (y:xs) else x:(unescape (y:xs))
+
+data Course = Course { title :: String, code :: Integer, points :: Integer }
+
+instance JsonSerialisable Course where
+  fromJson (Just c) = Course (stringOrError c "title")
+                      (floor $ (read (stringOrError c "code") :: Float))
+                      (floor $ (read (stringOrError c "points") :: Float))
+  fromJson Nothing = Course "not found" (-1) (-1)
+
+instance Renderable Course where
+  render c = stringToJSString $ (title c)++(show $ code c)++":"++(show $ points c)
+
+parseToJson :: JSString -> JSString -> JSString -> JsonObject
+parseToJson title code points = parseToJson' (jsStringToString title) (jsStringToString code) (jsStringToString points)
+
+parseToJson' :: String -> String -> String -> JsonObject
+parseToJson' title code points = JsonObject [key, value]
+                                 where
+                                   key = JsonPair (JsonString "key", JsonString (title++code))
+                                   value = JsonPair (JsonString "value", JsonObj (JsonObject [ptitle, pcode, ppoints]))
+                                   ptitle = JsonPair (JsonString "title", JsonString title)
+                                   pcode = JsonPair (JsonString "code", JsonString $ show $ parseNumber code)
+                                   ppoints = JsonPair (JsonString "points", JsonString $ show $ parseNumber points)
+
+parseNumber :: String -> Int
+parseNumber s = case parse numbers s of
+  [] -> (-1)
+  x -> (read $ fst $ head x)
+  where numbers = many1 digit

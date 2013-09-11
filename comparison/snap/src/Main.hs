@@ -2,6 +2,7 @@
 module Main where
 
 import           Control.Applicative
+import           Control.Monad
 import           Control.Monad.IO.Class
 import           Data.Aeson.Types
 import           Snap.Core
@@ -57,7 +58,14 @@ getn n = case getter of
            runRedis conn $ do get name
 
 
-data Datum = Datum String Integer
+data Course = Course { title :: String, code :: Integer, points :: Integer }
 
-instance ToJSON Datum where
-  toJSON (Datum k v) = object ["key" .= k, "value" .= v]
+instance ToJSON Course where
+  toJSON c = object ["title" .= title c, "code" .= code c, "points" .= points c]
+
+instance FromJSON Course where
+  parseJSON (Object v) = Course <$>
+                         v .: "title" <*>
+                         v .: "code" <*>
+                         v .: "points"
+  parseJSON _ = mzero
