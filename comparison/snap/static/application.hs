@@ -26,23 +26,19 @@ client html = do
 
 sendInputs :: [Element] -> Dom ()
 sendInputs html = do
-  titleInput <- Dom $ assuredly $ select (inputs . byId "set-title" . from) html
-  codeInput <- Dom $ assuredly $ select (inputs . byId "set-code" . from) html
-  pointsInput <- Dom $ assuredly $ select (inputs . byId "set-points" . from) html
+  title <- Dom $ (assuredly $ select (inputs . byId "set-title" . from) html) >>= \x -> return $ inputValue x
+  code <- Dom $ (assuredly $ select (inputs . byId "set-code" . from) html) >>= \x -> return $ inputValue x
+  points <- Dom $ (assuredly $ select (inputs . byId "set-points" . from) html) >>= \x -> return $ inputValue x
   submit <- Dom $ assuredly $ select (byId "set-send" . from) html
-  title <- return $ inputValue titleInput
-  code <- return $ inputValue codeInput
-  points <- return $ inputValue pointsInput
   clicks <- return $ click submit
   sets <- return $ remote POST "/post" $ (\_ -> toDto $ parseToJson (sample title) (sample code) (sample points)) <$> clicks
   terminate sets (\_ -> return ())
 
 retrieveGets :: [Element] -> Dom ()
 retrieveGets html = do
-  textInput <- Dom $ assuredly $ select (inputs . byId "get-in" . from) html
+  values <- Dom $ (assuredly $ select (inputs . byId "get-in" . from) html) >>= \x -> return $ inputValue x
   textSubmit <- Dom $ assuredly $ select (byId "get" . from) html
   textOut <- Dom $ assuredly $ select (byId "get-out" . from) html
-  values <- return $ inputValue textInput
   clicks <- return $ click textSubmit
   gets <- return $ remote POST "/get" $ (\_ -> toDto $ json $ sample values) <$> clicks
   put textOut (((\s -> fromJson $ toJson $ process s) <$> gets) :: Signal Course)
