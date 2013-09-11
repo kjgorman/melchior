@@ -9,5 +9,5 @@ import Melchior.Dom
 import Melchior.Dom.Events
 
 inputValue :: Input -> Signal JSString
-inputValue i = (\_ -> value i) <$> presses
+inputValue i = foldp (\_ _ -> value i) (stringToJSString "") presses
   where presses = createEventedSignal (Of ()) i (ElementEvt InputEvt)
