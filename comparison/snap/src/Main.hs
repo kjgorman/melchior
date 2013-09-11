@@ -4,11 +4,12 @@ module Main where
 import           Control.Applicative
 import           Control.Monad.IO.Class
 import           Data.Aeson.Types
-import           Data.Time.Clock
 import           Snap.Core
 import           Snap.Util.FileServe
 import           Snap.Http.Server
 import           Snap.Extras.JSON (writeJSON)
+import           Database.Redis
+import           Data.ByteString
 
 main :: IO ()
 main = quickHttpServe site
@@ -16,17 +17,45 @@ main = quickHttpServe site
 site :: Snap ()
 site =
     ifTop (serveFile "./static/index.html") <|>
-    route [ ("ajax", writeTime)] <|>
+    route [ ("post", method POST addEntry) , ("get", method POST getEntry)] <|>
     dir "static" (serveDirectory "./static/")
 
-writeTime :: Snap ()
-writeTime = do
-  t <- liftIO time
-  writeJSON t
+addEntry :: Snap ()
+addEntry = do
+  name <- getParam "name"
+  value <- getParam "value"
+  liftIO $ add name value
+  writeJSON $ object ["status" .= ("success"::String)]
 
-time :: IO Datum
-time = tm >>= \t -> return (Datum "time" t)
-  where tm = getCurrentTime >>= return . floor . toRational . utctDayTime
+add :: Maybe ByteString -> Maybe ByteString -> IO ()
+add k v = case setter of
+  Nothing -> return ()
+  Just x -> x
+  where setter = k >>= \key -> v >>= \value ->
+          Just $ do
+            conn <- connect defaultConnectInfo
+            runRedis conn $ do
+              set key value
+              return ()
+
+getEntry :: Snap ()
+getEntry = do
+  name <- getPostParam "name"
+  value <- liftIO $ getn name
+  writeEntry value
+  where
+    writeEntry (Left _) = writeBS "error"
+    writeEntry (Right x) = writeJSON x
+
+getn :: Maybe ByteString -> IO (Either Reply (Maybe ByteString))
+getn n = case getter of
+  Nothing -> return . Right . Just $ "could not read param"
+  Just x -> x
+  where getter = n >>= \name ->
+          Just $ do
+           conn <- connect defaultConnectInfo
+           runRedis conn $ do get name
+
 
 data Datum = Datum String Integer
 
