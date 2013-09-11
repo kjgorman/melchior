@@ -76,11 +76,14 @@ parseJson s = case parseJson' s of
   Just _ -> Nothing
 
 parseJson' :: String -> Maybe Json
-parseJson' s = maybeParse $ parse jsonObj s
+parseJson' s = maybeParse $ parse jsonObj $ trim s
               where
                 maybeParse [] = Nothing
                 maybeParse x  = Just $ parse' x
                 parse' x = head $ qsort (leng) $ map (\x -> fst x) x
+
+trim :: String -> String
+trim s = dropWhile (\x -> any (==x) ['\t', '\r', '\n', ' ']) s
 
 qsort :: (a -> Int) -> [a] -> [a]
 qsort _  [] =[]

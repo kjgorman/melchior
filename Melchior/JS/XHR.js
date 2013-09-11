@@ -63,12 +63,25 @@ var XHR = function () {
 
     function tryEncodeValue(value) {
         var res = value, json, key
+
+        function parse(obj) {
+            if(typeof obj !== "object") return obj
+            var res = "{"
+            for(var key in obj) {
+                if(key === "__aN__") continue
+                res+=('"'+key+'"'+':"'+parse(obj[key])+'",')
+            }
+            res = res.substring(0, res.length-1)
+            res += "}"
+            return res
+        }
+
         try {
             json = JSON.parse(value)
             res = ""
             for(key in json) {
                 if(key === "__aN__") continue
-                res += key+"="+json[key]+"&"
+                res += key+"="+parse(json[key])+"&"
             }
         } catch (_) { }
         return encodeURI(res)
