@@ -32,7 +32,8 @@ sendInputs html = do
   values <- return $ inputValue valueInput
   clicks <- return $ click submit
   let json = constructPost keys values
-  return ()
+  sets <- return $ remote POST "/post" $ (\_ -> toDto json) <$> clicks
+  terminate sets (\_ -> return ())
   where
     constructPost k v = JsonObject [key k, value v]
     key k = JsonPair (JsonString "key", JsonString $ jsStringToString $ sample k)

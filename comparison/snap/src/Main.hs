@@ -22,7 +22,7 @@ site =
 
 addEntry :: Snap ()
 addEntry = do
-  name <- getParam "name"
+  name <- getParam "key"
   value <- getParam "value"
   liftIO $ add name value
   writeJSON $ object ["status" .= ("success"::String)]

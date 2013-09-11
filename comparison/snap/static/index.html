@@ -64,11 +64,25 @@
         <div class="span6">
           <p>Do some things here, with a Haskell server and a Haskell client.</p>
           <div>
-            For example, click this button to get some data from the server:
-            <div><button class='btn' id='time-btn'>Seconds of the day</button></div>
-            <div>Seconds:<span id='time-out'></span></div>
+            Get some data from the server:
+            <div>
+              <input type="text" id="get-in" />
+              <button class="btn" id="get" type="text">Get</button>
+            </div>
+            <div>Result:<span id="get-out"></span></div>
           </div>
         </div>
+        <div class="span6">
+          <div>
+            Send some data to the server:
+            <div>
+              <input type="text" id="set-key" />
+              <input type="text" id="set-value" />
+            </div>
+            <div>
+              <button class="btn" id="set-send">Send</button>
+            </div>
+          </div>
       </div>
 
       <hr>

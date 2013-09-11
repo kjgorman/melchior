@@ -28,6 +28,13 @@
   (major1) == 0 && (major2) <  9 || \
   (major1) == 0 && (major2) == 9 && (minor) <= 2)
 
+/* package hedis-0.6.2 */
+#define VERSION_hedis "0.6.2"
+#define MIN_VERSION_hedis(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  6 || \
+  (major1) == 0 && (major2) == 6 && (minor) <= 2)
+
 /* package mtl-2.1.2 */
 #define VERSION_mtl "2.1.2"
 #define MIN_VERSION_mtl(major1,major2,minor) (\
@@ -69,4 +76,11 @@
   (major1) <  0 || \
   (major1) == 0 && (major2) <  3 || \
   (major1) == 0 && (major2) == 3 && (minor) <= 0)
+
+/* package utf8-string-0.3.7 */
+#define VERSION_utf8_string "0.3.7"
+#define MIN_VERSION_utf8_string(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  3 || \
+  (major1) == 0 && (major2) == 3 && (minor) <= 7)
 
