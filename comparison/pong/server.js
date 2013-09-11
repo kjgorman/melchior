@@ -1,6 +1,7 @@
 var express      = require('express'),
     app          = express()
 
+app.use(express.compress())
 app.use("/resources", express.static(__dirname+"/resources"))
 
 app.get("/melchior", function(req, res) {

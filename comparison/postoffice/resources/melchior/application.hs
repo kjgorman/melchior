@@ -35,7 +35,7 @@ def Nothing = "error"
 def (Just s) = s
 
 sendMessages :: Signal JsonObject -> Dom (Signal Status)
-sendMessages s = return $ request POST "/send" $ (\x -> toDto x) <$> s
+sendMessages s = return $ request POST "/send" $ toDto <$> s
 
 placeInOutbox :: Signal JsonObject -> [Element] -> Dom ()
 placeInOutbox s html = do

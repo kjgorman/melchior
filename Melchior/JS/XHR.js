@@ -47,11 +47,31 @@ var XHR = function () {
                 if(req.readyState === 4)
                     outSignal.push(req.response)
             }
-            req.setRequestHeader("content-type", "application/json; charset=utf-8")
-            req.send(_e_(value)) //should this send now?
+
+            var payload = _e_(value)
+            if(method === "POST") {
+                req.setRequestHeader("content-type", "application/x-www-form-urlencoded")
+                payload = tryEncodeValue(_e_(value))
+            } else {
+                req.setRequestHeader("content-type", "application/json; charset=utf-8")
+            }
+            req.send(payload)
         })
 
         return outSignal
+    }
+
+    function tryEncodeValue(value) {
+        var res = value, json, key
+        try {
+            json = JSON.parse(value)
+            res = ""
+            for(key in json) {
+                if(key === "__aN__") continue
+                res += key+"="+json[key]+"&"
+            }
+        } catch (_) { }
+        return encodeURI(res)
     }
 
     XHR.prototype.createXHRSignal = function (method, resource) {

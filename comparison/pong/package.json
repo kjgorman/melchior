@@ -7,6 +7,6 @@
   "author": "kjgorman",
   "license": "BSD",
   "dependencies": {
-    "express":"*"
+    "express": "*"
   }
 }
