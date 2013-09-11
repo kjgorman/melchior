@@ -3,6 +3,7 @@ module Melchior.Remote.Internal.Parser (
   , JsonPair
   , JsonString
   , JsonObject
+  , JsonObj
   , JsNull
   , JsonNumber
   , parseJson

@@ -11,6 +11,7 @@ module Melchior.Remote.Json (
   , JsonSerialisable
   , Json
   , JsonObject
+  , JsonObj
   , JsonPair
   , JsonString
   , JsNull
