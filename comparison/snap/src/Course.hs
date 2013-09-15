@@ -38,3 +38,6 @@ parseNumber s = case parse numbers s of
   [] -> (-1)
   x -> (read $ fst $ head x)
   where numbers = many1 digit
+
+getKey :: Course -> String
+getKey c = (title c)++(show $ title c)

@@ -5,14 +5,11 @@ import Control.Category
 import Melchior.Control
 import Melchior.Data.String
 import Melchior.Dom
-import Melchior.Dom.Events
-import Melchior.Dom.Html
 import Melchior.Dom.Selectors
 import Melchior.EventSources.Mouse
 import Melchior.EventSources.Elements
 import Melchior.Remote.Json
 import Melchior.Remote.XHR
-import Melchior.Remote.Internal.ParserUtils
 import Melchior.Sink
 import Course
 

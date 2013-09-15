@@ -10,7 +10,7 @@ import           Snap.Extras.JSON (writeJSON)
 import           Database.Redis
 import qualified Data.ByteString as D
 import qualified Data.ByteString.UTF8 as U
---import           Course
+import           Course
 
 main :: IO ()
 main = quickHttpServe site

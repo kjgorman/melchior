@@ -1,4 +1,4 @@
-{-#LANGUAGE CPP #-}
+{-#LANGUAGE EmptyDataDecls, CPP #-}
 module Melchior.Data.String (
     JSString
   , jsStringToString

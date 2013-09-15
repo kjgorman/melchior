@@ -11,7 +11,7 @@ Build-type:          Simple
 Cabal-version:       >=1.2
 
 Executable snap
-  hs-source-dirs: src
+  hs-source-dirs: src, /Users/kieran/school/2013/FY/dev/UHC/uhc-test/
   main-is: Main.hs
 
   Build-depends:
