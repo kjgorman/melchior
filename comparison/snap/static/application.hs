@@ -2,7 +2,6 @@ module Snap.Client where
 
 import Control.Applicative ((<$>))
 import Control.Category
-import Prelude hiding ((.), id)
 import Melchior.Control
 import Melchior.Data.String
 import Melchior.Dom
@@ -26,9 +25,9 @@ client html = do
 
 sendInputs :: [Element] -> Dom ()
 sendInputs html = do
-  title <- Dom $ (assuredly $ select (inputs . byId "set-title" . from) html) >>= \x -> return $ inputValue x
-  code <- Dom $ (assuredly $ select (inputs . byId "set-code" . from) html) >>= \x -> return $ inputValue x
-  points <- Dom $ (assuredly $ select (inputs . byId "set-points" . from) html) >>= \x -> return $ inputValue x
+  title <- getInput html "set-title"
+  code <- getInput html "set-code"
+  points <- getInput html "set-points"
   submit <- Dom $ assuredly $ select (byId "set-send" . from) html
   clicks <- return $ click submit
   sets <- return $ remote POST "/post" $ (\_ -> toDto $ parseToJson (sample title) (sample code) (sample points)) <$> clicks
@@ -36,23 +35,16 @@ sendInputs html = do
 
 retrieveGets :: [Element] -> Dom ()
 retrieveGets html = do
-  values <- Dom $ (assuredly $ select (inputs . byId "get-in" . from) html) >>= \x -> return $ inputValue x
+  values <- getInput html "get-in"
   textSubmit <- Dom $ assuredly $ select (byId "get" . from) html
   textOut <- Dom $ assuredly $ select (byId "get-out" . from) html
   clicks <- return $ click textSubmit
-  gets <- return $ remote POST "/get" $ (\_ -> toDto $ json $ sample values) <$> clicks
-  put textOut (((\s -> fromJson $ toJson $ process s) <$> gets) :: Signal Course)
+  gets <- return $ ((request POST "/get" $ (\_ -> toDto $ json $ sample values) <$> clicks) :: Signal Course)
+  put textOut gets
   where json v = JsonObject [JsonPair (JsonString "name", JsonString $ jsStringToString v)]
 
-
-process :: JSString -> JSString
-process t = stringToJSString $ unescape $ trimTail $ trimHead s
-  where s = jsStringToString t
-        trimHead s = if (head s) == '"' then tail s else s
-        trimTail s = if (last s) == '"' then (take ((length s)-1) s) else s
-        unescape [] = []
-        unescape (x:[]) = [x]
-        unescape (x:y:xs) = if x == '\\' && y == '"' then unescape (y:xs) else x:(unescape (y:xs))
+getInput :: [Element] -> String -> Dom (Signal JSString)
+getInput html key = Dom $ (assuredly $ select (inputs . byId key . from) html) >>= \x -> return $ inputValue x
 
 data Course = Course { title :: String, code :: Integer, points :: Integer }
 
@@ -64,6 +56,9 @@ instance JsonSerialisable Course where
 
 instance Renderable Course where
   render c = stringToJSString $ (title c)++(show $ code c)++":"++(show $ points c)
+
+instance JsonWriteable Course where
+  asJson c = Just $ parseToJson' (title c) (show $ code c) (show $ points c)
 
 parseToJson :: JSString -> JSString -> JSString -> JsonObject
 parseToJson title code points = parseToJson' (jsStringToString title) (jsStringToString code) (jsStringToString points)

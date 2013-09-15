@@ -1,7 +1,6 @@
 {-#LANGUAGE CPP#-}
 module Melchior.Remote.Json (
-    parseJson
-  , toJsonSF
+    toJsonSF
   , toJson
   , toDto
   , toJsonDict
@@ -10,7 +9,9 @@ module Melchior.Remote.Json (
   , stringOrError
   , numberOrNought
   , JsonSerialisable
+  , parseJson
   , JsonWriteable
+  , asJson
   , Json
   , JsonObject
 #ifdef __UHC_TARGET_JS__

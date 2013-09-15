@@ -2,15 +2,15 @@
 module Main where
 
 import           Control.Applicative
-import           Control.Monad
 import           Control.Monad.IO.Class
-import           Data.Aeson.Types
 import           Snap.Core
 import           Snap.Util.FileServe
 import           Snap.Http.Server
 import           Snap.Extras.JSON (writeJSON)
 import           Database.Redis
-import           Data.ByteString
+import qualified Data.ByteString as D
+import qualified Data.ByteString.UTF8 as U
+--import           Course
 
 main :: IO ()
 main = quickHttpServe site
@@ -26,9 +26,9 @@ addEntry = do
   name <- getParam "key"
   value <- getParam "value"
   liftIO $ add name value
-  writeJSON $ object ["status" .= ("success"::String)]
+  writeBS "{\"status\":\"success\"}"
 
-add :: Maybe ByteString -> Maybe ByteString -> IO ()
+add :: Maybe D.ByteString -> Maybe D.ByteString -> IO ()
 add k v = case setter of
   Nothing -> return ()
   Just x -> x
@@ -46,26 +46,25 @@ getEntry = do
   writeEntry value
   where
     writeEntry (Left _) = writeBS "error"
-    writeEntry (Right x) = writeJSON x
+    writeEntry (Right x) = writeBS $ clean x
 
-getn :: Maybe ByteString -> IO (Either Reply (Maybe ByteString))
+getn :: Maybe D.ByteString -> IO (Either Reply (Maybe D.ByteString))
 getn n = case getter of
   Nothing -> return . Right . Just $ "could not read param"
   Just x -> x
   where getter = n >>= \name ->
           Just $ do
            conn <- connect defaultConnectInfo
-           runRedis conn $ do get name
+           runRedis conn $ get name
 
+clean :: Maybe D.ByteString -> D.ByteString
+clean Nothing = "Nothing"
+clean (Just n) = U.fromString . process $ U.toString n
 
-data Course = Course { title :: String, code :: Integer, points :: Integer }
-
-instance ToJSON Course where
-  toJSON c = object ["title" .= title c, "code" .= code c, "points" .= points c]
-
-instance FromJSON Course where
-  parseJSON (Object v) = Course <$>
-                         v .: "title" <*>
-                         v .: "code" <*>
-                         v .: "points"
-  parseJSON _ = mzero
+process :: String -> String
+process = unescape . trimTail . trimHead
+  where trimHead s = if (head s) == '"' then tail s else s
+        trimTail s = if (last s) == '"' then (take ((length s)-1) s) else s
+        unescape [] = []
+        unescape (x:[]) = [x]
+        unescape (x:y:xs) = if x == '\\' && y == '"' then unescape (y:xs) else x:(unescape (y:xs))
