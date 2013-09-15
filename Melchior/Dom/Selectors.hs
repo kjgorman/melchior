@@ -44,7 +44,7 @@ instance Nodes Maybe where
         keep <- f x
         return $ if keep then Just x else Nothing
     toList = maybeToList
-    toMaybe = id
+    toMaybe = (\x -> x)
 
 instance Nodes [] where
     concatMapIO _ []       = return []
@@ -54,8 +54,8 @@ instance Nodes [] where
     filterIO _ []       = return []
     filterIO f (x : xs) = do
       keep <- f x
-      liftM (if keep then (x:) else id) $ filterIO f xs
-    toList = id
+      liftM (if keep then (x:) else (\y -> y)) $ filterIO f xs
+    toList = (\x -> x)
     toMaybe = listToMaybe
 
 

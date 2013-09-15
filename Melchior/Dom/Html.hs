@@ -1,17 +1,19 @@
-{-# LANGUAGE FlexibleInstances, TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances, TypeSynonymInstances, CPP#-}
 module Melchior.Dom.Html (
     Renderable
   , Html
   , Fragment
+#ifdef __UHC_TARGET_JS__
   , Text
   , JDiv
   , JSpan
+#endif
   , render
   , addClassTo
   , addAttribute
   , (<+>)
-  , (|+>)
-  , (<+|)
+  , (+>)
+  , (<+)
   ) where
 
 import Melchior.Data.String (JSString, stringToJSString)
@@ -44,16 +46,19 @@ instance (Renderable a, Show a) => Renderable [a] where
 (<+>) :: Html -> Html -> Html
 a <+> b = primAppendHtml a b
 
-(|+>) :: String -> Html -> Html
+(+>) :: String -> Html -> Html
 a +> b = primAppendHtml (stringToJSString a) b
 
-(<+|) :: Html -> String -> Html
+(<+) :: Html -> String -> Html
 a <+ b = primAppendHtml a (stringToJSString b)
 
 join []     = ""
 join (x:[]) = x
 join (x:xs) = x++","++(join xs)
 
-
+#ifdef __UHC_TARGET_JS__
 foreign import js "Html.append(%1, %2)"
   primAppendHtml :: Html -> Html -> Html
+#else
+primAppendHtml = undefined
+#endif

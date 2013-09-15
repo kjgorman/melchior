@@ -1,3 +1,4 @@
+{-#LANGUAGE CPP#-}
 module Melchior.Remote.Json (
     parseJson
   , toJsonSF
@@ -9,13 +10,15 @@ module Melchior.Remote.Json (
   , stringOrError
   , numberOrNought
   , JsonSerialisable
+  , JsonWriteable
   , Json
   , JsonObject
+#ifdef __UHC_TARGET_JS__
   , JsonObj
   , JsonPair
   , JsonString
   , JsNull
-  , parseJson
+#endif
   ) where
 
 
@@ -26,6 +29,9 @@ import Melchior.Remote.Internal.Parser
 
 class JsonSerialisable a where
   fromJson :: (Maybe JsonObject) -> a
+
+class JsonWriteable a where
+  asJson :: a -> (Maybe JsonObject)
 
 toDto :: JsonObject -> JSString
 toDto x = stringToJSString $ show x

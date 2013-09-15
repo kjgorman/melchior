@@ -1,19 +1,27 @@
-module Melchior.Remote.Internal.Parser (
+{-#LANGUAGE CPP#-}
+module Melchior.Remote.Internal.Parser {-(
     Json
+  , JsonObject
+#ifdef __UHC_TARGET_JS__
   , JsonPair
   , JsonString
-  , JsonObject
   , JsonObj
   , JsNull
   , JsonNumber
+#endif
   , parseJson
-  ) where
+  ) -} where
 
 import Control.Monad
 import Melchior.Remote.Internal.ParserUtils
 
-data Json = JsonString String | JsBool String | JsNull | JsonArray [Json] | JsonObj JsonObject | JsonNumber String
-          | JsonPair (Json, Json)
+data Json = JsonString String  |
+            JsBool String      |
+            JsNull             |
+            JsonArray [Json]   |
+            JsonObj JsonObject |
+            JsonNumber String  |
+            JsonPair (Json, Json)
 
 data JsonObject = JsonObject [Json]
 

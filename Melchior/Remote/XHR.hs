@@ -35,9 +35,9 @@ foreign import js "Sockets.createSocketedSignal(%1)"
 remote :: XHRMethod -> String -> Signal a -> Signal JSString
 remote x s source = primGetRemote (stringToJSString $ show x) (stringToJSString s) source
 
--- | Return a xhr request, or signal
+-- | Return an xhr request, or signal
 request :: (JsonSerialisable a) => XHRMethod -> String -> Signal s -> Signal a
-request  x s source = (\s -> fromJson $ toJson s) <$> (primGetRemote (stringToJSString $ show x) (stringToJSString s) source)
+request  x s source = (\s -> fromJson $ toJson $ process s) <$> (remote x s source)
 
 foreign import js "XHR.getRemote(%1, %2, %3)"
   primGetRemote :: JSString -> JSString -> Signal a -> Signal JSString
@@ -45,3 +45,11 @@ foreign import js "XHR.getRemote(%1, %2, %3)"
 rawRequest :: XHRMethod -> String -> Signal s -> Signal JSString
 rawRequest x s source = primGetRemote (stringToJSString $ show x) (stringToJSString s) source
 
+process :: JSString -> JSString
+process t = stringToJSString $ trimHead s
+  where s = jsStringToString t
+        trimHead s = if (head s) == '"'  then (tail s) else s
+        trimTail s = if (last s) == '"' then (take ((length s)-1) s) else s
+        unescape [] = []
+        unescape (x:[]) = [x]
+        unescape (x:y:xs) = if x == '\\' && y == '"' then unescape (y:xs) else x:(unescape (y:xs))

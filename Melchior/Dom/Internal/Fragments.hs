@@ -1,17 +1,23 @@
+{-#LANGUAGE CPP#-}
 module Melchior.Dom.Internal.Fragments (
     Html
   , Fragment
+#ifdef __UHC_TARGET_JS__
   , Text
   , JDiv
   , JSpan
   , Attribute
+#endif
   , addClassTo
   , addAttribute
   ) where
 
-import Melchior.Data.String (JSString, stringToJSString)
+import Melchior.Data.String (JSString, stringToJSString, jsStringToString)
 
 type Html = JSString
+
+instance Show JSString where
+  show h = jsStringToString h
 
 data Fragment = Text Html | JDiv [Fragment] | JSpan [Fragment] | Attribute [(String, [String])] Fragment
 
