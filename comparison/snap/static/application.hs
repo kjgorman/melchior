@@ -14,6 +14,7 @@ import Melchior.Remote.Json
 import Melchior.Remote.XHR
 import Melchior.Remote.Internal.ParserUtils
 import Melchior.Sink
+import Course
 
 main :: IO ()
 main = runDom client
@@ -45,35 +46,3 @@ retrieveGets html = do
 
 getInput :: [Element] -> String -> Dom (Signal JSString)
 getInput html key = Dom $ (assuredly $ select (inputs . byId key . from) html) >>= \x -> return $ inputValue x
-
-data Course = Course { title :: String, code :: Integer, points :: Integer }
-
-instance JsonSerialisable Course where
-  fromJson (Just c) = Course (stringOrError c "title")
-                      (floor $ (read (stringOrError c "code") :: Float))
-                      (floor $ (read (stringOrError c "points") :: Float))
-  fromJson Nothing = Course "not found" (-1) (-1)
-
-instance Renderable Course where
-  render c = stringToJSString $ (title c)++(show $ code c)++":"++(show $ points c)
-
-instance JsonWriteable Course where
-  asJson c = Just $ parseToJson' (title c) (show $ code c) (show $ points c)
-
-parseToJson :: JSString -> JSString -> JSString -> JsonObject
-parseToJson title code points = parseToJson' (jsStringToString title) (jsStringToString code) (jsStringToString points)
-
-parseToJson' :: String -> String -> String -> JsonObject
-parseToJson' title code points = JsonObject [key, value]
-                                 where
-                                   key = JsonPair (JsonString "key", JsonString (title++code))
-                                   value = JsonPair (JsonString "value", JsonObj (JsonObject [ptitle, pcode, ppoints]))
-                                   ptitle = JsonPair (JsonString "title", JsonString title)
-                                   pcode = JsonPair (JsonString "code", JsonString $ show $ parseNumber code)
-                                   ppoints = JsonPair (JsonString "points", JsonString $ show $ parseNumber points)
-
-parseNumber :: String -> Int
-parseNumber s = case parse numbers s of
-  [] -> (-1)
-  x -> (read $ fst $ head x)
-  where numbers = many1 digit

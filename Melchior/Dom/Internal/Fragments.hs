@@ -1,4 +1,4 @@
-{-#LANGUAGE CPP#-}
+{-# LANGUAGE CPP #-}
 module Melchior.Dom.Internal.Fragments (
     Html
   , Fragment
@@ -16,13 +16,10 @@ import Melchior.Data.String (JSString, stringToJSString, jsStringToString)
 
 type Html = JSString
 
-instance Show JSString where
-  show h = jsStringToString h
-
 data Fragment = Text Html | JDiv [Fragment] | JSpan [Fragment] | Attribute [(String, [String])] Fragment
 
 instance Show Fragment where
-  show (Text h) = show h
+  show (Text h) = jsStringToString h
   show (JDiv f) = "<div>" ++ (concatMap show f) ++ "</div>"
   show (JSpan f) = "<span>" ++ (concatMap show f) ++ "</div>"
   show (Attribute t f) = "<"++(tag f)++" "++(collapse t)++">"++(concatMap show $ fragments f)++"</"++(tag f)++">"

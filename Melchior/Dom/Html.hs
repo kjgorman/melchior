@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances, TypeSynonymInstances, CPP#-}
+{-# LANGUAGE FlexibleInstances, TypeSynonymInstances, CPP #-}
 module Melchior.Dom.Html (
     Renderable
   , Html
