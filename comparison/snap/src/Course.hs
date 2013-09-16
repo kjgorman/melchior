@@ -30,13 +30,13 @@ parseToJson' :: String -> String -> String -> JsonObject
 parseToJson' title code points = JsonObject [ptitle, pcode, ppoints]
                                  where
                                    ptitle = JsonPair (JsonString "title", JsonString title)
-                                   pcode = JsonPair (JsonString "code", JsonString $ show $ parseNumber code)
-                                   ppoints = JsonPair (JsonString "points", JsonString $ show $ parseNumber points)
+                                   pcode = JsonPair (JsonString "code", JsonString . show $ parseNumber code)
+                                   ppoints = JsonPair (JsonString "points", JsonString . show $ parseNumber points)
 
 parseNumber :: String -> Int
 parseNumber s = case parse numbers s of
   [] -> (-1)
-  x -> (read $ fst $ head x)
+  x -> (read . fst $ head x)
   where numbers = many1 digit
 
 getKey :: Course -> String
