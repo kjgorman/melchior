@@ -27,7 +27,7 @@ keys = presses $ toElement document
 tick = keys & (delta $ every frame)
 
 state = foldp next initial tick
-        where next key game = scoreg $ collide $ step key $ pop (fst $ fst key) $ push (snd $ fst key) $ game
+        where next key game = scoreg . collide . (step key) . pop (fst $ fst key) $ push (snd $ fst key) game
 
 display :: Signal Game -> Context -> Dom ()
 display g ctx = terminate g (\g -> let Dom io = back ctx >> elems g ctx in io)
