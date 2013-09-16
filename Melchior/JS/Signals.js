@@ -45,7 +45,6 @@ var Signals = function () {
         newSignal.accumulator = base
 
         this.registeredListeners.push(function (value, event) {
-
             if(_e_(value)._tag_ && _e_(value)._tag_ === -1) return //empty signal
             var res = UHCFunction.call(transform, value, event)
             newSignal.previous = newSignal.accumulator
