@@ -3,6 +3,13 @@ var UHCFunction = function () {
 
     Object.prototype.__aN__ = function () { return this }
 
+    /* monkey patch proper composition! */
+    $Control.$Category.$Category__DCT37__1__0DFLControl_2eCategory_2e_2e=
+    new _F_(function($f,$g,$x)
+            {var $__=
+             new _A_($g,[$x]);
+             return new _A_($f,[$__]);});
+
     function applyNode(func, value) {
         window.debug && console.log("applying node", window.func = func, window.val = value)
         var argCopy, result
