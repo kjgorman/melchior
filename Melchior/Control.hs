@@ -25,9 +25,10 @@ module Melchior.Control
   , (&)
   , pipe
   , emptySignal
+  , empty
   ) where
 
-import Control.Applicative
+import Control.Applicative hiding (empty)
 import Control.Monad (liftM)
 import Melchior.Data.String
 import Melchior.Dom
@@ -175,6 +176,15 @@ foreign import js "Signals.emptySignal()"
 #else
 primEmptySignal :: a -> a
 primEmptySignal = undefined
+#endif
+
+empty :: a -> Bool
+empty = primEmpty
+#ifdef __UHC_TARGET_JS__
+foreign import js "Signals.empty(%1)"
+  primEmpty :: a -> Bool
+#else
+primEmpty = undefined
 #endif
 
 -- * Filters

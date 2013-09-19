@@ -171,6 +171,14 @@ var Signals = function () {
         }
     }
 
+    function empty(signal) {
+        var val = signal.__aN__ ? signal.__aN__() : null
+        if(val._tag_ && val._tag_ === -1)
+            return $UHC.$Base.$True__
+        else
+            return $UHC.$Base.$False__
+    }
+
     function merge(s, t) {
         var u = new Signal()
         s.registerListener(function(value) {
@@ -193,6 +201,7 @@ var Signals = function () {
         constant: constant,
         emptySignal: emptySignal,
         previous: previous,
-        merge: merge
+        merge: merge,
+        empty: empty
     }
 }()

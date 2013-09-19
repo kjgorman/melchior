@@ -13,6 +13,5 @@ position el = (\x -> coords x) <$> s
 click :: Element -> Signal MouseEvent
 click e = createEventedSignal (Of ClickEvt) e (MouseEvt ClickEvt)
 
-
 foreign import js "Events.coordinates(%1)"
   coords :: MouseEvent -> (Int, Int)
