@@ -8,6 +8,8 @@ import Melchior.Remote.Internal.ParserUtils
 
 data Course = Course { title :: String, code :: Integer, points :: Integer }
 
+-----------------------------------------------------------------------------
+-- Instances
 instance JsonSerialisable Course where
   fromJson (Just c) = Course (stringOrError c "title")
                       (floor $ (read (stringOrError c "code") :: Float))
@@ -23,15 +25,18 @@ instance JsonWriteable Course where
 instance Show Course where
   show c = (title c)++(show $ code c)++":"++(show $ points c)
 
+
+-----------------------------------------------------------------------------
+-- Parsing
 parseToJson :: JSString -> JSString -> JSString -> JsonObject
-parseToJson title code points = parseToJson' (jsStringToString title) (jsStringToString code) (jsStringToString points)
+parseToJson t c p = parseToJson' (jsStringToString t) (jsStringToString c) (jsStringToString p)
 
 parseToJson' :: String -> String -> String -> JsonObject
-parseToJson' title code points = JsonObject [ptitle, pcode, ppoints]
-                                 where
-                                   ptitle = JsonPair (JsonString "title", JsonString title)
-                                   pcode = JsonPair (JsonString "code", JsonString . show $ parseNumber code)
-                                   ppoints = JsonPair (JsonString "points", JsonString . show $ parseNumber points)
+parseToJson' t c p = JsonObject [ptitle, pcode, ppoints]
+                     where
+                       ptitle = JsonPair (JsonString "title", JsonString t)
+                       pcode = JsonPair (JsonString "code", JsonString . show $ parseNumber c)
+                       ppoints = JsonPair (JsonString "points", JsonString . show $ parseNumber p)
 
 parseNumber :: String -> Int
 parseNumber s = case parse numbers s of
@@ -39,5 +44,24 @@ parseNumber s = case parse numbers s of
   x -> (read . fst $ head x)
   where numbers = many1 digit
 
+fromString :: String -> Course
+fromString s = fromJson $ parseJson s
+
+-----------------------------------------------------------------------------
+-- Operations
+
+-- Get the database key
 getKey :: Course -> String
 getKey c = (title c)++(show $ title c)
+
+-- Update the points value of a course
+setPoint :: Course -> Integer -> Course
+setPoint c i = Course (title c) (code c) i
+
+-- Update the code value of a course
+setCode :: Course -> Integer -> Course
+setCode c i = Course (title c) i (points c)
+
+-- Update the title value of a course
+setTitle :: Course -> String -> Course
+setTitle c s = Course s (code c) (points c)

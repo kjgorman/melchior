@@ -6,10 +6,10 @@ import           Control.Monad.IO.Class
 import           Snap.Core
 import           Snap.Util.FileServe
 import           Snap.Http.Server
-import           Snap.Extras.JSON (writeJSON)
 import           Database.Redis
 import qualified Data.ByteString as D
 import qualified Data.ByteString.UTF8 as U
+import           Melchior.Remote.Json
 import           Course
 
 main :: IO ()
@@ -18,7 +18,9 @@ main = quickHttpServe site
 site :: Snap ()
 site =
     ifTop (serveFile "./static/index.html") <|>
-    route [ ("post", method POST addEntry) , ("get", method POST getEntry)] <|>
+    route [ ("post", method POST addEntry)
+          , ("get", method POST getEntry)
+          , ("set/points", method POST setPoints)] <|>
     dir "static" (serveDirectory "./static/")
 
 addEntry :: Snap ()
@@ -56,6 +58,20 @@ getn n = case getter of
           Just $ do
            conn <- connect defaultConnectInfo
            runRedis conn $ get name
+
+setPoints :: Snap ()
+setPoints = do
+  key <- getPostParam "key"
+  record <- liftIO $ getn key
+  let course = getFromString record
+      newCourse = setPoint course 20
+  liftIO $ add key $ asJson newCourse >>= Just . U.fromString . show
+  writeBS "(\"status\":\"success\"}"
+  where
+    mbS Nothing = U.fromString ""
+    mbS (Just s) = s
+    getFromString (Left _) = Course "" (-1) (-1)
+    getFromString (Right s) = fromString . U.toString $ mbS s
 
 clean :: Maybe D.ByteString -> D.ByteString
 clean Nothing = "Nothing"
