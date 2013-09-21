@@ -21,7 +21,8 @@ site =
     route [ ("post", method POST addEntry)
           , ("get", method POST getEntry)
           , ("set/points", method POST setPoints)] <|>
-    dir "static" (serveDirectory "./static/")
+    dir "static" (serveDirectory "./static/") <|>
+    dir "src" (serveDirectory "./src/")
 
 addEntry :: Snap ()
 addEntry = do
