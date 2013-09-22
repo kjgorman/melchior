@@ -67,8 +67,10 @@ s <<< t = \x -> s $ t x
 (&&&) :: SF a b -> SF a c -> SF a (b, c)
 s &&& t = \x -> primAmpersands s t x
 
-(&) :: Signal a -> Signal b -> Signal (a, b)
-s & t = primPair s t
+(&) :: Signal a -> Signal b -> Signal (Maybe a, Maybe b)
+s & t = (\p -> maybify p) <$> primPair s t
+        where maybify p = (m $ fst p, m $ snd p)
+              m s = if empty s then Nothing else Just s
 
 -- * Misc. primitive signal operations
 
