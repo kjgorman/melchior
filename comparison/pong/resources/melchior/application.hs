@@ -27,7 +27,7 @@ keys = presses $ toElement document
 tick = keys & (delta $ every frame)
 
 state = foldp next initial tick
-        where next key game = scoreg . collide . (step key) . pop (fst $ fst key) $ push (snd $ fst key) game
+        where next key game = scoreg . collide . (step key) . pop key $ push key game
 
 display :: Signal Game -> Context -> Dom ()
 display g ctx = terminate g (\g -> let Dom io = back ctx >> elems g ctx in io)
@@ -40,20 +40,28 @@ setupPong html = do
   display state context
 
 -- * game logic
-push :: Int -> Game -> Game
-push i (Game p1 p2 b) = Game (transition p1 i 87 83 1) (transition p2 i 38 40 1) b
+push :: (Maybe (Int, Int), Maybe Int) -> Game -> Game
+push k (Game p1 p2 b) = Game (transition p1 (d $ fst k) 87 83 1) (transition p2 (d $ fst k) 38 40 1) b
+                        where
+                          d Nothing = (-1)
+                          d (Just k) = snd k
 
-pop :: Int -> Game ->  Game
-pop i (Game p1 p2 b) = Game (transition p1 i 87 83 0) (transition p2 i 38 40 0) b
+pop :: (Maybe (Int, Int), Maybe Int) -> Game ->  Game
+pop k (Game p1 p2 b) = Game (transition p1 (d $ fst k) 87 83 0) (transition p2 (d $ fst k) 38 40 0) b
+                              where
+                                d Nothing = (-1)
+                                d (Just k) = fst k
 
 transition :: Player -> Int -> Int -> Int -> Int -> Player
 transition p i u d m | i == u = Player (x p) (y p) ((-1)*m) (score p)
                      | i == d = Player (x p) (y p) (1*m) (score p)
                      | otherwise = p
 
-step :: ((Int, Int), Int) -> Game -> Game
+step :: (Maybe (Int, Int), Maybe Int) -> Game -> Game
 step s (Game p1 p2 b) = Game (move p1) (move p2) (Ball (bx b + vx b * d) (by b + vy b * d) (vx b) (vy b))
-                        where d = (fromIntegral $ snd s) * 0.001
+                       where d = (fromIntegral $ m $ snd s) * 0.001
+                             m Nothing = 0
+                             m (Just t) = t
 
 move :: Player -> Player
 move p | (mv p) == (-1) = Player (x p) ((y p)-10) (mv p) (score p)
