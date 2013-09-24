@@ -67,4 +67,4 @@ Echo user input _in reverse_
         where f i o = do
             inp <- i
             out <- o
-            return $ put out $ (reverse . jsStringToString) <$> inputValue inp
+            Just $ put out $ (reverse . jsStringToString) <$> inputValue inp
