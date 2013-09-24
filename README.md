@@ -17,6 +17,8 @@ and minify to `dist/melchior.js` and `dist/melchior.min.js`.
 
 ###example
 
+Tick a clock
+
     import Control.Category
     import Melchior.Control
     import Melchior.Dom
@@ -39,5 +41,30 @@ and minify to `dist/melchior.js` and `dist/melchior.min.js`.
     elapsed :: Signal Int
     elapsed = foldp (\_ e -> e + 1) 0 $ every second
 
+Echo user input _in reverse_
 
+    import Control.Applicative
+    import Control.Category
+    import Melchior.Control
+    import Melchior.Data.String
+    import Melchior.Dom
+    import Melchior.Dom.Selectors
+    import Melchior.Sink
 
+    main :: IO ()
+    main = runDom setup
+
+    setup :: [Element] -> Dom ()
+    setup html = do
+      inp <- Dom $ select (inputs . byId "inp" . from) html
+      out <- Dom $ select (byId "out" . from) html
+      reversal inp out
+
+    reversal :: Maybe Input -> Maybe Element -> Dom ()
+    reversal i o = case f i o of
+        Nothing -> return ()
+        Just x -> x
+        where f i o = do
+            inp <- i
+            out <- o
+            return $ put out $ (reverse . jsStringToString) <$> inputValue inp
