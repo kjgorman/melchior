@@ -14,3 +14,30 @@ so ostensibly you should now be able to `sudo ./install` and it will install all
 the melchior bin file to /usr/bin, but there's still something slightly wonky with permissions. it should be obvious
 what needs to be chown'd or whatever though. after that a straight 'grunt' will compile all the things and concatenate
 and minify to `dist/melchior.js` and `dist/melchior.min.js`.
+
+###example
+
+    import Control.Category
+    import Melchior.Control
+    import Melchior.Dom
+    import Melchior.Dom.Selectors
+    import Melchior.Sink
+    import Melchior.Time
+
+    main :: IO ()
+    main = runDom setup
+
+    setup :: [Element] -> Dom ()
+    setup html = do
+            output <- Dom $ select (byId "out" . from) html
+            tick output
+
+    tick :: Maybe Element -> Dom ()
+    tick Nothing = return ()
+    tick (Just out) = put out elapsed
+
+    elapsed :: Signal Int
+    elapsed = foldp (\_ e -> e + 1) 0 $ every second
+
+
+
