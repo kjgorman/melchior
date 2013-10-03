@@ -3,7 +3,7 @@
 
 ![Melchior d'Hondecoeter](http://www.artcyclopedia.org/art/melchior-d-hondecoeter-pelican.jpg)
 
-Melchior, the Haskell based functional reactive programming for making rich, responsive web applications.
+Melchior, the Haskell based functional reactive programming framework for making rich, responsive web applications.
 
 ###getting it going and all that good stuff
 
