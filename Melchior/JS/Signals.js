@@ -34,7 +34,7 @@ var Signals = function () {
             window.debug && console.log("evaluating", value)
             evaluate(value)
         } else for(var i = 0, len = this.registeredListeners.length; i < len; i++) {
-            this.registeredListeners[i](value, event);
+            this.registeredListeners[i](value, event)
         }
     }
 
@@ -57,7 +57,7 @@ var Signals = function () {
                 newSignal.accumulator = res
                 newSignal.push(res, event)
             }
-        });
+        })
         return newSignal
     }
 
