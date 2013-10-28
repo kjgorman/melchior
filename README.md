@@ -41,7 +41,7 @@ Tick a clock
     elapsed :: Signal Int
     elapsed = foldp (\_ e -> e + 1) 0 $ every second
 
-Echo user input _in reverse_
+Echo user input ~_in reverse_~
 
     import Control.Applicative
     import Control.Category
