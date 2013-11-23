@@ -2,22 +2,16 @@ var Signals = function () {
     "use strict";
 
     var Signal = function () {
-
         this.registeredListeners = []
         this.accumulator = null
         this.previous = null
         this.folding = false
-        this.__isSignal = true
     }
 
     Signal.prototype.currently = function (take) {
         var res = this.accumulator
         if(!this.folding && take) this.accumulator = undefined
         return res
-    }
-
-    Signal.prototype.was = function () {
-        return this.previous
     }
 
     Signal.prototype.registerListener = function(callback) {
@@ -76,7 +70,7 @@ var Signals = function () {
     }
 
     function previous (signal) {
-        return signal.was()
+        return signal.previous
     }
 
     function constant(value) {

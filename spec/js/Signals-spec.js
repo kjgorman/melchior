@@ -29,8 +29,8 @@ describe("an evented signal should push events on an element to it's listeners",
         , signal = Signals.createEventedSignal(anElement, "click")
         , global = false;
 
-        signal.pipe(function() { 
-                global = true;  
+        signal.pipe(function() {
+                global = true;
         });
 
         var event = document.createEvent("MouseEvents");
@@ -71,7 +71,7 @@ describe("piping a signal should produce a new signal that will react to the old
     , originalSignal = Signals.createEventedSignal(element, "click");
 
     it("should produce a new signal", function () {
-        expect(originalSignal.pipe({args:[], __aN__:function() {}}).__isSignal).toBe(true);
+        expect(originalSignal.pipe({args:[], __aN__:function() {}}) instanceof Signals.Signal).toBe(true);
     });
 
     it("should produce a value when the original signal receives a value", function () {
