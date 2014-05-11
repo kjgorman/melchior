@@ -1,4 +1,4 @@
-###Melchior [![Build Status](https://travis-ci.org/kjgorman/489-uhc.png)](https://travis-ci.org/kjgorman/489-uhc)
+###Melchior [![Build Status](https://travis-ci.org/kjgorman/melchior.png)](https://travis-ci.org/kjgorman/melchior)
 
 
 ![Melchior d'Hondecoeter](http://www.artcyclopedia.org/art/melchior-d-hondecoeter-pelican.jpg)
